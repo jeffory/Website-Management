@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Ticket;
+use App\TicketMessage;
 use Auth;
 
 class TicketController extends Controller
@@ -25,9 +26,15 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return view('ticket.index', [
-            'tickets' => Ticket::all()
+        if (Auth::user()->is_admin or Auth::user()->is_staff) {
+            return view('ticket.index', [
+                'tickets' => Ticket::all()
             ]);
+        }
+
+        return view('ticket.index', [
+            'tickets' => Ticket::where('user_id', Auth::user()->id)->get()
+        ]);
     }
 
     /**
@@ -35,8 +42,16 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Ticket $ticket)
+    public function show(Ticket $ticket, Request $request)
     {
+        $ticket->load(['messages', 'messages.user' => function ($q) {
+            $q->select('id', 'name');
+        }]);
+        
+        if ($request->wantsJson()) {
+            return [ 'ticket' => $ticket ];
+        }
+
         return view('ticket.show', [
             'ticket' => $ticket
             ]);
@@ -60,12 +75,22 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $ticket = new Ticket();
+        $ticketMessage = new TicketMessage();
 
         $ticket->title = $request->input('title');
         $ticket->user_id = Auth::user()->id;
         $ticket->save();
 
-        return redirect('/tickets');
+        $ticketMessage->message = $request->input('message');
+        $ticketMessage->user_id = $ticket->user_id;
+        $ticketMessage->ticket_id = $ticket->id;
+        $ticketMessage->save();
+
+        if (! $request->wantsJson()) {
+            return redirect('tickets/' . $ticket->id);
+        } else {
+            return compact($ticket);
+        }
     }
 
     /**
@@ -86,9 +111,12 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ticket $ticket)
+    public function destroy(Ticket $ticket, Request $request)
     {
         $ticket->delete();
-        return redirect('/tickets');
+
+        if (! $request->wantsJson()) {
+            return redirect('/tickets');
+        }
     }
 }
