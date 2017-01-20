@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container small-container">
     <h2><i class="fa fa-lock"></i><br>Login</h2>
 
@@ -49,5 +50,14 @@
             </a>
         </p>
     </form>
+</div>
+
+<div class="container small-container content" style="background-color: #fafab6;">
+    <h2>For demoing:</h2>
+    
+    <ul>
+        <li>email: demo@gmail.com</li>
+        <li>password: password</li>
+    </ul>
 </div>
 @endsection
