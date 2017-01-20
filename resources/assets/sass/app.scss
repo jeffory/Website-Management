@@ -17,12 +17,23 @@ $primary: #21a8bd;
     box-sizing: border-box;
 }
 
+[v-cloak] {
+    display:none;
+}
+
 h1 {
     font-size: $size-1;
+    margin-bottom: .7em;
 }
 
 h2 {
     font-size: $size-2;
+    margin-bottom: .5em;
+}
+
+h3 {
+    font-size: $size-3;
+    margin-bottom: .3em;
 }
 
 .button.is-wide {
@@ -65,7 +76,7 @@ body {
 
 h2 {
     font-size: 2em;
-    margin-bottom: 1em;
+    // margin-bottom: .7em;
 
     .fa {
         font-size: 2.5em;
@@ -120,4 +131,32 @@ p {
             visibility: visible;
         }
     }
+}
+
+.fa.is-big {
+    font-size: 2.5em;
+    height: 40px;
+    width: 40px;
+}
+
+.icon-box {
+    background-color: $primary;
+    cursor: pointer;
+    padding: 3.5em 1em;
+
+    &,
+    a {
+        color: $white;
+    }
+
+    &:hover {
+        background-color: darken($primary, 10%);
+    }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
 }
