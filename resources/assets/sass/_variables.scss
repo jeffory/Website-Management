@@ -23,7 +23,7 @@ $line-height-base: 1.6;
 $text-color: #636b6f;
 
 // Navbar
-$navbar-default-bg: #fff;
+$navbar-default-bg: darken(#575757, 20%);
 
 // Buttons
 $btn-default-color: $text-color;
@@ -35,3 +35,4 @@ $input-color-placeholder: lighten($text-color, 30%);
 
 // Panels
 $panel-default-heading-bg: #fff;
+$panel-default-main-content: #fff;

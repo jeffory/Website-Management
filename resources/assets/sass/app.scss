@@ -1,9 +1,123 @@
 
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://fonts.googleapis.com/css?family=Archivo+Black);
+@import url(https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css);
+
 
 // Variables
 @import "variables";
 
-// Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+$primary: #21a8bd;
+
+// Bulma
+@import "node_modules/bulma/bulma.sass";
+
+*, body {
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: $size-1;
+}
+
+h2 {
+    font-size: $size-2;
+}
+
+.button.is-wide {
+    height: auto;
+    padding: .75em 0;
+    width: 100%
+}
+
+body {
+    background-color: $body-bg;
+    background-image: url('../img/body-background.jpg');
+    background-size: cover;
+    color: $text-color;
+    font-family: $font-family-sans-serif;
+    font-size: $font-size-base;
+    min-height: 100vh;
+    padding-top: 4.65em;
+}
+
+.nav {
+    background-color: $navbar-default-bg;
+    margin-bottom: 1em;
+    position: fixed;
+    top: 0;
+    width: 100%;
+
+    &, a {
+        color: $white;
+    }
+
+    a:hover {
+        color: $primary;
+    }
+}
+
+.nav-brand {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 1em;
+
+    .fa {
+        font-size: 2.5em;
+        margin-right: .1em;
+    }
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+
+.main-container {
+    background-color: $panel-default-main-content;
+    padding: 2em 4em;
+}
+
+.small-container {
+    background-color: rgba(255, 255, 255, .95);
+    // color: #fff;
+    max-width: 400px;
+    // overflow: hidden;
+    padding: 2em;
+    position: relative;
+
+    h2 {
+        text-align: center;
+
+        .fa {
+            color: #21a8bd;
+        }
+    }
+
+    .button {
+        background-color: $primary;
+        border-color: lighten($primary, 15%);
+        color: $white;
+    }
+}
+
+.ticket-listing {
+    cursor: pointer;
+
+    .controls {
+        visibility: hidden;
+    }
+
+    &:hover {
+        background-color: lighten($primary, 50%);
+
+        .controls {
+            visibility: visible;
+        }
+    }
+}
