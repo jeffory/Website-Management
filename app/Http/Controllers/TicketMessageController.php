@@ -35,6 +35,14 @@ class TicketMessageController extends Controller
         $ticketMessage->message = $request->input('message');
         $ticketMessage->save();
 
+        $ticketMessage->load(['user' => function ($q) {
+            $q->select('id', 'name');
+        }]);
+
+        if ($request->wantsJson()) {
+            return $ticketMessage;
+        }
+
         return redirect()->back();
     }
 
@@ -53,9 +61,12 @@ class TicketMessageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ticket $ticket, TicketMessage $ticketmessage)
+    public function destroy(Ticket $ticket, TicketMessage $ticketmessage, Request $request)
     {
         $ticketmessage->delete();
-        return redirect()->back();
+
+        if (! $request->wantsJson()) {
+            return redirect()->back();
+        }
     }
 }
