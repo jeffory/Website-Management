@@ -55,7 +55,10 @@
     </div>
 
     <!-- Scripts -->
+    {{-- <script src="https://npmcdn.com/vue-timeago@2.1.2/index.umd.js"></script> --}}
+    @yield('inline-script')
     <script src="/js/app.js"></script>
+
     {{-- <script src="http://livejs.com/live.js"></script> --}}
 </body>
 </html>
