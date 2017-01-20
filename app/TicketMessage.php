@@ -23,11 +23,15 @@ class TicketMessage extends Model
         return $this->hasOne(Ticket::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function username()
     {
         $this->user_id;
         $user = User::find($this->user_id);
         return $user['name'];
     }
-
 }
