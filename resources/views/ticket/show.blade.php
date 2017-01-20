@@ -4,55 +4,74 @@
 <div class="container main-container content">
     <h2><strong>Ticket:</strong> {{ $ticket->title }}</h2>
 
-    
+    <noscript>
     @foreach($ticket->messages as $index => $message)
     <div class="ticket-listing columns">
         <div class="column is-2">
             <p>
-                {{ $message->username() }}<br>
+                <span>{{ $message->username() }}</span><br>
                 <span class="is-small">{{ $message->updated_at->diffForHumans() }}</span>
             </p>
         </div>
 
         <div class="ticket-message column is-9">
-            <p>
-                {{ $message->message }}
-            </p>
+            <p>{{ $message->message }}</p>
         </div>
 
-        <div class="controls column">
+        <div class="controls column has-text-right">
             {{-- <a class="button" href="#">Edit</a> --}}
 
-            <form role="form" method="POST" action="{{ url('/tickets', [$ticket->id, 'message', $message->id]) }}" data-behavior="turbolinks-form" style="display: inline">
+            <form role="form" method="POST" action="{{ url('/tickets', [$ticket->id, 'message', $message->id]) }}" style="display: inline">
                 {{ csrf_field() }}
                 {{ method_field('DELETE') }}
 
-                <input class="button is-danger" type="submit" name="delete" value="Delete">
+                <button class="delete" type="submit" name="delete"></button>
             </form>
         </div>
     </div>
     @endforeach
+    </noscript>
+
     
+    <ticket-details :user-id="{{Auth::user()->id}}" :ticket-id="{{$ticket->id}}" inline-template v-cloak>
+        <transition appear name="fade">
+            <div>
+                <div class="columns ticket-listing" v-for="message in ticket.messages">
+                    <div class="column is-2">
+                        <p>
+                            <span>@{{ message.user.name }}</span><br>
+                            <timeago :since="Date.parse(message.updated_at)" :auto-update="1"></timeago>
+                        </p>
+                    </div>
+    
+                    <div class="ticket-message column is-9">
+                        <p>@{{ message.message }}</p>
+                    </div>
+    
+                    <div class="controls column has-text-right">
+                        <button class="delete" @click="deleteMessage(message.id)"></button>
+                    </div>
+                </div>
 
-    <form role="form" method="POST" action="{{ url('/tickets', [$ticket->id, 'message']) }}">
-        {{ csrf_field() }}
+                <p class="control">
+                    <textarea class="textarea" placeholder="New message" v-model="newMessage"></textarea>
+                </p>
 
-        <p class="control">
-            <textarea class="textarea" name="message" placeholder="Message"></textarea>
-        </p>
+                <p class="control">
+                    <button class="button is-wide is-primary" @click="storeMessage()">Add new message</button>
+                </p>
 
-        <p class="control">
-            <input class="button is-wide is-primary" type="submit" name="save" value="Add to conversation">
-        </p>
-    </form>
-
-    <form role="form" method="POST" action="{{ url('/tickets', [$ticket->id]) }}">
-        {{ csrf_field() }}
-        {{ method_field('DELETE') }}
-
-        <p class="control">
-            <input class="button is-wide is-danger" type="submit" name="delete" value="Delete Ticket">
-        </p>
-    </form>
+                <p class="control">
+                    <button class="button is-wide is-danger" @click="deleteTicket(ticket.id)">Delete Ticket</button>
+                </p>
+            </div>
+        </transition>
+    </ticket-details>
 </div>
+@endsection
+
+@section('inline-script')
+<script>
+    var ticket = {!! json_encode($ticket) !!};
+</script>
 @endsection
