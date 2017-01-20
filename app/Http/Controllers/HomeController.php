@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Ticket;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $ticket_count = Ticket::where('user_id', Auth::user()->id)->count();
+
+        return view('home', [
+            'ticket_count' => $ticket_count
+        ]);
     }
 }
