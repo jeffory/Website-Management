@@ -16,6 +16,6 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
 Route::resource('/tickets', 'TicketController');
-// Route::get('/tickets/{ticket}', 'TicketController@show');
+
 Route::post('/tickets/{ticket}/message', 'TicketMessageController@store');
 Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
