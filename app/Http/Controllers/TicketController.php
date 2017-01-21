@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Ticket;
 use App\TicketMessage;
 use Auth;
+use App\Events\TicketCreation;
 
 class TicketController extends Controller
 {
@@ -85,6 +86,8 @@ class TicketController extends Controller
         $ticketMessage->user_id = $ticket->user_id;
         $ticketMessage->ticket_id = $ticket->id;
         $ticketMessage->save();
+
+        event(new TicketCreation($ticket));
 
         if (! $request->wantsJson()) {
             return redirect('tickets/' . $ticket->id);

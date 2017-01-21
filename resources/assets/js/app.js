@@ -32,7 +32,7 @@ Vue.component('ticket-details', {
         }
     },
     mounted() {
-        // this.listen();
+        this.listen();
         this.getTicket();
     },
     methods: {
@@ -40,11 +40,18 @@ Vue.component('ticket-details', {
          * Listen to Echo channels.
          */
         listen() {
-            // Echo.join('ticket.' + this.ticketId)
-            //     .here(viewers => {
-            //         this.viewers = viewers;
-            //         console.log(this.viewers);
-            //     });
+            console.log('Listening for other users');
+
+            Echo.join('ticket.' + this.ticketId)
+                .here((users) => {
+                    //
+                })
+                .joining((user) => {
+                    console.log(user.name);
+                })
+                .leaving((user) => {
+                    console.log(user.name);
+                });
         },
 
         /**
