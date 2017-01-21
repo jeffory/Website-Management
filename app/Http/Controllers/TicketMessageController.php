@@ -7,6 +7,8 @@ use App\Ticket;
 use App\TicketMessage;
 use Auth;
 
+use App\Events\TicketMessageCreation;
+
 class TicketMessageController extends Controller
 {
     /**
@@ -38,6 +40,8 @@ class TicketMessageController extends Controller
         $ticketMessage->load(['user' => function ($q) {
             $q->select('id', 'name');
         }]);
+
+        event(new TicketMessageCreation($ticketMessage));
 
         if ($request->wantsJson()) {
             return $ticketMessage;

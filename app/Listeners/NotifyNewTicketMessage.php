@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\TicketCreation;
+use App\Events\TicketMessageCreation;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyTicketCreated
+class NotifyNewTicketMessage
 {
     /**
      * Create the event listener.
@@ -21,11 +21,12 @@ class NotifyTicketCreated
     /**
      * Handle the event.
      *
-     * @param  TicketCreation  $event
+     * @param  TicketMessageCreation  $event
      * @return void
      */
-    public function handle(TicketCreation $event)
+    public function handle(TicketMessageCreation $event)
     {
         //
+        // broadcast(new NewMessage($event))->toOthers();
     }
 }

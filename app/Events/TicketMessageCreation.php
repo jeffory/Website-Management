@@ -4,28 +4,29 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
+
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-use App\Ticket;
+use App\TicketMessage;
 
-class TicketCreation implements ShouldBroadcastNow
+class TicketMessageCreation implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
-    public $ticket;
+    public $ticketMessage;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(TicketMessage $ticketMessage)
     {
-        $this->ticket = $ticket;
+        $this->ticketMessage = $ticketMessage;
     }
 
     /**
@@ -35,6 +36,6 @@ class TicketCreation implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('tickets');
+        return new Channel('ticket.'. $this->ticketMessage->ticket_id);
     }
 }

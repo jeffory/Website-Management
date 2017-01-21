@@ -14,8 +14,11 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\TicketCreation' => [
-            'App\Listeners\NotifyTicketCreated',
+            'App\Listeners\NotifyNewTicket',
         ],
+        'App\Events\TicketMessageCreation' => [
+            'App\Listeners\NotifyNewTicketMessage',
+        ]
     ];
 
     /**
