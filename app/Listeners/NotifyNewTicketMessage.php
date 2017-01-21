@@ -27,6 +27,5 @@ class NotifyNewTicketMessage
     public function handle(TicketMessageCreation $event)
     {
         //
-        // broadcast(new NewMessage($event))->toOthers();
     }
 }

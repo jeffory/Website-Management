@@ -30,6 +30,16 @@ class TicketMessageCreation implements ShouldBroadcast
     }
 
     /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'ticket.newMessage';
+    }
+
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return Channel|array

@@ -40,17 +40,9 @@ Vue.component('ticket-details', {
          * Listen to Echo channels.
          */
         listen() {
-            console.log('Listening for other users');
-
             Echo.join('ticket.' + this.ticketId)
-                .here((users) => {
-                    //
-                })
-                .joining((user) => {
-                    console.log(user.name);
-                })
-                .leaving((user) => {
-                    console.log(user.name);
+                .listen('ticket.newMessage', (e) => {
+                    addMessage(e.message);
                 });
         },
 
