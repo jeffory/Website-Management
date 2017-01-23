@@ -7,8 +7,8 @@
 
 require('./bootstrap');
 
-var Turbolinks = require("turbolinks");
-Turbolinks.start();
+// var Turbolinks = require("turbolinks");
+// Turbolinks.start();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -22,13 +22,15 @@ Turbolinks.start();
 Vue.component('ticket-details', {
     props: [
         'userId',
+        'userName',
         'ticketId'
     ],
     data() {
         return {
             newMessage: '',
             viewers: [],
-            ticket: {}
+            ticket: {},
+            ticketPending : {}
         }
     },
     mounted() {
@@ -41,8 +43,22 @@ Vue.component('ticket-details', {
          */
         listen() {
             Echo.join('ticket.' + this.ticketId)
-                .listen('ticket.newMessage', (e) => {
-                    addMessage(e.message);
+                .here((users) => {
+                    this.viewers = users;
+                })
+                .joining((user) => {
+                    this.viewers.push(user);
+                })
+                .leaving((user) => {
+                    this.viewers = _.reject(this.viewers, function(viewer) {
+                        return viewer.id == user.id;
+                    });
+                })
+                .listen('TicketAddMessage', (e) => {
+                    this.addMessage(e.ticketMessage);
+                })
+                .listen('TicketDeleteMessage', (e) => {
+                    this.removeMessage(e.ticketMessage.id);
                 });
         },
 
@@ -53,6 +69,7 @@ Vue.component('ticket-details', {
             if (typeof(ticket) !== 'undefined') {
                 this.ticket = ticket;
             } else {
+                // No data in inline-JS, get via Ajax.
                 this.$http.get('/tickets/' + this.ticketId)
                     .then(response => {
                         this.ticket = response.data.ticket;
@@ -65,11 +82,22 @@ Vue.component('ticket-details', {
          * Delete a ticket.
          */
         storeMessage() {
+            this.ticketPending = {
+                message: this.newMessage,
+                created_at: new Date(),
+                updated_at: new Date(),
+                user: {
+                    id: this.userID,
+                    name: this.userName
+                }};
+
+            this.addMessage(this.ticketPending);
+
             this.$http.post('/tickets/' + this.ticketId + '/message', { message: this.newMessage })
                 .then(response => {
                     // If we fetch the message from the response we get the username...
-                    this.addMessage(response.data)
                     this.newMessage = '';
+                    return;
                 });
         },
 
