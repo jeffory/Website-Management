@@ -33,39 +33,43 @@
     </noscript>
 
     
-    <ticket-details :user-id="{{Auth::user()->id}}" :ticket-id="{{$ticket->id}}" inline-template v-cloak>
-        <transition appear name="fade">
-            <div>
-                <div class="columns ticket-listing" v-for="message in ticket.messages">
-                    <div class="column is-2">
-                        <p>
-                            <span>@{{ message.user.name }}</span><br>
-                            <timeago :since="Date.parse(message.updated_at)" :auto-update="1"></timeago>
-                        </p>
-                    </div>
-    
-                    <div class="ticket-message column is-9">
-                        <p>@{{ message.message }}</p>
-                    </div>
-    
-                    <div class="controls column has-text-right">
-                        <button class="delete" @click="deleteMessage(message.id)"></button>
-                    </div>
+    <ticket-details user-id="{{Auth::user()->id}}" user-name="{{Auth::user()->name}}" :ticket-id="{{$ticket->id}}" inline-template v-cloak>
+        <div>
+            <div class="columns ticket-listing" v-for="message in ticket.messages">
+                <div class="column is-2">
+                    <p>
+                        <span>@{{ message.user.name }}</span><br>
+                        <timeago :since="Date.parse(message.updated_at)" :auto-update="1"></timeago>
+                    </p>
                 </div>
 
-                <p class="control">
-                    <textarea class="textarea" placeholder="New message" v-model="newMessage"></textarea>
-                </p>
+                <div class="ticket-message column is-9">
+                    <p>@{{ message.message }}</p>
+                </div>
 
-                <p class="control">
-                    <button class="button is-wide is-primary" @click="storeMessage()">Add new message</button>
-                </p>
-
-                <p class="control">
-                    <button class="button is-wide is-danger" @click="deleteTicket(ticket.id)">Delete Ticket</button>
-                </p>
+                <div class="controls column has-text-right">
+                    <button class="delete" @click="deleteMessage(message.id)"></button>
+                </div>
             </div>
-        </transition>
+
+            <div class="viewers-listing">
+                Viewers:&nbsp;&nbsp;&nbsp;
+                <span class="tag is-medium" v-for="viewer in viewers" style="margin-right: 3px">@{{ viewer.name }}</span>
+            </div>
+            <br>
+
+            <p class="control">
+                <textarea class="textarea" placeholder="New message" v-model="newMessage"></textarea>
+            </p>
+
+            <p class="control">
+                <button class="button is-wide is-primary" @click="storeMessage()">Add new message</button>
+            </p>
+
+            <p class="control">
+                <button class="button is-wide is-danger" @click="deleteTicket(ticket.id)">Delete Ticket</button>
+            </p>
+        </div>
     </ticket-details>
 </div>
 @endsection
