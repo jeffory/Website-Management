@@ -7,8 +7,6 @@ use App\Ticket;
 use App\TicketMessage;
 use Auth;
 
-use App\Events\TicketMessageCreation;
-
 class TicketMessageController extends Controller
 {
     /**
@@ -37,11 +35,11 @@ class TicketMessageController extends Controller
         $ticketMessage->message = $request->input('message');
         $ticketMessage->save();
 
-        $ticketMessage->load(['user' => function ($q) {
-            $q->select('id', 'name');
+        $ticketMessage->load(['user' => function ($q) { 
+            $q->select('id', 'name'); 
         }]);
 
-        event(new TicketMessageCreation($ticketMessage));
+        broadcast(new \App\Events\TicketAddMessage($ticketMessage))->toOthers();
 
         if ($request->wantsJson()) {
             return $ticketMessage;
@@ -51,7 +49,7 @@ class TicketMessageController extends Controller
     }
 
     /**
-     * Update an existing ticket.
+     * Update an existing ticket message.
      *
      * @return \Illuminate\Http\Response
      */
@@ -61,12 +59,13 @@ class TicketMessageController extends Controller
     }
 
     /**
-     * Delete a ticket.
+     * Delete a ticket message.
      *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Ticket $ticket, TicketMessage $ticketmessage, Request $request)
     {
+        broadcast(new \App\Events\TicketDeleteMessage($ticketmessage))->toOthers();
         $ticketmessage->delete();
 
         if (! $request->wantsJson()) {

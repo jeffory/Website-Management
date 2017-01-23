@@ -87,7 +87,7 @@ class TicketController extends Controller
         $ticketMessage->ticket_id = $ticket->id;
         $ticketMessage->save();
 
-        event(new TicketCreation($ticket));
+        // event(new TicketCreation($ticket));
 
         if (! $request->wantsJson()) {
             return redirect('tickets/' . $ticket->id);

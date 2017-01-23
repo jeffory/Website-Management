@@ -13,7 +13,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 use App\TicketMessage;
 
-class TicketMessageCreation implements ShouldBroadcast
+class TicketAddMessage implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
@@ -26,17 +26,8 @@ class TicketMessageCreation implements ShouldBroadcast
      */
     public function __construct(TicketMessage $ticketMessage)
     {
-        $this->ticketMessage = $ticketMessage;
-    }
-
-    /**
-     * The event's broadcast name.
-     *
-     * @return string
-     */
-    public function broadcastAs()
-    {
-        return 'ticket.newMessage';
+        // If it's sent as an object and not an Array, it won't send user object.
+        $this->ticketMessage = $ticketMessage->toArray();
     }
 
     /**
@@ -46,6 +37,6 @@ class TicketMessageCreation implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('ticket.'. $this->ticketMessage->ticket_id);
+        return new PresenceChannel('ticket.'. $this->ticketMessage['ticket_id']);
     }
 }
