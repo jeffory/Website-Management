@@ -18,6 +18,19 @@ require('./bootstrap');
 
 // Vue.component('example', require('./components/Example.vue'));
 
+function generateUUID(){
+    var d = new Date().getTime();
+    if(window.performance && typeof window.performance.now === "function"){
+        d += performance.now(); //use high-precision timer if available
+    }
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
+
 
 Vue.component('ticket-details', {
     props: [
@@ -33,9 +46,22 @@ Vue.component('ticket-details', {
             ticketPending : {}
         }
     },
+    computed: {
+        isPosting: function () {
+            return 'uuid' in this.ticketPending;
+        }
+    },
     mounted() {
         this.listen();
         this.getTicket();
+
+        let ticket_index = this.findMessageIndex('id', 37);
+
+        if (typeof(ticket_index) !== 'undefined') {
+            this.ticket.messages[ticket_index].message = 'Hello world';
+        } else {
+            console.log('Cannot find message!');
+        }
     },
     methods: {
         /**
@@ -82,27 +108,55 @@ Vue.component('ticket-details', {
          * Delete a ticket.
          */
         storeMessage() {
+            // One at a time, prevent spam and it should be unncessary.
+            if ('uuid' in this.ticketPending) {
+                return;
+            }
+
             this.ticketPending = {
+                uuid: generateUUID(),
+                status: 0,
                 message: this.newMessage,
                 created_at: new Date(),
                 updated_at: new Date(),
                 user: {
                     id: this.userID,
                     name: this.userName
-                }};
+                }
+            };
 
             this.addMessage(this.ticketPending);
 
+            self = this;
+
             this.$http.post('/tickets/' + this.ticketId + '/message', { message: this.newMessage })
                 .then(response => {
-                    // If we fetch the message from the response we get the username...
+                    let ticket_id = self.findMessageIndex('uuid', self.ticketPending.uuid);
+
+                    if (typeof(ticket_id) !== 'undefined') {
+                        self.ticket.messages[ticket_id] = response.data
+                    } else {
+                        console.error('Cannot find pending ticket!!');
+                    }
+
                     this.newMessage = '';
+                    this.ticketPending = {};
                     return;
                 });
         },
 
         addMessage(message) {
             this.ticket.messages.push(message);
+        },
+
+        findMessageIndex(field, value=null) {
+            return _.findIndex(this.ticket.messages, function(message) {
+                if (value == null) {
+                    return field in message;
+                }
+
+                return message[field] == value;
+            });
         },
 
         removeMessage(id) {

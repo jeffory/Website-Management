@@ -59,11 +59,11 @@
             <br>
 
             <p class="control">
-                <textarea class="textarea" placeholder="New message" v-model="newMessage"></textarea>
+                <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting"></textarea>
             </p>
 
             <p class="control">
-                <button class="button is-wide is-primary" @click="storeMessage()">Add new message</button>
+                <button class="button is-wide is-primary" @click="storeMessage()" :disabled="isPosting">Add new message</button>
             </p>
 
             <p class="control">
