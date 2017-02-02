@@ -37,10 +37,11 @@ $factory->define(App\Ticket::class, function (Faker\Generator $faker) {
 $factory->define(App\TicketMessage::class, function (Faker\Generator $faker) {
     static $ticket_id;
     static $user_id;
+    static $message;
 
     return [
         'ticket_id' => $ticket_id ?: $ticket_id = 0,
         'user_id' => $user_id ?: $user_id = 0,
-        'message' => $faker->paragraph()
+        'message' => $message ?: $message = $faker->paragraph()
     ];
 });
