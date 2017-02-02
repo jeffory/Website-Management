@@ -30,8 +30,6 @@ class TicketMessage extends Model
 
     public function username()
     {
-        $this->user_id;
-        $user = User::find($this->user_id);
-        return $user['name'];
+        return $this->user()['name'];
     }
 }

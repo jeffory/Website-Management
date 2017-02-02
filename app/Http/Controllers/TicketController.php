@@ -25,18 +25,26 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::user()->is_admin or Auth::user()->is_staff) {
-            return view('ticket.index', [
-                'tickets' => Ticket::all()
-            ]);
+            $tickets = Ticket::withTrashed()
+                ->where('user_id', Auth::user()->id)
+                ->get();
+        }
+
+        if (isset($request->trashed)) {
+            $tickets = Ticket::withTrashed()
+                ->where('user_id', Auth::user()->id)
+                ->get();
+        } else {
+            $tickets = Ticket::where('user_id', Auth::user()->id)
+                ->get();
         }
         
         $user = Auth::user();
 
         return view('ticket.index', [
-            'tickets' => Ticket::where('user_id', Auth::user()->id)->get()
             'tickets' => $tickets,
             'user' => $user
         ]);
@@ -71,6 +79,8 @@ class TicketController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Ticket::class);
+
         return view('ticket.create');
     }
 
@@ -81,6 +91,8 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Ticket::class);
+
         $ticket = new Ticket();
         $ticketMessage = new TicketMessage();
 

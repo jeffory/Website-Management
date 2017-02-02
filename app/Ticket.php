@@ -21,8 +21,33 @@ class Ticket extends Model
         return $this->hasMany(TicketMessage::class);
     }
 
+    /**
+     * Ticket is owned by a user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Determine if this Ticket is owned by a particular user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ownedBy(User $user)
+    {
+        return $this->user_id == $user->id;
+    }
+
+    /**
+     * Determine if a Ticket is open.
+     *
+     * @return boolean
+     */
+    public function isOpen()
+    {
+        return $this->status == 0;
     }
 }

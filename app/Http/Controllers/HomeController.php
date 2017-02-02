@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $ticket_count = Ticket::where('user_id', Auth::user()->id)->count();
+        $ticket_count = Auth::user()->myTicketCount();
 
         return view('home', [
             'ticket_count' => $ticket_count

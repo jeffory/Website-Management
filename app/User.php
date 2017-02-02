@@ -26,4 +26,39 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get all the tickets a User can view/edit.
+     *
+     * @return boolean
+     */
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->is_admin == 1;
+    }
+
+    public function isStaff()
+    {
+        return ($this->is_staff == 1 || $this->isAdmin());
+    }
+    public function myTickets()
+    {
+        if ($this->isStaff()) {
+            return Ticket::all();
+        }
+        return $this->tickets();
+    }
+
+    public function myTicketCount()
+    {
+        if ($this->isStaff()) {
+            return Ticket::count();
+        }
+        return $this->tickets()->count();
+    }
 }
