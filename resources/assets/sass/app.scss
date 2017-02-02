@@ -67,6 +67,10 @@ body {
     a:hover {
         color: $primary;
     }
+
+    li + li {
+        margin-top: 0 !important;
+    }
 }
 
 .nav-brand {
@@ -159,4 +163,13 @@ p {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
   opacity: 0
+}
+
+.tab-panes {
+    border-bottom: 1px solid #dbdbdb;
+    border-left: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+    margin-bottom: 1em;
+    margin-top: -1.5em;
+    padding: 1em;
 }

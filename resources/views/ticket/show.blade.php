@@ -1,50 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container main-container content">
+<div class="container main-container">
     <h2><strong>Ticket:</strong> {{ $ticket->title }}</h2>
-
-    <noscript>
-    @foreach($ticket->messages as $index => $message)
-    <div class="ticket-listing columns">
-        <div class="column is-2">
-            <p>
-                <span>{{ $message->username() }}</span><br>
-                <span class="is-small">{{ $message->updated_at->diffForHumans() }}</span>
-            </p>
-        </div>
-
-        <div class="ticket-message column is-9">
-            <p>{{ $message->message }}</p>
-        </div>
-
-        <div class="controls column has-text-right">
-            {{-- <a class="button" href="#">Edit</a> --}}
-
-            <form role="form" method="POST" action="{{ url('/tickets', [$ticket->id, 'message', $message->id]) }}" style="display: inline">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
-
-                <button class="delete" type="submit" name="delete"></button>
-            </form>
-        </div>
-    </div>
-    @endforeach
-    </noscript>
-
     
-    <ticket-details user-id="{{Auth::user()->id}}" user-name="{{Auth::user()->name}}" :ticket-id="{{$ticket->id}}" inline-template v-cloak>
-        <div>
-            <div class="columns ticket-listing" v-for="message in ticket.messages">
+    <ticket-details user-id="{{Auth::user()->id}}" user-name="{{Auth::user()->name}}" :data="ticket" inline-template v-cloak>
+        <div v-if="ticket">
+             <div class="columns ticket-listing" v-for="message in ticket.messages">
                 <div class="column is-2">
-                    <p>
+                    <p class="content">
                         <span>@{{ message.user.name }}</span><br>
                         <timeago :since="Date.parse(message.updated_at)" :auto-update="1"></timeago>
                     </p>
                 </div>
 
                 <div class="ticket-message column is-9">
-                    <p>@{{ message.message }}</p>
+                    <p class="content">@{{ message.message }}</p>
                 </div>
 
                 <div class="controls column has-text-right">
@@ -58,9 +29,27 @@
             </div>
             <br>
 
-            <p class="control">
-                <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting"></textarea>
-            </p>
+            <tabs :active="1">
+                <tab label="Message" icon="pencil">
+                    <p class="control">
+                        <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting" style="min-height: 150px"></textarea>
+                    </p>
+                </tab>
+
+                <tab :label="'Attachments (' + attachmentCount + ')'" icon="paperclip">
+                    <p class="control">
+                        <dropzone id="file" url="https://httpbin.org/post" @vdropzone-success="fileUploaded" @vdropzone-removedFile="fileRemoved" :use-font-awesome="true" :max-file-size-in-mb="10" style="height: 100%" ref="dropzone"></dropzone>
+                    </p>
+                </tab>
+
+                <tab label="Users/Permissions" icon="user">
+                    <p>
+                        User permissions would go here.
+                    </p>
+                </tab>
+            </tabs>
+
+            <div>attachments: @{{ attachmentCount }}</div>
 
             <p class="control">
                 <button class="button is-wide is-primary" @click="storeMessage()" :disabled="isPosting">Add new message</button>

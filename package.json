@@ -20,6 +20,7 @@
     "laravel-echo": "^1.2.2",
     "pusher-js": "^4.0.0",
     "turbolinks": "^5.0.0",
-    "vue-timeago": "^3.1.5"
+    "vue-timeago": "^3.1.5",
+    "vue2-dropzone": "^2.0.0"
   }
 }

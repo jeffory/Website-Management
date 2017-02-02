@@ -6460,6 +6460,10 @@ body {
   color: #21a8bd;
 }
 
+.nav li + li {
+  margin-top: 0 !important;
+}
+
 .nav-brand {
   font-family: 'Archivo Black', sans-serif;
   text-transform: uppercase;
@@ -6528,7 +6532,6 @@ p {
 
 .icon-box {
   background-color: #21a8bd;
-  cursor: pointer;
   padding: 3.5em 1em;
 }
 
@@ -6548,6 +6551,15 @@ p {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.tab-panes {
+  border-bottom: 1px solid #dbdbdb;
+  border-left: 1px solid #dbdbdb;
+  border-right: 1px solid #dbdbdb;
+  margin-bottom: 1em;
+  margin-top: -1.5em;
+  padding: 1em;
 }
 
 /*# sourceMappingURL=app.css.map */
