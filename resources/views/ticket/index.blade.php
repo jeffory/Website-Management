@@ -4,7 +4,7 @@
 <div class="container main-container content" id="tickets-management">
     <h2>My tickets</h2>
 
-    @if (! $user->is_verified)
+    @if (! $user->isVerified())
         <p>Please verify your email to post tickets.</p>
     @endif
 
