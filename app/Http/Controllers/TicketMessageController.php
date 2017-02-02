@@ -35,8 +35,11 @@ class TicketMessageController extends Controller
         $ticketMessage->message = $request->input('message');
         $ticketMessage->save();
 
-        $ticketMessage->load(['user' => function ($q) { 
-            $q->select('id', 'name'); 
+        // Set the Ticket updated_at time to now.
+        $ticket->touch();
+
+        $ticketMessage->load(['user' => function ($q) {
+            $q->select('id', 'name');
         }]);
 
         broadcast(new \App\Events\TicketAddMessage($ticketMessage))->toOthers();
