@@ -37,15 +37,41 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    /**
+     * Determine if the user is an admin.
+     *
+     * @return boolean
+     */
     public function isAdmin()
     {
         return $this->is_admin == 1;
     }
 
+    /**
+     * Determine if the user is a staff member.
+     *
+     * @return boolean
+     */
     public function isStaff()
     {
         return ($this->is_staff == 1 || $this->isAdmin());
     }
+
+    /**
+     * Determine if the user has verified their email/account.
+     *
+     * @return boolean
+     */
+    public function isVerified()
+    {
+        return $this->is_verified == 1;
+    }
+
+    /**
+     * Retrieve a list of the users viewable tickets.
+     *
+     * @return collection
+     */
     public function myTickets()
     {
         if ($this->isStaff()) {
@@ -54,6 +80,11 @@ class User extends Authenticatable
         return $this->tickets();
     }
 
+    /**
+     * Determine the count of the users viewable tickets.
+     *
+     * @return integer
+     */
     public function myTicketCount()
     {
         if ($this->isStaff()) {
