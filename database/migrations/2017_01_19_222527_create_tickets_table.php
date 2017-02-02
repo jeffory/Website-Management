@@ -17,7 +17,8 @@ class CreateTicketsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->integer('user_id')->unsigned();
-            $table->string('status')->nullable();
+            $table->integer('assigned_to')->unsigned()->nullable();
+            $table->integer('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });
