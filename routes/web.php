@@ -19,3 +19,5 @@ Route::resource('/tickets', 'TicketController');
 
 Route::post('/tickets/{ticket}/message', 'TicketMessageController@store');
 Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
+
+Route::get('/user/verify/{token}', 'UserVerificationController')->name('user.verify');

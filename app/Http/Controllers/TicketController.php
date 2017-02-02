@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Ticket;
 use App\TicketMessage;
 use Auth;
-use App\Events\TicketCreation;
+use App\Events\TicketCreated;
 
 class TicketController extends Controller
 {
@@ -32,9 +32,13 @@ class TicketController extends Controller
                 'tickets' => Ticket::all()
             ]);
         }
+        
+        $user = Auth::user();
 
         return view('ticket.index', [
             'tickets' => Ticket::where('user_id', Auth::user()->id)->get()
+            'tickets' => $tickets,
+            'user' => $user
         ]);
     }
 
@@ -45,6 +49,8 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket, Request $request)
     {
+        $this->authorize('view', $ticket);
+
         $ticket->load(['messages', 'messages.user' => function ($q) {
             $q->select('id', 'name');
         }]);
@@ -87,7 +93,7 @@ class TicketController extends Controller
         $ticketMessage->ticket_id = $ticket->id;
         $ticketMessage->save();
 
-        // event(new TicketCreation($ticket));
+        event(new TicketCreated($ticket));
 
         if (! $request->wantsJson()) {
             return redirect('tickets/' . $ticket->id);
