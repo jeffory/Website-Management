@@ -167,7 +167,8 @@ return [
          * Package Service Providers...
          */
 
-        //
+        Modelizer\Selenium\SeleniumServiceProvider::class,
+        Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
 
         /*
          * Application Service Providers...

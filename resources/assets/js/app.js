@@ -32,7 +32,7 @@ Vue.use(VueTimeago, {
 })
 
 Vue.component('ticket-details', require('./components/TicketDetails.vue'));
-
+Vue.component('message-attachments', require('./components/MessageAttachments.vue'));
 Vue.component('tabs', require('./components/Tabs.vue'));
 Vue.component('tab', require('./components/Tab.vue'));
 

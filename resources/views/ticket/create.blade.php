@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container main-container content">
-    <h2>Create a new ticket</h2>
+<div class="container main-container">
+    <h2 class="is-title is-2">Create a new ticket</h2>
 
     <form role="form" method="POST" action="{{ url('/tickets') }}">
         {{ csrf_field() }}
@@ -16,12 +16,16 @@
         </p>
 
         <p class="control">
-            <textarea class="textarea{{ $errors->has('message') ? ' is-danger' : '' }}" name="message" type="text" placeholder="Message" required>{{ old('message') }}</textarea>
+            <textarea class="textarea{{ $errors->has('message') ? ' is-danger' : '' }}" name="message" type="text" placeholder="Message" required></textarea>
+
+            <message-attachments></message-attachments>
 
             @if ($errors->has('message'))
                 <span class="help is-danger">{{ $errors->first('message') }}</span>
             @endif
         </p>
+
+        <hr>
 
         <p class="control">
             <button type="submit" class="button is-wide is-primary">
