@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ $title or '' }} | {{ config('app.name', '') }}</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     @yield('markup')
 </head>
 <body style="color: #333; font-family: sans-serif; line-height: 1.35em">
@@ -18,7 +12,6 @@
         <div style="padding: 20px;">
             @yield('content')
 
-            <br>
             <p style="margin-bottom: 1.5em">
                 Warm regards,<br>
                 Keith McGahey

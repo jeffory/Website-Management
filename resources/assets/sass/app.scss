@@ -173,3 +173,14 @@ p {
     margin-top: -1.5em;
     padding: 1em;
 }
+
+.pagination {
+    margin-bottom: 1em;
+
+    li {
+        display: inline-block;
+        list-style: none;
+    }
+}
+
+

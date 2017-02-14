@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Client Area | {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
@@ -25,7 +25,7 @@
         <nav class="nav">
             <div class="container">
                 <div class="nav-left">
-                    <a class="nav-item nav-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
+                    <a class="nav-item nav-brand" href="{{ url('/') }}">Client Area | {{ config('app.name', 'Laravel') }}</a>
                 </div>
 
                 <div class="nav-right">

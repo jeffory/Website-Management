@@ -6532,6 +6532,7 @@ p {
 
 .icon-box {
   background-color: #21a8bd;
+  cursor: pointer;
   padding: 3.5em 1em;
 }
 
@@ -6560,6 +6561,15 @@ p {
   margin-bottom: 1em;
   margin-top: -1.5em;
   padding: 1em;
+}
+
+.pagination {
+  margin-bottom: 1em;
+}
+
+.pagination li {
+  display: inline-block;
+  list-style: none;
 }
 
 /*# sourceMappingURL=app.css.map */

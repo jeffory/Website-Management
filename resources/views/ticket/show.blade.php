@@ -2,7 +2,24 @@
 
 @section('content')
 <div class="container main-container">
-    <h2><strong>Ticket:</strong> {{ $ticket->title }}</h2>
+
+    <nav class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="is-marginless"><strong>Ticket:</strong> {{ $ticket->title }}</h2>
+            </div>
+        </div>
+
+        <div class="level-right">
+            <div class="level-item">
+                <button class="button is-medium is-outlined">
+                    <span class="icon">
+                        <i class="fa fa-bars"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </nav>
     
     <ticket-details user-id="{{Auth::user()->id}}" user-name="{{Auth::user()->name}}" :data="ticket" inline-template v-cloak>
         <div v-if="ticket">
@@ -32,7 +49,7 @@
             <tabs :active="1">
                 <tab label="Message" icon="pencil">
                     <p class="control">
-                        <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting" style="min-height: 150px"></textarea>
+                        <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting" name="message" style="min-height: 150px"></textarea>
                     </p>
                 </tab>
 
