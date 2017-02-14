@@ -80,7 +80,7 @@
                     if ('progress' in self.options) {
                         if (e.lengthComputable) {
                             self.options['progress'].call(self,
-                                ((self.chunkRangeEnd - e.loaded) / self.fileSize) * 100
+                                ((self.chunkRangeStart + e.loaded) / self.fileSize) * 100
                             );
                         }
                     }
