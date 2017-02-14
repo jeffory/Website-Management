@@ -10,12 +10,15 @@
     </p>
 
     <p>
-        Please verify your email using the link below:<br>
+        Click the button below to verify your email address:
+    </p>
 
-        <a href="{{ route('user.verify', ['token' => $user->verification_token]) }}">
-            {{ route('user.verify', ['token' => $user->verification_token]) }}
+    <p style="padding: .8em 2em;">
+        <a href="{{ route('user.verify', ['token' => $user->verification_token]) }}" style="background-color: #21a8bd; color: #fff; padding: 1em 3em; text-decoration: none; border-radius: 4px">
+            Verify Email
         </a>
     </p>
+    
 @endsection
 
 @section('markup')
@@ -23,15 +26,15 @@
         {
           "@context": "http://schema.org",
           "@type": "EmailMessage",
+          "description": "Verify your new account.",
           "potentialAction": {
-            "@type": "SaveAction",
+            "@type": "ConfirmAction",
             "name": "Verify Account",
             "handler": {
               "@type": "HttpActionHandler",
               "url": "{{ route('user.verify', ['token' => $user->verification_token]) }}"
             }
-          },
-          "description": "Verify your new account."
+          }
         }
     </script>
 @endsection

@@ -20,4 +20,7 @@ Route::resource('/tickets', 'TicketController');
 Route::post('/tickets/{ticket}/message', 'TicketMessageController@store');
 Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
 
-Route::get('/user/verify/{token}', 'UserVerificationController')->name('user.verify');
+Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')->name('user.sendVerification');
+Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')->name('user.verify');
+
+Route::post('/file_upload', 'FileUploadController@store');

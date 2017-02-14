@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserRegistration' => [
             'App\Listeners\SendUserRegistrationEmail'
         ],
+        'App\Events\UserResendVerification' => [
+            'App\Listeners\SendUserRegistrationEmail'
+        ],
         'App\Events\TicketCreated' => [
             'App\Listeners\SendTicketCreationEmail'
         ],

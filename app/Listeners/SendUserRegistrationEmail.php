@@ -3,6 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\UserRegistration;
+use App\Events\UserResendVerification;
+
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -27,7 +29,7 @@ class SendUserRegistrationEmail
      * @param  UserRegistration  $event
      * @return void
      */
-    public function handle(UserRegistration $event)
+    public function handle($event)
     {
         $user = $event->user;
 
