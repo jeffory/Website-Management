@@ -48,7 +48,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Determine if the user is a staff member.
+     * Determine if the user is at least a staff member.
      *
      * @return boolean
      */
@@ -90,6 +90,7 @@ class User extends Authenticatable
         if ($this->isStaff()) {
             return Ticket::count();
         }
+
         return $this->tickets()->count();
     }
 }
