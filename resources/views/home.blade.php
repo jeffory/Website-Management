@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.client-area')
 
 @section('content')
 <div class="container main-container">
@@ -18,9 +18,9 @@
 
             <p>
                 @if(Auth::user()->is_admin)
-                <a href="{{ url('tickets') }}">There are {{ $ticket_count }} ticket(s) open</a>
+                <a href="{{ route('tickets.index') }}">There are {{ $ticket_count }} ticket(s) open</a>
                 @else
-                <a href="{{ url('tickets') }}">You have {{ $ticket_count }} ticket(s) open</a>
+                <a href="{{ route('tickets.index') }}">You have {{ $ticket_count }} ticket(s) open</a>
                 @endif
             </p>
         </div>

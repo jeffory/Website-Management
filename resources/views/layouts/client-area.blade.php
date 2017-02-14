@@ -20,7 +20,7 @@
         ]); ?>
     </script>
 </head>
-<body>
+<body class="has-top-navbar">
     <div id="app">
         <nav class="nav">
             <div class="container">

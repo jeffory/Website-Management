@@ -50,7 +50,10 @@ body {
     font-family: $font-family-sans-serif;
     font-size: $font-size-base;
     min-height: 100vh;
-    padding-top: 4.65em;
+
+    &.has-top-navbar {
+        padding-top: 4.65em;
+    }
 }
 
 .nav {

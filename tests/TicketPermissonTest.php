@@ -44,7 +44,7 @@ class TicketPermissonTest extends TestCase
              ->see($title);
 
         $this->actingAs($user2)
-             ->get('tickets/'. $ticket->id)
+             ->visitRoute('tickets.show', ['id' => $ticket->id])
              ->assertResponseStatus(403);
 
         $this->assertTrue($admin->isAdmin());

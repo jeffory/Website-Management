@@ -13,14 +13,16 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index');
-Route::get('/home', 'HomeController@index');
-Route::resource('/tickets', 'TicketController');
+Route::get('/client-area/', 'HomeController@index');
 
-Route::post('/tickets/{ticket}/message', 'TicketMessageController@store');
-Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
+Route::resource('/client-area/tickets', 'TicketController');
 
-Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')->name('user.sendVerification');
-Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')->name('user.verify');
+Route::post('/client-area/tickets/{ticket}/message', 'TicketMessageController@store');
+Route::delete('/client-area/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
+
+Route::get('/client-area/user/resend-verification', 'UserVerificationController@sendVerificationEmail')->name('user.sendVerification');
+Route::get('/client-area/user/verify/{token}', 'UserVerificationController@verifyUserByToken')->name('user.verify');
 
 Route::post('/file_upload', 'FileUploadController@store');
+
+Route::get('/{page?}', 'PagesController@serve');
