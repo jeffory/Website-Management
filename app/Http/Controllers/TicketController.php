@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use App\Ticket;
 use App\TicketMessage;
@@ -27,19 +30,23 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::user()->is_admin or Auth::user()->is_staff) {
-            $tickets = Ticket::withTrashed()
-                ->where('user_id', Auth::user()->id)
-                ->get();
-        }
-
-        if (isset($request->trashed)) {
-            $tickets = Ticket::withTrashed()
-                ->where('user_id', Auth::user()->id)
-                ->get();
+        if (!isset($request->trashed)) {
+            if (Auth::user()->isStaff()) {
+                $tickets = Ticket::paginate(15);
+            } else {
+                $tickets = Ticket::where('user_id', Auth::user()->id)
+                    ->get();
+            }
         } else {
-            $tickets = Ticket::where('user_id', Auth::user()->id)
-                ->get();
+            // Show trashed tickets too
+            if (Auth::user()->isStaff()) {
+                $tickets = Ticket::withTrashed()
+                    ->get();
+            } else {
+                $tickets = Ticket::withTrashed()
+                    ->where('user_id', Auth::user()->id)
+                    ->get();
+            }
         }
         
         $user = Auth::user();
