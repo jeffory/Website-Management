@@ -10,7 +10,6 @@ require('./bootstrap');
 // var Turbolinks = require("turbolinks");
 // Turbolinks.start();
 
-import Dropzone from 'vue2-dropzone';
 import VueTimeago from 'vue-timeago';
 
 Vue.use(VueTimeago, {
@@ -30,6 +29,8 @@ Vue.use(VueTimeago, {
 
     }
 })
+
+window.axios = require('axios');
 
 Vue.component('ticket-details', require('./components/TicketDetails.vue'));
 Vue.component('message-attachments', require('./components/MessageAttachments.vue'));

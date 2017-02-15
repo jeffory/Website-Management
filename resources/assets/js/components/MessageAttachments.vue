@@ -35,8 +35,78 @@
 </template>
 
 <script>
-    class ChunkUploader {
+    export default {
+        props: [
 
+        ],
+        data() {
+            return {
+                attachmentCount: 0,
+                attachedFiles: [],
+                uploadsInProgress: 0
+            }
+        },
+        methods: {
+            upload(e) {
+                let self = this;
+
+                _.each(e.srcElement.files, (file) => {
+                    let index = self.attachedFiles.length;
+                    this.uploadsInProgress++;
+
+                    self.attachedFiles.push({
+                        index: index,
+                        name: file.name,
+                        percentage: 0,
+                        hasError: false,
+                        serverFileID: false
+                    });
+
+                    new ChunkUploader(file, "upload_file", '/file_upload',
+                    {
+                        progress: (percentageDone) => {
+                            self.updateUploadStatus(index, { percentage: percentageDone });
+                        },
+                        error: () => {
+                            self.updateUploadStatus(index, { percentage: 100, hasError: true });
+                            self.uploadsInProgress--;
+                            
+                            if (self.uploadsInProgress == 0) {
+                                e.srcElement.value = "";
+                            }
+                        },
+                        complete: () => {
+                            self.updateUploadStatus(index, { percentage: 100 });
+                            self.uploadsInProgress--;
+
+                            if (self.uploadsInProgress == 0) {
+                                e.srcElement.value = "";
+                            }
+                        }
+                    });
+
+                });
+            },
+            removeUpload(index) {
+                this.attachedFiles = _.reject(this.attachedFiles, (file) => {
+                    return file.index == index;
+                });
+            },
+            updateUploadStatus(index, data) {
+                var file = _.find(this.attachedFiles, {'index': index});
+                
+                _.each(data, (value, key) => {
+                    if (key in file) {
+                        file[key] = value;
+                    }
+                });
+            }
+        }
+    }
+
+    // ---- ChunkUploader ----
+
+    class ChunkUploader {
         constructor(file, formFieldName, postURL, options) {
 
             if (! 'axios' in window) {
@@ -118,78 +188,6 @@
                 self.chunkRangeStart = self.chunkRangeEnd;
                 self.chunkRangeEnd = self.chunkRangeStart + self.chunkSize;
                 self.uploadChunk();
-            }
-        }
-
-    }
-
-    // ----
-
-    export default {
-        props: [
-
-        ],
-        data() {
-            return {
-                attachmentCount: 0,
-                attachedFiles: [],
-                uploadsInProgress: 0
-            }
-        },
-        methods: {
-            upload(e) {
-                let self = this;
-
-                _.each(e.srcElement.files, (file) => {
-                    let index = self.attachedFiles.length;
-                    this.uploadsInProgress++;
-
-                    self.attachedFiles.push({
-                        index: index,
-                        name: file.name,
-                        percentage: 0,
-                        hasError: false,
-                        serverFileID: false
-                    });
-
-                    new ChunkUploader(file, "upload_file", '/file_upload',
-                    {
-                        progress: (percentageDone) => {
-                            self.updateUploadStatus(index, { percentage: percentageDone });
-                        },
-                        error: () => {
-                            self.updateUploadStatus(index, { percentage: 100, hasError: true });
-                            self.uploadsInProgress--;
-                            
-                            if (self.uploadsInProgress == 0) {
-                                e.srcElement.value = "";
-                            }
-                        },
-                        complete: () => {
-                            self.updateUploadStatus(index, { percentage: 100 });
-                            self.uploadsInProgress--;
-
-                            if (self.uploadsInProgress == 0) {
-                                e.srcElement.value = "";
-                            }
-                        }
-                    });
-
-                });
-            },
-            removeUpload(index) {
-                this.attachedFiles = _.reject(this.attachedFiles, (file) => {
-                    return file.index == index;
-                });
-            },
-            updateUploadStatus(index, data) {
-                var file = _.find(this.attachedFiles, {'index': index});
-                
-                _.each(data, (value, key) => {
-                    if (key in file) {
-                        file[key] = value;
-                    }
-                });
             }
         }
     }

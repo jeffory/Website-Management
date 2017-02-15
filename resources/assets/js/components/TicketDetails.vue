@@ -1,11 +1,9 @@
 <!-- Can't put the template in here because it uses outside variables -->
 
 <script>
-    import Dropzone from 'vue2-dropzone';
-
     export default {
         components: {
-            Dropzone
+            
         },
         props: [
             'userId',
@@ -150,15 +148,6 @@
                 this.removeMessage(ticketMessageID);
             },
 
-            fileUploaded() {
-                this.attachmentCount = _.filter(this.$refs.dropzone.dropzone.files, { 'status': 'success' }).length;
-            },
-
-            fileRemoved() {
-                console.log('fileRemoved');
-                this.attachmentCount = _.filter(this.$refs.dropzone.dropzone.files, { 'status': 'success' }).length;
-            },
-
             generateUUID() {
                 var d = new Date().getTime();
                 if(window.performance && typeof window.performance.now === "function"){
@@ -173,9 +162,7 @@
             }
         },
         watch: {
-            'this.$refs.dropzone.dropzone.files': function () {
-                this.attachmentCount = _.filter(this.$refs.dropzone.dropzone.files, { 'status': 'success' }).length;
-            }
+
         }
     }
 </script>

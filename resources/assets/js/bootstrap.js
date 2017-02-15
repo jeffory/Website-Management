@@ -18,7 +18,6 @@ window._ = require('lodash');
 
 window.Vue = require('vue');
 require('vue-resource');
-window.axios = require('axios');
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of

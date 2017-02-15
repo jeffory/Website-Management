@@ -32,7 +32,7 @@ class FileUploadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    private function completeUpload(Request $request, $file_variable)
+    private function processFileUpload(Request $request, $file_variable)
     {
         $file_upload = new FileReceiver($file_variable, $request, HandlerFactory::classFromRequest($request));
 
@@ -52,7 +52,7 @@ class FileUploadController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $this->completeUpload($request, "upload_file");
+        $file = $this->processFileUpload($request, "upload_file");
 
         // If the file hasn't finished uploading yet...
         if (! $file->isFinished()) {
