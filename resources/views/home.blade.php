@@ -7,7 +7,7 @@
 
     <div class="columns">
         <div class="column is-3 box has-text-centered icon-box">
-            <a href="{{ url('tickets') }}">
+            <a href="{{ route('tickets.index') }}">
             <i class="icon fa fa-ticket is-big"></i>
             @if(Auth::user()->is_admin)
                 <h3>Support Tickets</h3>
