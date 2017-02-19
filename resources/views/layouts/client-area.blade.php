@@ -22,32 +22,49 @@
 </head>
 <body class="has-top-navbar">
     <div id="app">
-        <nav class="nav">
-            <div class="container">
-                <div class="nav-left">
-                    <a class="nav-item nav-brand" href="{{ url('/') }}">Client Area | {{ config('app.name', 'Laravel') }}</a>
-                </div>
-
-                <div class="nav-right">
-                    @if (Auth::guest())
-                        <a class="nav-item" href="{{ url('/login') }}">Login</a>
-                        <a class="nav-item" href="{{ url('/register') }}">Register</a>
-                    @else
-                    <a class="nav-item" href="{{ url('/tickets') }}">My tickets</a>
-
-                    
-                    <a class="nav-item" href="{{ url('/logout') }}"
-                        onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
-                        Logout
-                    </a>
-
-                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                    @endif
-                </div>
+        <nav class="nav container">
+            <div class="nav-left">
+                <a class="nav-item nav-brand" href="{{ route('home') }}">
+                    Client Area
+                </a>
             </div>
+            
+            <!-- Desktop menu -->
+            <div class="nav-right nav-menu">
+                @if (Auth::guest())
+                    <a class="nav-item" href="{{ route('login') }}">Login</a>
+                    <a class="nav-item" href="{{ route('register') }}">Register</a>
+                @else
+                <a class="nav-item" href="{{ route('tickets.index') }}">My tickets</a>
+
+                
+                <a class="nav-item" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                             document.getElementById('logout-form').submit();">
+                    Logout
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+                @endif
+            </div>
+
+            <!-- Mobile menu -->
+            <dropdown-menu>
+                <template slot="button" class="nav-toggle is-dark">
+                    <span class="icon">
+                        <i class="fa fa-bars"></i>
+                    </span>
+                </template>
+
+                <template slot="menu">
+                    <ul class="menu-list" style="background-color: #242424">
+                        <li><a href="{{ route('tickets.index') }}">My tickets</a></li>
+                        <li><a>Logout</a></li>
+                    </ul>
+                </template>
+            </dropdown-menu>
         </nav>
 
         @yield('content')

@@ -9,7 +9,7 @@
             
                     <span>Attach file(s)</span>
             
-                    <input type="file" id="file-input" multiple @change.prevent="upload">
+                    <input type="file" id="file-input" ref="file-uploader" multiple @change.prevent="upload">
                 </label>
             </div>
             
@@ -26,7 +26,7 @@
                         <span>{{ file.name }}</span>
                         <button class="delete is-small" @click.prevent="removeUpload(file.index)"></button>
 
-                        <input type="hidden" name="file_id[]" v-if="file.serverFileID" value="file.serverFileID">
+                        <input type="hidden" name="file-id-input[]" v-if="file.serverFileID" value="file.serverFileID">
                     </li>
                 </ul>
             </div>
@@ -36,9 +36,6 @@
 
 <script>
     export default {
-        props: [
-
-        ],
         data() {
             return {
                 attachmentCount: 0,
@@ -50,7 +47,9 @@
             upload(e) {
                 let self = this;
 
-                _.each(e.srcElement.files, (file) => {
+                let file_upload_input = this.$refs['file-uploader'];
+
+                _.each(file_upload_input.files, (file) => {
                     let index = self.attachedFiles.length;
                     this.uploadsInProgress++;
 
@@ -72,7 +71,7 @@
                             self.uploadsInProgress--;
                             
                             if (self.uploadsInProgress == 0) {
-                                e.srcElement.value = "";
+                                file_upload_input.value = "";
                             }
                         },
                         complete: () => {
@@ -80,7 +79,7 @@
                             self.uploadsInProgress--;
 
                             if (self.uploadsInProgress == 0) {
-                                e.srcElement.value = "";
+                                file_upload_input.value = "";
                             }
                         }
                     });

@@ -94,7 +94,7 @@
 
                 self = this;
 
-                this.$http.post('/tickets/' + this.ticket.id + '/message', { message: this.newMessage })
+                this.$http.post('/client-area/tickets/' + this.ticket.id + '/message', { message: this.newMessage })
                     .then(response => {
                         let ticket_id = self.findMessageIndex('uuid', self.ticketPending.uuid);
 
@@ -134,7 +134,7 @@
              * Delete the ticket.
              */
             deleteTicket() {
-                this.$http.delete('/tickets/' + this.ticket.id)
+                this.$http.delete('/client-area/tickets/' + this.ticket.id)
                     .then(response => {
                         window.location = "/tickets";
                     });
@@ -144,7 +144,7 @@
              * Delete a ticket.
              */
             deleteMessage(ticketMessageID) {
-                this.$http.post('/tickets/' + this.ticket.id + '/message/' + ticketMessageID, {  _method: 'DELETE' });
+                this.$http.post('/client-area/tickets/' + this.ticket.id + '/message/' + ticketMessageID, {  _method: 'DELETE' });
                 this.removeMessage(ticketMessageID);
             },
 

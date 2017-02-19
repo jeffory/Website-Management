@@ -32,6 +32,7 @@ Vue.use(VueTimeago, {
 
 window.axios = require('axios');
 
+Vue.component('dropdown-menu', require('./components/DropdownMenu.vue'));
 Vue.component('ticket-details', require('./components/TicketDetails.vue'));
 Vue.component('message-attachments', require('./components/MessageAttachments.vue'));
 Vue.component('tabs', require('./components/Tabs.vue'));

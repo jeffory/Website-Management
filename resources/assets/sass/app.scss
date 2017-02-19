@@ -52,15 +52,19 @@ body {
     min-height: 100vh;
 
     &.has-top-navbar {
-        padding-top: 4.65em;
+        padding-top: 4.05em;
     }
 }
 
 .nav {
     background-color: $navbar-default-bg;
-    margin-bottom: 1em;
+    left: 50%;
+    margin: 0 auto;
+    min-height: 58px;
+    padding: .25em 1em;
     position: fixed;
     top: 0;
+    transform: translateX(-50%);
     width: 100%;
 
     &, a {
@@ -73,6 +77,30 @@ body {
 
     li + li {
         margin-top: 0 !important;
+    }
+
+    .dropdown-menu {
+        margin: 5px 0;
+
+        .button {
+            background-color: #242424;
+            border: 0;
+            color: #fff;
+        }
+
+        .menu {
+            border: 0;
+            margin-top: 5px;
+            transform: translateX(-63%);
+        }
+
+        a {
+            padding: 1em 3em;
+        }
+
+        a:hover {
+            background-color: #242424;
+        }
     }
 }
 

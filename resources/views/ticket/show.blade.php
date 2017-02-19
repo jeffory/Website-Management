@@ -12,11 +12,23 @@
 
         <div class="level-right">
             <div class="level-item">
-                <button class="button is-medium is-outlined">
-                    <span class="icon">
-                        <i class="fa fa-bars"></i>
-                    </span>
-                </button>
+
+                <dropdown-menu v-cloak alignment="right">
+
+                    <template slot="button" class="test1">
+                        <span class="icon">
+                            <i class="fa fa-bars"></i>
+                        </span>
+                    </template>
+
+                    <template slot="menu">
+                        <ul class="menu-list">
+                            <li><a>Share with user</a></li>
+                            <li><a>Delete Ticket</a></li>
+                        </ul>
+                    </template>
+                </dropdown-menu>
+
             </div>
         </div>
     </nav>
@@ -46,27 +58,9 @@
             </div>
             <br>
 
-            <tabs :active="1">
-                <tab label="Message" icon="pencil">
-                    <p class="control">
-                        <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting" name="message" style="min-height: 150px"></textarea>
-                    </p>
-                </tab>
-
-                <tab :label="'Attachments (' + attachmentCount + ')'" icon="paperclip">
-                    <p class="control">
-                        <dropzone id="file" url="https://httpbin.org/post" @vdropzone-success="fileUploaded" @vdropzone-removedFile="fileRemoved" :use-font-awesome="true" :max-file-size-in-mb="10" style="height: 100%" ref="dropzone"></dropzone>
-                    </p>
-                </tab>
-
-                <tab label="Users/Permissions" icon="user">
-                    <p>
-                        User permissions would go here.
-                    </p>
-                </tab>
-            </tabs>
-
-            <div>attachments: @{{ attachmentCount }}</div>
+            <p class="control">
+                <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting" name="message" style="min-height: 150px"></textarea>
+            </p>
 
             <p class="control">
                 <button class="button is-wide is-primary" @click="storeMessage()" :disabled="isPosting">Add new message</button>
