@@ -21,7 +21,7 @@ class TicketCreationTest extends TestCase
         $message = 'This is my message';
 
         $this->actingAs($user)
-             ->visit('client-area/tickets/create')
+             ->visit(route('tickets.create'))
              ->see('Create a new Ticket')
              ->type($title, 'title')
              ->type($message, 'message')

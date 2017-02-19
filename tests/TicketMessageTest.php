@@ -30,16 +30,19 @@ class TicketMessageTest extends SeleniumTestCase
 
         $message = factory(App\TicketMessage::class)->make();
 
-        $this->visit('/login')
+        $this->visit(route('login'))
              ->submitForm('form', [
                 'email' => $user->email,
                 'password' => $user_password
                 ])
-             ->visit('tickets/'. $ticket->id)
+             ->wait(2)
+             ->visit(route('tickets.show', ['id' => $ticket->id]))
              ->see('Ticket: '. $ticket->title)
              ->type($message->message, 'message')
              ->press('Add new message')
-             ->visit('tickets/'. $ticket->id)
+             ->waitForElementsWithClass('ticket-message', 5000)
+             ->see($message->message)
+             ->visit(route('tickets.show', ['id' => $ticket->id]))
              ->see($message->message);
     }
 }

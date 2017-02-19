@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TicketPermissonTest extends TestCase
 {
+    use DatabaseTransactions;
+    
     /**
      * Test permissions between User and Tickets.
      *
@@ -43,9 +45,11 @@ class TicketPermissonTest extends TestCase
              ->visitRoute('tickets.show', ['id' => $ticket->id])
              ->see($title);
 
-        $this->actingAs($user2)
-             ->visitRoute('tickets.show', ['id' => $ticket->id])
-             ->assertResponseStatus(403);
+        // This fails before assertion if visitRoute() is used.
+        $response = $this->actingAs($user2)
+                         ->call('GET', route('tickets.show', ['id' => $ticket->id]));
+
+        $this->assertEquals(403, $response->status());
 
         $this->assertTrue($admin->isAdmin());
 
