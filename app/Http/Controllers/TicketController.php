@@ -115,7 +115,7 @@ class TicketController extends Controller
         event(new TicketCreated($ticket));
 
         if (! $request->wantsJson()) {
-            return redirect('tickets/' . $ticket->id);
+            return redirect()->route('tickets.show', ['id' => $ticket->id]);
         } else {
             return compact($ticket);
         }
@@ -144,7 +144,7 @@ class TicketController extends Controller
         $ticket->delete();
 
         if (! $request->wantsJson()) {
-            return redirect('/tickets');
+            return redirect()->route('tickets.index');
         }
     }
 }

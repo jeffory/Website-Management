@@ -4,7 +4,7 @@
 <div class="container main-container">
     <h2 class="is-title is-2">Create a new ticket</h2>
 
-    <form role="form" method="POST" action="{{ url('/tickets') }}">
+    <form role="form" method="POST" action="{{ route('tickets.index') }}">
         {{ csrf_field() }}
 
         <p class="control">
@@ -24,8 +24,6 @@
                 <span class="help is-danger">{{ $errors->first('message') }}</span>
             @endif
         </p>
-
-        <hr>
 
         <p class="control">
             <button type="submit" class="button is-wide is-primary">

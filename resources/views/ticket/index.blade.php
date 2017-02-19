@@ -49,14 +49,14 @@
         </tbody>
     </table>
 
-    {{ $tickets->links('components.bulma-pagination') }}
+    {{ $tickets->links('partials.bulma-pagination') }}
     @endif
 
     <div class="column">
 
         <a class="button is-primary {{ (!$user->isVerified()) ? 'is-disabled': '' }}" href="{{ route('tickets.create') }}">
             <span class="icon is-small">
-                <i class="icon fa fa-plus"></i>
+                <i class="fa fa-plus"></i>
             </span>
             <span>Create new ticket</span>
         </a>

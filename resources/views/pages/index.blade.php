@@ -7,7 +7,7 @@
     <p class="has-text-centered subtitle">
         Full website coming soon. In the meantime, ticket support is limited but available here:
         <br><br>
-        <a class="button is-primary is-medium" href="/login">Login</a>
+        <a class="button is-primary is-medium" href="/client-area">Login</a>
     </p>
 </div>
 @endsection
