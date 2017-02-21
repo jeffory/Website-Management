@@ -57,6 +57,6 @@ class FileUploadTest extends SeleniumTestCase
              ->see('cheese-01.jpg')
              ->wait(3);
 
-        $ticket->delete();
+        $ticket->forcedelete();
     }
 }

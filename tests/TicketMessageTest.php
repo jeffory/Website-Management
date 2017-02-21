@@ -44,5 +44,7 @@ class TicketMessageTest extends SeleniumTestCase
              ->see($message->message)
              ->visit(route('tickets.show', ['id' => $ticket->id]))
              ->see($message->message);
+
+        $ticket->forceDelete();
     }
 }
