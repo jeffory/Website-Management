@@ -59,7 +59,7 @@ return [
             'key' => getenv('S3_KEY'),
             'secret' => getenv('S3_KEY'),
             'region' => getenv('S3_REGION'),
-            'bucket' => getenv('S3_BUCKET')',
+            'bucket' => getenv('S3_BUCKET'),
         ],
 
     ],
