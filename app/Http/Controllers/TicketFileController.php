@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\FileUpload;
+use App\TicketFile;
 
 use Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +13,7 @@ use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 
-class FileUploadController extends Controller
+class TicketFileController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -50,7 +50,7 @@ class FileUploadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function upload(Request $request)
     {
         $file = $this->processFileUpload($request, "upload_file");
 
@@ -59,29 +59,28 @@ class FileUploadController extends Controller
             return;
         }
 
-        $directory = 'uploads/'. date('Y-m-j'). '/'. str_random(8);
-
-        // Like lighting a smoke in a petrol station...
+        $directory = 'public/uploads/'. date('Y-m-j'). '/'. str_random(8);
+        
         while (Storage::exists($directory)) {
-            $directory = 'uploads/'. date('Y-m-j'). '/'. str_random(8);
+            $directory = 'public/uploads/'. date('Y-m-j'). '/'. str_random(8);
         }
 
         $filename = $file->getClientOriginalName();
         $filepath = $file->storeAs($directory, $filename);
-        
-        return [
-            'status' => 'Upload complete.'
-        ];
 
-        // $fileUpload = new FileUpload();
-        // $fileUpload->filename = $filename;
-        // $fileUpload->filepath = $filepath;
-        // $fileUpload->user_id = Auth::user()->id;
-        // $fileUpload->save();
+        $TicketFile = new TicketFile();
+        $TicketFile->name = $filename;
+        $TicketFile->path = $filepath;
+        $TicketFile->url = Storage::url(preg_replace('/^public\//', '', $filepath));
 
-        // if ($request->wantsJson()) {
-        //     return compact($fileUpload);
-        // }
+        $TicketFile->user_id = Auth::user()->id;
+        $TicketFile->token = str_random(60);
+        $TicketFile->save();
 
+        if ($request->wantsJson()) {
+            return $TicketFile;
+        }
+
+        return redirect()->back();
     }
 }

@@ -41,7 +41,7 @@ class FileUploadTest extends SeleniumTestCase
              ->type($ticket->title, 'title')
              ->type($ticket->message, 'message')
              ->execute([
-                'script' => 'let el = document.querySelectorAll("input[type=file]")[0];'.
+                'script' => 'var el = document.querySelectorAll("input[type=file]")[0];'.
                             'el.style.display = "inline";'.
                             'el.dispatchEvent(new Event("change"));',
                 'args'   => array()

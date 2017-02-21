@@ -20,7 +20,7 @@ Route::group(['prefix' => 'client-area'], function () {
     Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
 });
 
-Route::post('/file_upload', 'FileUploadController@store');
+Route::post('/tickets/file_upload', 'TicketFileController@upload')->name('tickets.file_upload');
 
 Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')->name('user.sendVerification');
 Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')->name('user.verify');

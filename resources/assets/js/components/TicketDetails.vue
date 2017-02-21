@@ -12,7 +12,7 @@
         ],
         data() {
             return {
-                attachmentCount: 0,
+                attachments: [],
                 ticket: this.data,
                 newMessage: '',
                 viewers: [],
@@ -66,7 +66,6 @@
                             this.ticket = response.data.ticket;
                         });
                 }
-                
             },
 
             /**
@@ -84,6 +83,7 @@
                     message: this.newMessage,
                     created_at: new Date(),
                     updated_at: new Date(),
+                    file: this.attachments,
                     user: {
                         id: this.userID,
                         name: this.userName
@@ -94,7 +94,12 @@
 
                 self = this;
 
-                this.$http.post('/client-area/tickets/' + this.ticket.id + '/message', { message: this.newMessage })
+                let postData = {
+                    message: this.newMessage,
+                    ticket_files: this.attachments
+                };
+
+                this.$http.post('/client-area/tickets/' + this.ticket.id + '/message', postData)
                     .then(response => {
                         let ticket_id = self.findMessageIndex('uuid', self.ticketPending.uuid);
 
@@ -159,6 +164,13 @@
                     return (c=='x' ? r : (r&0x3|0x8)).toString(16);
                 });
                 return uuid;
+            },
+
+            addAttachment(attachment) {
+                this.attachments.push({
+                    name: attachment.name,
+                    token: attachment.token
+                });
             }
         },
         watch: {

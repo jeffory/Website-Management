@@ -45,6 +45,14 @@
 
                 <div class="ticket-message column is-9">
                     <p class="content">@{{ message.message }}</p>
+
+                    <p v-if="message.file.length > 0">
+                        <ul style="display: inline-block;">
+                            <li v-for="file in message.file" style="background-color: hsl(271, 100%, 71%)" class="tag is-medium">
+                                <a :href="file.url" style="color: #fff">@{{ file.name }}</a>
+                            </li>
+                        </ul>
+                    </p>
                 </div>
 
                 <div class="controls column has-text-right">
@@ -62,12 +70,10 @@
                 <textarea class="textarea" placeholder="New message" v-model="newMessage" :disabled="isPosting" name="message" style="min-height: 150px"></textarea>
             </p>
 
-            <p class="control">
-                <button class="button is-wide is-primary" @click="storeMessage()" :disabled="isPosting">Add new message</button>
-            </p>
+            <message-attachments upload-to="{{ route('tickets.file_upload') }}" v-on:upload-completed="addAttachment"></message-attachments>
 
             <p class="control">
-                <button class="button is-wide is-danger" @click="deleteTicket(ticket.id)">Delete Ticket</button>
+                <button class="button is-wide is-primary" @click="storeMessage()" :disabled="isPosting">Add new message</button>
             </p>
         </div>
     </ticket-details>

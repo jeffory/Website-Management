@@ -68,6 +68,8 @@ class TicketController extends Controller
 
         $ticket->load(['messages', 'messages.user' => function ($q) {
             $q->select('id', 'name');
+        }, 'messages.file' => function ($q) {
+            $q->select('id', 'name', 'path', 'url', 'user_id', 'ticket_message_id', 'created_at');
         }]);
         
         if ($request->wantsJson()) {

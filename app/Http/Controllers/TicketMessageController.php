@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Ticket;
 use App\TicketMessage;
+use App\TicketFile;
 use Auth;
 
 class TicketMessageController extends Controller
@@ -35,12 +36,23 @@ class TicketMessageController extends Controller
         $ticketMessage->message = $request->input('message');
         $ticketMessage->save();
 
+        foreach ($request->input('ticket_files') as $index => $file) {
+            $TicketFile = TicketFile::where('token', $file['token'])->first();
+
+            $TicketFile->ticket_id = $ticket->id;
+            $TicketFile->ticket_message_id = $ticketMessage->id;
+
+            $TicketFile->save();
+        }
+
         // Set the Ticket updated_at time to now.
         $ticket->touch();
 
         $ticketMessage->load(['user' => function ($q) {
             $q->select('id', 'name');
         }]);
+
+        $ticketMessage->load('file');
 
         broadcast(new \App\Events\TicketAddMessage($ticketMessage))->toOthers();
 

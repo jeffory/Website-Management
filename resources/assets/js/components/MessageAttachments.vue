@@ -26,7 +26,7 @@
                         <span>{{ file.name }}</span>
                         <button class="delete is-small" @click.prevent="removeUpload(file.index)"></button>
 
-                        <input type="hidden" name="file-id-input[]" v-if="file.serverFileID" value="file.serverFileID">
+                        <input type="hidden" name="ticket-file[]" v-if="file.token" :value="file.token">
                     </li>
                 </ul>
             </div>
@@ -36,6 +36,9 @@
 
 <script>
     export default {
+        props: [
+            'uploadTo'
+        ],
         data() {
             return {
                 attachmentCount: 0,
@@ -47,21 +50,23 @@
             upload(e) {
                 let self = this;
 
-                let file_upload_input = this.$refs['file-uploader'];
+                let file_upload_input = self.$refs['file-uploader'];
 
                 _.each(file_upload_input.files, (file) => {
                     let index = self.attachedFiles.length;
-                    this.uploadsInProgress++;
+                    self.uploadsInProgress++;
 
                     self.attachedFiles.push({
                         index: index,
                         name: file.name,
                         percentage: 0,
                         hasError: false,
-                        serverFileID: false
+                        token: ''
                     });
 
-                    new ChunkUploader(file, "upload_file", '/file_upload',
+                    self.$emit('upload-started', self.attachedFiles[index]);
+
+                    new ChunkUploader(file, "upload_file", self.uploadTo,
                     {
                         progress: (percentageDone) => {
                             self.updateUploadStatus(index, { percentage: percentageDone });
@@ -74,9 +79,14 @@
                                 file_upload_input.value = "";
                             }
                         },
-                        complete: () => {
-                            self.updateUploadStatus(index, { percentage: 100 });
+                        complete: (response) => {
+                            self.updateUploadStatus(index, {
+                                percentage: 100,
+                                token: response.data.token
+                            });
+
                             self.uploadsInProgress--;
+                            self.$emit('upload-completed', self.attachedFiles[index]);
 
                             if (self.uploadsInProgress == 0) {
                                 file_upload_input.value = "";
@@ -159,7 +169,7 @@
                 self.chunkError(error);
             })
             .then(function (response) {
-                self.chunkComplete();
+                self.chunkComplete(response);
             });
         }
 
@@ -178,11 +188,11 @@
             self.options['error'].call(self, error);
         }
 
-        chunkComplete() {
+        chunkComplete(response) {
             let self = this;
 
             if (self.chunkRangeEnd == self.fileSize) {
-                self.options['complete'].call();
+                self.options['complete'].call(self, response);
             } else {
                 self.chunkRangeStart = self.chunkRangeEnd;
                 self.chunkRangeEnd = self.chunkRangeStart + self.chunkSize;
