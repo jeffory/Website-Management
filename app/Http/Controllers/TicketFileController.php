@@ -68,10 +68,12 @@ class TicketFileController extends Controller
         $filename = $file->getClientOriginalName();
         $filepath = $file->storeAs($directory, $filename);
 
+        Storage::setVisibility($filepath, 'public');
+
         $TicketFile = new TicketFile();
         $TicketFile->name = $filename;
         $TicketFile->path = $filepath;
-        $TicketFile->url = Storage::url(preg_replace('/^public\//', '', $filepath));
+        $TicketFile->url = Storage::url($filepath);
 
         $TicketFile->user_id = Auth::user()->id;
         $TicketFile->token = str_random(60);
