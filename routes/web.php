@@ -18,6 +18,10 @@ Route::group(['prefix' => 'client-area'], function () {
     Route::resource('/tickets', 'TicketController');
     Route::post('/tickets/{ticket}/message', 'TicketMessageController@store');
     Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
+    Route::delete(
+        '/tickets/delete_file_upload/{query}',
+        'TicketFileController@destroy'
+    )->name('tickets.delete_file_upload');
 });
 
 Route::post('/tickets/file_upload', 'TicketFileController@upload')->name('tickets.file_upload');

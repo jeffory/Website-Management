@@ -23,10 +23,11 @@
                         <progress :value="file.percentage" max="100" class="progress"
                             v-bind:class="{'is-primary': file.percentage < 100, 'is-success':  file.percentage == 100, 'is-danger': file.hasError}">
                         </progress>
-                        <span>{{ file.name }}</span>
-                        <button class="delete is-small" @click.prevent="removeUpload(file.index)"></button>
 
-                        <input type="hidden" name="ticket-file[]" v-if="file.token" :value="file.token">
+                        <span>{{ file.name }}</span>
+
+                        <button class="delete is-small" @click.prevent="removeUpload(file.index)" v-if="file.token"></button>
+                        <input type="hidden" name="ticket_file[]" v-if="file.token" :value="file.token">
                     </li>
                 </ul>
             </div>
@@ -86,7 +87,7 @@
                             });
 
                             self.uploadsInProgress--;
-                            self.$emit('upload-completed', self.attachedFiles[index]);
+                            self.$emit('upload-completed', _.find(this.attachedFiles, {'index': index}));
 
                             if (self.uploadsInProgress == 0) {
                                 file_upload_input.value = "";
@@ -97,6 +98,11 @@
                 });
             },
             removeUpload(index) {
+                var file = _.find(this.attachedFiles, {'index': index});
+
+                Vue.http.delete('/client-area/tickets/delete_file_upload/' + file.token);
+                self.$emit('upload-removed', file);
+
                 this.attachedFiles = _.reject(this.attachedFiles, (file) => {
                     return file.index == index;
                 });

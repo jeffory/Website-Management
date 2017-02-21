@@ -45,3 +45,20 @@ $factory->define(App\TicketMessage::class, function (Faker\Generator $faker) {
         'message' => $message ?: $message = $faker->paragraph()
     ];
 });
+
+$factory->define(App\TicketFile::class, function (Faker\Generator $faker) {
+    static $name;
+    static $user_id;
+    static $ticket_id;
+    static $ticket_message_id;
+
+    return [
+        'name' => $name ?: '',
+        'path' => 'somefakefile.jpg',
+        'url' => 'somefakefile.jpg',
+        'user_id' => $user_id ?: $user_id = 0,
+        'ticket_id' => $ticket_id ?: $ticket_id = 0,
+        'ticket_message_id' => $ticket_message_id ?: $ticket_message_id = 0,
+        'token' => str_random(40)
+    ];
+});

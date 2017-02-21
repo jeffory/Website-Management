@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Ticket;
 use App\TicketMessage;
+use App\TicketFile;
 use Auth;
 use App\Events\TicketCreated;
 
@@ -103,16 +104,27 @@ class TicketController extends Controller
         $this->authorize('create', Ticket::class);
 
         $ticket = new Ticket();
-        $ticketMessage = new TicketMessage();
 
         $ticket->title = $request->input('title');
         $ticket->user_id = Auth::user()->id;
         $ticket->save();
 
-        $ticketMessage->message = $request->input('message');
-        $ticketMessage->user_id = $ticket->user_id;
-        $ticketMessage->ticket_id = $ticket->id;
-        $ticketMessage->save();
+        $ticket_message = new TicketMessage();
+        $ticket_message->message = $request->input('message');
+        $ticket_message->user_id = $ticket->user_id;
+        $ticket_message->ticket_id = $ticket->id;
+        $ticket_message->save();
+
+        if ($request->has('ticket_file')) {
+            foreach ($request->input('ticket_file') as $index => $token) {
+                $Ticket_file = TicketFile::where('token', $token)->first();
+
+                $Ticket_file->ticket_id = $ticket->id;
+                $Ticket_file->ticket_message_id = $ticket_message->id;
+
+                $Ticket_file->save();
+            }
+        }
 
         event(new TicketCreated($ticket));
 

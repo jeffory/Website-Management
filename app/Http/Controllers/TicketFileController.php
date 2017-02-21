@@ -85,4 +85,24 @@ class TicketFileController extends Controller
 
         return redirect()->back();
     }
+
+    /**
+     * Delete a file via token or ID.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $query)
+    {
+        if (strlen($query) >= 40) {
+            $TicketFile = TicketFile::where('token', $query)->first();
+        } else {
+            $TicketFile = TicketFile::where('id', $query)->first();
+        }
+
+        if ($request->wantsJson()) {
+            return ['status' => $TicketFile->delete()];
+        }
+
+        return redirect()->back();
+    }
 }

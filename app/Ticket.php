@@ -5,9 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Iatstuti\Database\Support\CascadeSoftDeletes;
+
 class Ticket extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['messages', 'files'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -19,6 +23,18 @@ class Ticket extends Model
     public function messages()
     {
         return $this->hasMany(TicketMessage::class);
+    }
+
+    /**
+     * Get any files associated with the ticket.
+     *
+     * Used for cascading deletions.
+     *
+     * @var array
+     */
+    public function files()
+    {
+        return $this->hasMany(TicketFile::class);
     }
 
     /**

@@ -49,7 +49,14 @@ class FileUploadTest extends SeleniumTestCase
 
         $this->type($file_path, '#file-input')
              ->waitForElementsWithClass('file-list-item', 5000)
-             ->wait(10)
-             ->press('Create');
+             ->waitForElementsWithClass('delete', 10000)
+             ->press('Create')
+             ->wait(8)
+             ->waitForElementsWithClass('container', 10000)
+             ->see($ticket->title)
+             ->see('cheese-01.jpg')
+             ->wait(3);
+
+        $ticket->delete();
     }
 }

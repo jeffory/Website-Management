@@ -83,7 +83,7 @@
                     message: this.newMessage,
                     created_at: new Date(),
                     updated_at: new Date(),
-                    file: this.attachments,
+                    file: [],
                     user: {
                         id: this.userID,
                         name: this.userName
@@ -171,7 +171,11 @@
                     name: attachment.name,
                     token: attachment.token
                 });
-            }
+            },
+
+            removeAttachment(attachment) {
+                
+            },
         },
         watch: {
 
