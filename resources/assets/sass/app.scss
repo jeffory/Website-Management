@@ -123,6 +123,11 @@ p {
     margin-bottom: 1em;
 }
 
+.panel h2,
+.panel h3,
+.panel table {
+    margin-bottom: 0;
+}
 
 .main-container {
     background-color: $panel-default-main-content;
@@ -177,7 +182,8 @@ p {
 .icon-box {
     background-color: $primary;
     cursor: pointer;
-    padding: 3.5em 1em;
+    height: 235px;
+    padding: 3.2em 1em;
 
     &,
     a {

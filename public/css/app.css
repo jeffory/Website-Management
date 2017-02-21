@@ -6515,6 +6515,12 @@ p {
   margin-bottom: 1em;
 }
 
+.panel h2,
+.panel h3,
+.panel table {
+  margin-bottom: 0;
+}
+
 .main-container {
   background-color: #fff;
   padding: 2em 4em;
@@ -6566,7 +6572,8 @@ p {
 .icon-box {
   background-color: #21a8bd;
   cursor: pointer;
-  padding: 3.5em 1em;
+  height: 235px;
+  padding: 3.2em 1em;
 }
 
 .icon-box,
