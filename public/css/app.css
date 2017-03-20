@@ -6612,4 +6612,164 @@ p {
   list-style: none;
 }
 
+@-webkit-keyframes fadeIn {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    opacity: 0;
+  }
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    opacity: 0;
+  }
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    display: block;
+    opacity: 1;
+  }
+  1% {
+    display: block;
+    opacity: 1;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    display: block;
+    opacity: 1;
+  }
+  1% {
+    display: block;
+    opacity: 1;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+  }
+}
+
+form .status-indicator {
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: none;
+  font-size: 1.25em;
+  height: 100%;
+  -webkit-box-pack: center;
+  justify-content: center;
+  opacity: 0;
+  position: absolute;
+  padding-bottom: 1em;
+  left: 0;
+  text-align: center;
+  top: 0;
+  -webkit-transition: background-color 2s ease;
+  transition: background-color 2s ease;
+  width: 100%;
+  z-index: 9010;
+}
+
+.status-message p {
+  margin-bottom: 1em;
+}
+
+form.is-submitting .status-indicator,
+form.had-successful-submit .status-indicator,
+form.had-unsuccessful-submit .status-indicator,
+form.had-error-submit .status-indicator {
+  -webkit-animation: 1s fadeIn both ease;
+  animation: 1s fadeIn both ease;
+  display: -webkit-box;
+  display: flex;
+}
+
+form .status-message {
+  display: none;
+  padding: 3em 0 2.5em;
+  width: 100%;
+}
+
+form.is-submitting .status-submitting,
+form.had-successful-submit .status-successful,
+form.had-unsuccessful-submit .status-unsuccessful,
+form.had-error-submit .status-error {
+  display: block;
+}
+
+form.had-successful-submit .status-indicator,
+form.had-unsuccessful-submit .status-indicator {
+  -webkit-animation: 1s fadeOut both ease;
+  animation: 1s fadeOut both ease;
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
+}
+
+form.had-successful-submit .status-message {
+  background-color: rgba(42, 178, 123, 0.8);
+  color: #fff;
+  -webkit-transition: background-color 1.5s ease;
+  transition: background-color 1.5s ease;
+}
+
+form.had-unsuccessful-submit .status-message {
+  background-color: rgba(203, 185, 86, 0.8);
+  color: #fff;
+  -webkit-transition: background-color 1.5s ease;
+  transition: background-color 1.5s ease;
+}
+
+form.had-error-submit .status-message {
+  background-color: rgba(191, 83, 41, 0.8);
+  color: #fff;
+  -webkit-transition: background-color 1.5s ease;
+  transition: background-color 1.5s ease;
+}
+
+.status-message .fa-inverse {
+  font-size: .8em;
+  margin-top: -1px;
+}
+
+.status-successful .fa-inverse {
+  color: #05ff28;
+}
+
+.status-unsuccessful .fa-inverse {
+  color: #ffa305;
+  font-size: .6em;
+  margin-top: -2px;
+}
+
+.status-error .fa-inverse {
+  color: #ff0528;
+}
+
+form.had-error-submit .status-error {
+  display: block;
+}
+
 /*# sourceMappingURL=app.css.map */

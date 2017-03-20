@@ -37,6 +37,26 @@ Route::group(['prefix' => 'client-area'], function () {
 Route::post('/tickets/file_upload', 'TicketFileController@upload')
     ->name('tickets.file_upload');
 
+Route::group(['prefix' => 'client-area/management'], function () {
+    Route::get('/', 'ServerManagementController@index')
+        ->name('server.index');
+
+    Route::get('/email/{domain}', 'ServerManagementController@show')
+        ->name('server.show');
+
+    Route::post('/email-password-strength', 'ServerManagementController@emailPasswordStrength')
+        ->name('server.emailPasswordStrength');
+
+    Route::post('/email-password-change', 'ServerManagementController@emailPasswordChange')
+        ->name('server.emailChangePassword');
+
+    Route::post('/email-new-account', 'ServerManagementController@storeNewEmail')
+        ->name('server.storeNewEmail');
+
+    Route::delete('/email-delete-account', 'ServerManagementController@deleteEmail')
+        ->name('server.deleteEmail');
+});
+
 Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')
     ->name('user.sendVerification');
 

@@ -28,7 +28,8 @@ class HomeController extends Controller
         $ticket_count = Auth::user()->myTicketCount();
 
         return view('home', [
-            'ticket_count' => $ticket_count
+            'ticket_count' => $ticket_count,
+            'user' => Auth::user()
         ]);
     }
 }

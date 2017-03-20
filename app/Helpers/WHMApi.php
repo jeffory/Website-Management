@@ -214,7 +214,7 @@ class WHMApi
     }
 
     /**
-     * Create a new email account.
+     * Delete an email account.
      *
      * CPanel UAPI function. Documentation:
      * https://documentation.cpanel.net/display/SDK/UAPI+Functions+-+Email%3A%3Aadd_pop
@@ -241,7 +241,7 @@ class WHMApi
         if (!$data) {
             return false;
         }
-        
+
         return intval($data->result->status) == 1;
     }
 
@@ -355,6 +355,42 @@ class WHMApi
             }
 
             return intval($data->result->data) == 1;
+        }
+    }
+
+    /**
+     * Change an email accounts password.
+     *
+     * CPanel UAPI Function. Documentation:
+     * https://documentation.cpanel.net/display/SDK/UAPI+Functions+-+Email%3A%3Apasswd_pop
+     *
+     * @param string cpanel user to run the command under
+     * @param string email account username
+     * @param string password
+     *
+     * @return object|boolean JSON data or FALSE on request failure.
+     */
+    public function emailChangePassword($cpanel_user, $username, $password, $domain)
+    {
+        $data = $this->cpanelCall(
+            'Email',
+            'passwd_pop',
+            $cpanel_user,
+            [
+                'cpanel_jsonapi_apiversion' => 3,
+                'email' => $username,
+                'password' => $password,
+                'domain' => $domain,
+            ]
+        );
+
+        if (isset($data->result)) {
+            if ($data->result->errors !== null) {
+                $this->last_error = $data->result;
+                return false;
+            }
+
+            return intval($data->result->status) == 1;
         }
     }
 

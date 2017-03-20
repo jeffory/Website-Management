@@ -5,7 +5,7 @@
 <div class="container small-container">
     <h2><i class="fa fa-lock"></i><br>Login</h2>
 
-    <form role="form" method="POST" action="{{ url('/login') }}">
+    <form role="form" method="POST" action="{{ route('login') }}">
         {{ csrf_field() }}
 
         <p class="control has-icon">

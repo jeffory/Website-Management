@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('timezone')->nullable();
             $table->boolean('is_verified')->default(false);
+            // Extra layer of security
+            $table->boolean('has_server_access')->default(false);
             $table->boolean('is_staff')->default(false);
             $table->boolean('is_admin')->default(false);
             $table->string('verification_token')->nullable();

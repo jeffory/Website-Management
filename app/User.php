@@ -44,7 +44,7 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        return $this->is_admin == 1;
+        return (bool) $this->is_admin;
     }
 
     /**
@@ -54,7 +54,7 @@ class User extends Authenticatable
      */
     public function isStaff()
     {
-        return ($this->is_staff == 1 || $this->isAdmin());
+        return (bool) $this->is_staff || $this->isAdmin();
     }
 
     /**
@@ -64,7 +64,17 @@ class User extends Authenticatable
      */
     public function isVerified()
     {
-        return $this->is_verified == 1;
+        return (bool) $this->is_verified;
+    }
+
+    /**
+     * Determine if the user can access servers.
+     *
+     * @return boolean
+     */
+    public function hasServerAccess()
+    {
+        return (bool) $this->has_server_access;
     }
 
     /**
