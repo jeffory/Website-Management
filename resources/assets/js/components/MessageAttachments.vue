@@ -42,10 +42,12 @@
         ],
         data() {
             return {
-                attachmentCount: 0,
                 attachedFiles: [],
                 uploadsInProgress: 0
             }
+        },
+        mounted() {
+            eventHub.$on('clearAttachments', this.clearAttachments);
         },
         methods: {
             upload(e) {
@@ -115,6 +117,10 @@
                         file[key] = value;
                     }
                 });
+            },
+            clearAttachments() {
+                this.attachedFiles = [];
+                this.uploadsInProgress = 0;
             }
         }
     }
