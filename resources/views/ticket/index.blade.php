@@ -23,13 +23,14 @@
             <tr>
                 <th>Status</th>
                 <th>Title</th>
+                <th>Creator</th>
                 <th>Last update</th>
             </tr>
         </thead>
         <tbody>
             @foreach($tickets as $index => $ticket)
                 <tr>
-                    <td style="width: 15%">
+                    <td>
                         @if ($ticket->trashed())
                         <span class="tag is-danger">Trashed</span>
                         @endif
@@ -43,13 +44,20 @@
                         <a href="{{ route('tickets.show', ['ticket' => $ticket]) }}">{{ $ticket->title }}</a>
                     </td>
 
+                    <td>
+                        {{ $ticket->user->name }}
+                    </td>
+
                     <td style="width: 20%">{{ $ticket->updated_at->diffForHumans() }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    {{ $tickets->links('partials.bulma-pagination') }}
+    @if ($tickets->count() > 1)
+        {{ $tickets->links('partials.bulma-pagination') }}
+    @endif
+    
     @endif
 
     <div class="column">
