@@ -13,19 +13,34 @@
 
 Auth::routes();
 
-Route::group(['prefix' => 'client-area'], function () {
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::resource('/tickets', 'TicketController');
-    Route::post('/tickets/{ticket}/message', 'TicketMessageController@store');
-    Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy');
-    Route::delete(
-        '/tickets/delete_file_upload/{query}',
-        'TicketFileController@destroy'
-    )->name('tickets.delete_file_upload');
+# TODO: Somewhere in the code there is a redirect to /home when logging in.
+Route::get('/home', function () {
+    return redirect()->route('home');
 });
 
-Route::post('/tickets/file_upload', 'TicketFileController@upload')->name('tickets.file_upload');
+Route::group(['prefix' => 'client-area'], function () {
+    Route::get('/', 'HomeController@index')
+        ->name('home');
 
-Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')->name('user.sendVerification');
-Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')->name('user.verify');
+    Route::resource('/tickets', 'TicketController');
+    
+    Route::post('/tickets/{ticket}/message', 'TicketMessageController@store')
+        ->name('ticket_message.store');
+
+    Route::delete('/tickets/{ticket}/message/{ticketmessage}', 'TicketMessageController@destroy')
+        ->name('ticket_message.destroy');
+
+    Route::delete('/tickets/delete_file_upload/{query}', 'TicketFileController@destroy')
+        ->name('tickets.delete_file_upload');
+});
+
+Route::post('/tickets/file_upload', 'TicketFileController@upload')
+    ->name('tickets.file_upload');
+
+Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')
+    ->name('user.sendVerification');
+
+Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')
+    ->name('user.verify');
+
 Route::get('/{page?}', 'PagesController@serve');
