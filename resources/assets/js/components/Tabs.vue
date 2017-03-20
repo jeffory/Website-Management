@@ -1,6 +1,6 @@
 <template>
     <div class="tab-container">
-        <div class="tabs is-boxed is-right">
+        <div class="tabs is-boxed">
             <ul>
                 <li v-for="(tab, index) in tabPanes" v-bind:class="{ 'is-active': index == activeTab }">
                     <a :href="'#tab-' + index" @click="activeTab = index">
@@ -24,7 +24,7 @@
         data() {
             return {
                 tabPanes: [],
-                activeTab: parseInt(this.active) - 1
+                activeTab: parseInt(this.active) - 1 || 0
             }
         },
         props: [

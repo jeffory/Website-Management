@@ -15,7 +15,7 @@
                 activeTab: this.$parent.activeTab
             }
         },
-        created () {
+        created() {
             this.$parent.tabPanes.push({
                 index: this.index,
                 label: this.label,
