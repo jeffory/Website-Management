@@ -7,21 +7,24 @@
         },
         props: [
             'userId',
-            'userName',
+            'username',
             'data'
         ],
         data() {
             return {
                 attachments: [],
                 ticket: this.data,
-                newMessage: '',
+                new_message: '',
                 viewers: [],
-                ticketPending : {}
+                ticket_pending : {},
+                users_typing: [],
+                echo: null,
+                user_typing_timer: null
             }
         },
         computed: {
             isPosting: function () {
-                return 'uuid' in this.ticketPending;
+                return 'uuid' in this.ticket_pending;
             }
         },
         mounted() {
@@ -33,7 +36,7 @@
              * Listen to Echo channels.
              */
             listen() {
-                Echo.join('ticket.' + this.ticket.id)
+                this.echo = Echo.join('ticket.' + this.ticket.id)
                     .here((users) => {
                         this.viewers = users;
                     })
@@ -50,7 +53,25 @@
                     })
                     .listen('TicketDeleteMessage', (e) => {
                         this.removeMessage(e.ticketMessage.id);
-                    });
+                    })
+                    .listenForWhisper('TicketUserTyping', _.throttle((e) => {
+                        let typing_timeout = 12;
+                        let user_typing = _.find(this.users_typing, function(user) {
+                            return user.name == e.user;
+                        });
+
+                        if (user_typing) {
+                            user_typing.expires = new Date(new Date().getTime() + (typing_timeout * 1000));
+                        } else {
+                            this.users_typing.push({
+                                name: e.user,
+                                expires: new Date(new Date().getTime() + (typing_timeout * 1000))
+                            });
+
+                            // Only try start polling timer on a new user typing...
+                            this.pollUserTyping();
+                        }
+                    }));
             },
 
             /**
@@ -73,35 +94,35 @@
              */
             storeMessage() {
                 // One at a time, prevent spam and it should be unncessary.
-                if ('uuid' in this.ticketPending) {
+                if ('uuid' in this.ticket_pending) {
                     return;
                 }
 
-                this.ticketPending = {
+                this.ticket_pending = {
                     uuid: this.generateUUID(),
                     status: 0,
-                    message: this.newMessage,
+                    message: this.new_message,
                     created_at: new Date(),
                     updated_at: new Date(),
                     file: [],
                     user: {
                         id: this.userID,
-                        name: this.userName
+                        name: this.username
                     }
                 };
 
-                this.addMessage(this.ticketPending);
+                this.addMessage(this.ticket_pending);
 
                 self = this;
 
                 let postData = {
-                    message: this.newMessage,
+                    message: this.new_message,
                     ticket_files: this.attachments
                 };
 
                 this.$http.post('/client-area/tickets/' + this.ticket.id + '/message', postData)
                     .then(response => {
-                        let ticket_id = self.findMessageIndex('uuid', self.ticketPending.uuid);
+                        let ticket_id = self.findMessageIndex('uuid', self.ticket_pending.uuid);
 
                         if (typeof(ticket_id) !== 'undefined') {
                             self.ticket.messages[ticket_id] = response.data
@@ -109,8 +130,10 @@
                             console.error('Cannot find pending ticket!!');
                         }
 
-                        this.newMessage = '';
-                        this.ticketPending = {};
+                        self.new_message = '';
+                        self.ticket_pending = {};
+
+                        eventHub.$emit('clearAttachments');
                         return;
                     });
             },
@@ -146,7 +169,7 @@
             },
 
             /**
-             * Delete a ticket.
+             * Delete a ticket message.
              */
             deleteMessage(ticketMessageID) {
                 this.$http.post('/client-area/tickets/' + this.ticket.id + '/message/' + ticketMessageID, {  _method: 'DELETE' });
@@ -155,15 +178,40 @@
 
             generateUUID() {
                 var d = new Date().getTime();
-                if(window.performance && typeof window.performance.now === "function"){
+                if (window.performance && typeof window.performance.now === "function") {
                     d += performance.now(); //use high-precision timer if available
                 }
                 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                    var r = (d + Math.random()*16)%16 | 0;
+                    var r = (d + Math.random() * 16) % 16 | 0;
                     d = Math.floor(d/16);
-                    return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+                    return (c == 'x' ? r : (r&0x3|0x8)).toString(16);
                 });
                 return uuid;
+            },
+
+            isUserTyping(name) {
+                return _.find(this.users_typing, (user) => {
+                    return name == user.name;
+                });
+            },
+
+            pollUserTyping() {
+                this.user_typing_timer = setInterval(() => {
+                    // Kill the timer if no one's typing
+                    if (this.users_typing.length == 0) {
+                        clearInterval(this.user_typing_timer);
+                    }
+
+                    this.users_typing = _.reject(this.users_typing, function(user_typing) {
+                        return (new Date()).getTime() >= user_typing.expires.getTime();
+                    });
+                }, 500);
+            },
+
+            setUserTyping () {
+                this.echo.whisper('TicketUserTyping', {
+                    user: this.username
+                });
             },
 
             addAttachment(attachment) {
@@ -182,4 +230,3 @@
         }
     }
 </script>
-
