@@ -51,11 +51,15 @@ class FileUploadTest extends SeleniumTestCase
              ->waitForElementsWithClass('file-list-item', 5000)
              ->waitForElementsWithClass('delete', 10000)
              ->press('Create')
-             ->wait(8)
+             ->wait(9)
              ->waitForElementsWithClass('container', 10000)
              ->see($ticket->title)
              ->see('cheese-01.jpg')
              ->wait(3);
+
+        $ticket::where('user_id', $user->id)
+               ->where('title', $ticket->title)
+               ->first();
 
         $ticket->forcedelete();
     }
