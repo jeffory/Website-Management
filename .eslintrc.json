@@ -1,0 +1,16 @@
+{
+    "extends": "airbnb",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "camelcase": ["error", "never"]
+    },
+    "globals": {
+        "Vue": true,
+        "window": true,
+        "_": true,
+        "axios": true
+    }
+}

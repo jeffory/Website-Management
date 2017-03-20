@@ -6,6 +6,10 @@
   },
   "devDependencies": {
     "bootstrap-sass": "^3.3.7",
+    "eslint": "^3.17.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.0",
     "gulp": "^3.9.1",
     "jquery": "^3.1.0",
     "laravel-elixir": "^6.0.0-14",
