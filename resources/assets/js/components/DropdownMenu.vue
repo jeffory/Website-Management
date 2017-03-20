@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown-menu">
-        <button @click="toggleMenu()" class="button is-medium is-outlined">
+        <button @click="toggleMenu()" class="button is-outlined">
             <slot name="button"></slot>
         </button>
 
@@ -44,7 +44,7 @@
         background-color: #fff;
         border: 1px solid #dbdbdb;
         position: absolute;
-        transform: translateX(-75%);
+        transform: translateX(-57%);
         width: fit-content;
         z-index: 9010;
     }

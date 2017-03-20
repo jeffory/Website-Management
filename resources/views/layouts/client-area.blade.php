@@ -51,20 +51,26 @@
             </div>
 
             <!-- Mobile menu -->
-            <dropdown-menu>
-                <template slot="button" class="nav-toggle is-dark">
-                    <span class="icon">
-                        <i class="fa fa-bars"></i>
-                    </span>
-                </template>
+            <div class="nav-toggle">
+                <dropdown-menu>
+                    <template slot="button" class="nav-toggle is-dark">
+                        <span class="icon">
+                            <i class="fa fa-bars"></i>
+                        </span>
+                    </template>
 
-                <template slot="menu">
-                    <ul class="menu-list" style="background-color: #242424">
-                        <li><a href="{{ route('tickets.index') }}">My tickets</a></li>
-                        <li><a>Logout</a></li>
-                    </ul>
-                </template>
-            </dropdown-menu>
+                    <template slot="menu">
+                        <ul class="menu-list" style="background-color: #242424">
+                            <li>
+                                <a href="{{ route('tickets.index') }}">My tickets</a>
+                            </li>
+                            <li>
+                                <a>Logout</a>
+                            </li>
+                        </ul>
+                    </template>
+                </dropdown-menu>
+            </div>
         </nav>
 
         @yield('content')
@@ -72,10 +78,8 @@
     </div>
 
     <!-- Scripts -->
-    {{-- <script src="https://npmcdn.com/vue-timeago@2.1.2/index.umd.js"></script> --}}
     @yield('inline-script')
+    {{-- <script src="https://cdn.polyfill.io/v2/polyfill.js"></script> --}}
     <script src="/js/app.js"></script>
-
-    {{-- <script src="http://livejs.com/live.js"></script> --}}
 </body>
 </html>
