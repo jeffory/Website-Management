@@ -77,8 +77,11 @@ class TicketController extends Controller
             return [ 'ticket' => $ticket ];
         }
 
+        $user = Auth::user();
+
         return view('ticket.show', [
-            'ticket' => $ticket
+            'ticket' => $ticket,
+            'user' => $user
             ]);
     }
 
@@ -117,12 +120,12 @@ class TicketController extends Controller
 
         if ($request->has('ticket_file')) {
             foreach ($request->input('ticket_file') as $index => $token) {
-                $Ticket_file = TicketFile::where('token', $token)->first();
+                $ticket_file = TicketFile::where('token', $token)->first();
 
-                $Ticket_file->ticket_id = $ticket->id;
-                $Ticket_file->ticket_message_id = $ticket_message->id;
+                $ticket_file->ticket_id = $ticket->id;
+                $ticket_file->ticket_message_id = $ticket_message->id;
 
-                $Ticket_file->save();
+                $ticket_file->save();
             }
         }
 
