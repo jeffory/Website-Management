@@ -167,7 +167,7 @@ return [
          * Package Service Providers...
          */
 
-        Modelizer\Selenium\SeleniumServiceProvider::class,
+        Laravel\Tinker\TinkerServiceProvider::class,
         Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
 
         /*
