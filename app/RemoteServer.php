@@ -207,9 +207,25 @@ class RemoteServer extends Model
     public static function emailChangePassword($email, $password)
     {
         list($username, $domain) = explode('@', $email);
+        $cpanel_user = self::getDomainUsername($domain);
 
         return [
-            'status' => WHMApi::emailChangePassword($username, $password, $domain)
+            'status' => WHMApi::emailChangePassword($cpanel_user, $username, $password, $domain)
+        ];
+    }
+
+    /**
+     * Check an email accounts password.
+     *
+     * @param array
+     */
+    public static function emailVerifyPassword($email, $password)
+    {
+        list($username, $domain) = explode('@', $email);
+        $cpanel_user = self::getDomainUsername($domain);
+
+        return [
+            'status' => WHMApi::emailVerifyAccount($cpanel_user, $email, $password)
         ];
     }
 }
