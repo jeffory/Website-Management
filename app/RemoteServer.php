@@ -27,6 +27,8 @@ class RemoteServer extends Model
         '***REMOVED***',
         '***REMOVED***',
         '***REMOVED***',
+        '***REMOVED***',
+        '***REMOVED***',
         '***REMOVED***'
     ];
 
@@ -59,14 +61,14 @@ class RemoteServer extends Model
             RemoteServer::updateOrCreate(
                 ['uid' => $account->uid],
                 [
-                'uid' => $account->uid,
-                'domain' => $account->domain,
-                'username'  => $account->user,
-                'plan-name' => $account->plan,
-                'max-emails' => $account->maxpop,
-                'disk-used' => preg_replace('[\D]', '', $account->diskused),
-                'disk-limit' => preg_replace('[\D]', '', $account->disklimit),
-                'active' => ($account->suspended == 0)
+                    'uid' => $account->uid,
+                    'domain' => $account->domain,
+                    'username'  => $account->user,
+                    'plan-name' => $account->plan,
+                    'max-emails' => $account->maxpop,
+                    'disk-used' => preg_replace('[\D]', '', $account->diskused),
+                    'disk-limit' => preg_replace('[\D]', '', $account->disklimit),
+                    'active' => ($account->suspended == 0)
                 ]
             );
         }
@@ -178,11 +180,12 @@ class RemoteServer extends Model
     {
         $username = $this->getDomainUsername($domain);
 
-        return ['domain' => $domain,
-                'username' => $username,
-                'accounts' => WHMApi::emailList($username, $domain)];
+        return [
+            'domain' => $domain,
+            'username' => $username,
+            'accounts' => WHMApi::emailList($username, $domain)
+        ];
     }
-
 
     /**
      * Retrieve the strength of a email password.
