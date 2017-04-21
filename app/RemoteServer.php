@@ -70,7 +70,7 @@ class RemoteServer extends Model
      * @return string the username associated with the domain.
      *                FALSE if domain is non-existent.
      */
-    public static function getUserByDomain($domain)
+    public static function getDomainUsername($domain)
     {
         $server = RemoteServer::where('domain', $domain)->first();
 
@@ -93,8 +93,7 @@ class RemoteServer extends Model
      */
     public static function createEmail($email, $password, $domain, $quota = 2048)
     {
-        $cpanel_user = self::getUserByDomain($domain);
-
+        $cpanel_user = self::getDomainUsername($domain);
         $result = WHMApi::emailCreateAccount($cpanel_user, $email, $password, $domain, $quota);
 
         return $result;
@@ -110,8 +109,7 @@ class RemoteServer extends Model
      */
     public static function deleteEmail($email_username, $domain)
     {
-        $cpanel_user = self::getUserByDomain($domain);
-
+        $cpanel_user = self::getDomainUsername($domain);
         $result = WHMApi::emailDeleteAccount($cpanel_user, $email_username, $domain);
 
         return $result;
@@ -121,10 +119,12 @@ class RemoteServer extends Model
      * Downloads a list of the current emails for a given domain.
      *
      * @param string the domain's email accounts to look up
+     *
+     * @return array
      */
     public function emailList($domain)
     {
-        $username = $this->getUserByDomain($domain);
+        $username = $this->getDomainUsername($domain);
 
         return ['domain' => $domain,
                 'username' => $username,
@@ -132,6 +132,11 @@ class RemoteServer extends Model
     }
 
 
+    /**
+     * Retrieve the strength of a email password.
+     *
+     * @param array
+     */
     public static function emailPasswordStrength($password)
     {
         return [
@@ -139,6 +144,11 @@ class RemoteServer extends Model
         ];
     }
 
+    /**
+     * Change an email accounts password.
+     *
+     * @param array
+     */
     public static function emailChangePassword($email, $password)
     {
         list($username, $domain) = explode('@', $email);
