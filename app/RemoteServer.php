@@ -31,9 +31,21 @@ class RemoteServer extends Model
     ];
 
     /**
+     * The users that belong to the server.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+
+    /**
      * Downloads a list of the current accounts on the web hosting server.
      *
      * Run as a artisan command or job, so error exceptions are allowed.
+     *
+     * @return void
      */
     public static function updateServerList()
     {
@@ -57,6 +69,46 @@ class RemoteServer extends Model
                 'active' => ($account->suspended == 0)
                 ]
             );
+        }
+    }
+
+    /**
+     * Checks if a user is authorised with the server.
+     *
+     * @return boolean
+     */
+    public function hasAuthorisedUser(User $user)
+    {
+        foreach ($this->users as $current_user) {
+            if ($user->id === $current_user->id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Authorises a user to use server.
+     *
+     * @return boolean
+     */
+    public function addAuthorisedUser(User $user)
+    {
+        if (! $this->hasAuthorisedUser($user)) {
+            return $this->users()->attach($user);
+        }
+    }
+
+     /**
+     * Remove authorisation of user to use server.
+     *
+     * @return boolean
+     */
+    public function removeAuthorisedUser(User $user)
+    {
+        if ($this->hasAuthorisedUser($user)) {
+            return $this->users()->detach($user);
         }
     }
 
