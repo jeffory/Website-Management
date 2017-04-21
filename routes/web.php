@@ -50,6 +50,9 @@ Route::group(['prefix' => 'client-area/management'], function () {
     Route::post('/email-password-change', 'ServerManagementController@emailPasswordChange')
         ->name('server.emailChangePassword');
 
+    Route::post('/email-password-check', 'ServerManagementController@emailPasswordCheck')
+        ->name('server.emailPasswordCheck');
+
     Route::post('/email-new-account', 'ServerManagementController@storeNewEmail')
         ->name('server.storeNewEmail');
 
