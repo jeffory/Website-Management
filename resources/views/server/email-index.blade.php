@@ -1,9 +1,9 @@
 @extends('layouts.client-area')
 
 @section('content')
-@include('partials/new-email-modal')
-@include('partials/delete-email-modal')
-@include('partials/password-options-modal')
+@include('partials/modal/new-email-modal')
+@include('partials/modal/delete-email-modal')
+@include('partials/modal/password-options-modal')
 
 <div class="container main-container">
     <h2 class="title is-2">Email accounts for: {{ $domain }}</h2>

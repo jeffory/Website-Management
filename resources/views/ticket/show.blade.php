@@ -1,6 +1,7 @@
 @extends('layouts.client-area')
 
 @section('content')
+@include('partials/modal/delete-ticket-modal')
 <div class="container main-container">
 
     <ticket-details user-id="{{$user->id}}" username="{{$user->name}}" :data="ticket" inline-template v-cloak>

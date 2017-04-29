@@ -1,4 +1,4 @@
-<modal ref="new_email" v-cloak>
+<modal id="new-email-modal" v-cloak>
     <section>
         <h3>New account</h3>
     </section>
@@ -55,7 +55,7 @@
             </p>
 
             <p class="control">
-                <button type="button" class="button" @click="hideModal('new_email')">Cancel</button>
+                <button type="button" class="button" @click="eventbus.$emit('hide-modal', 'new-email-modal')">Cancel</button>
             </p>
         </div>
     </form>

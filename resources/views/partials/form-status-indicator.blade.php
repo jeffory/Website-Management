@@ -15,7 +15,7 @@
             </span>
 
             <p>
-                Form successfully processed.
+                Form submission sucessful.
             </p>
         </p>
     </div>
@@ -43,7 +43,7 @@
         </p>
         
         <p>
-            There was an error submitting the request to the server. <br>
+            There was an error submitting the request to the server.<br>
             Please check your internet connection and try again.
         </p>
 
