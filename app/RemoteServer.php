@@ -16,23 +16,6 @@ class RemoteServer extends Model
                            'max-emails', 'disk-used', 'disk-limit', 'active'];
 
     /**
-     * List of domains to never be stored or be manipulated by the system.
-     *
-     * @var array
-     */
-    protected static $ignore_servers = [
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***',
-        '***REMOVED***'
-    ];
-
-    /**
      * The users that belong to the server.
      *
      * @return Illuminate\Database\Eloquent\Relations\belongsToMany
@@ -53,8 +36,15 @@ class RemoteServer extends Model
     {
         $accounts = WHMApi::accountList();
 
+        $whitelisted_servers = preg_split(
+            '@(?:\s*,\s*|^\s*|\s*$)@',
+            env('REMOTESERVER_WHITELIST', []),
+            null,
+            PREG_SPLIT_NO_EMPTY
+        );
+
         foreach ($accounts as $index => $account) {
-            if (in_array($account->domain, RemoteServer::$ignore_servers)) {
+            if (!in_array($account->domain, $whitelisted_servers)) {
                 continue;
             }
 
