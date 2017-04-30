@@ -13,7 +13,7 @@ class RemoteserverUser extends Migration
      */
     public function up()
     {
-        Schema::create('remote_user', function (Blueprint $table) {
+        Schema::create('remote_server_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('remote_server_id')->unsigned();
@@ -27,6 +27,6 @@ class RemoteserverUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('remote_user');
+        Schema::dropIfExists('remote_server_user');
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\RemoteServer;
 
+use Auth;
+
 class ServerManagementController extends Controller
 {
     /**
@@ -26,9 +28,12 @@ class ServerManagementController extends Controller
     {
         $this->authorize('index', RemoteServer::class);
 
-        $accounts = RemoteServer::where('active', 1)
-                        ->orderBy('domain', 'asc')
-                        ->get();
+        $user = Auth::user();
+        $accounts = $user->assessibleServers();
+
+        foreach ($accounts as $index => $account) {
+            $account['disk-used-percentage'] = round(($account['disk-used'] / $account['disk-limit']) * 100, 2) . '%';
+        }
 
         return view('server.index', [
             'accounts' => $accounts
@@ -144,12 +149,32 @@ class ServerManagementController extends Controller
     public function emailPasswordChange(Request $request)
     {
         $this->validate($request, [
-            'passsword' => 'required',
-            'passsword_confirmation' => 'confirmed',
+            'email' => 'required',
+            'password' => 'required|confirmed'
         ]);
 
         if ($request->has('password')) {
-            return (array) RemoteServer::emailPasswordStrength($request->input('password'));
+            return (array) RemoteServer::emailChangePassword($request->input('email'), $request->input('password'));
+        }
+    }
+
+    /**
+     * Change an account password.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function emailPasswordCheck(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($request->has('password')) {
+            return (array) RemoteServer::emailVerifyPassword(
+                $request->input('email'),
+                $request->input('password')
+            );
         }
     }
 
