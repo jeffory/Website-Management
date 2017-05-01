@@ -14,23 +14,24 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
-    static $verified;
+    static $is_verified;
 
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
-        'is_verified' => $verified ?: $verified = true,
-        'remember_token' => str_random(10),
+        'is_verified' => $is_verified ?: $is_verified = true,
     ];
 });
 
 $factory->define(App\Ticket::class, function (Faker\Generator $faker) {
     static $user_id;
+    static $message;
 
     return [
         'title' => $faker->sentence(),
-        'user_id' => $user_id ?: $user_id = 0
+        'user_id' => $user_id ?: $user_id = factory(App\User::class)->create()->id,
+        'message' => $message ?: $message = $faker->paragraph()
     ];
 });
 
