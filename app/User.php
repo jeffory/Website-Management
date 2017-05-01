@@ -38,6 +38,30 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all the tickets a User can view/edit.
+     *
+     * @return boolean
+     */
+    public function remoteServers()
+    {
+        return $this->belongsToMany(RemoteServer::class);
+    }
+
+    /**
+     * Get all the tickets a User can view/edit.
+     *
+     * @return boolean
+     */
+    public function assessibleServers()
+    {
+        if ($this->is_admin) {
+            return RemoteServer::all();
+        }
+
+        return $this->remoteServers;
+    }
+
+    /**
      * Determine if the user is an admin.
      *
      * @return boolean
@@ -82,12 +106,22 @@ class User extends Authenticatable
      *
      * @return collection
      */
-    public function myTickets()
+    public function myTickets($status = null)
     {
-        if ($this->isStaff()) {
-            return Ticket::all();
+        $query = Ticket::select(['id', 'title', 'user_id', 'status', 'assigned_to', 'created_at', 'updated_at'])
+                       ->with(['user' => function ($query) {
+                            $query->select('id', 'name');
+                       }]);
+
+        if (!$this->isStaff()) {
+            $query->where('user_id', $this->id);
         }
-        return $this->tickets();
+
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        return $query;
     }
 
     /**
@@ -98,9 +132,20 @@ class User extends Authenticatable
     public function myTicketCount()
     {
         if ($this->isStaff()) {
-            return Ticket::count();
+            return Ticket::where('status', 0)->count();
         }
 
-        return $this->tickets()->count();
+        return $this->tickets()->where('status', 0)->count();
+    }
+
+    /**
+     * Generate a user token.
+     *
+     * @return void
+     */
+    public function generateVerificationToken()
+    {
+        $this->verification_token = str_random(40);
+        $this->save();
     }
 }
