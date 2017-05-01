@@ -31,30 +31,32 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        if (!isset($request->trashed)) {
-            if (Auth::user()->isStaff()) {
-                $tickets = Ticket::paginate(15);
-            } else {
-                $tickets = Ticket::where('user_id', Auth::user()->id)
-                    ->get();
-            }
-        } else {
-            // Show trashed tickets too
-            if (Auth::user()->isStaff()) {
-                $tickets = Ticket::withTrashed()
-                    ->get();
-            } else {
-                $tickets = Ticket::withTrashed()
-                    ->where('user_id', Auth::user()->id)
-                    ->get();
-            }
-        }
-        
+        $this->authorize('index', Ticket::class);
+
         $user = Auth::user();
+        
+        $sort_status = $request->input('status', 0);
+
+        // Other than an asterisk, we only want to allow integers
+        if ($sort_status === '*') {
+            $sort_status = null;
+        } else {
+            $sort_status = intval($sort_status) or 0;
+        }
+
+        $tickets = $user->myTickets($sort_status)
+                        ->paginate(15);
+
+        foreach ($tickets as &$ticket) {
+            $ticket['user_name'] = $ticket['user']['name'];
+            $ticket['_link'] = route('tickets.show', $ticket->id);
+            unset($ticket['user']);
+        }
 
         return view('ticket.index', [
             'tickets' => $tickets,
-            'user' => $user
+            'user' => $user,
+            'ticket_status_sort' => $sort_status
         ]);
     }
 
@@ -77,11 +79,9 @@ class TicketController extends Controller
             return [ 'ticket' => $ticket ];
         }
 
-        $user = Auth::user();
-
         return view('ticket.show', [
             'ticket' => $ticket,
-            'user' => $user
+            'user' => Auth::user()
             ]);
     }
 
@@ -110,20 +110,15 @@ class TicketController extends Controller
 
         $ticket->title = $request->input('title');
         $ticket->user_id = Auth::user()->id;
+        $ticket->message = $request->input('message');
         $ticket->save();
-
-        $ticket_message = new TicketMessage();
-        $ticket_message->message = $request->input('message');
-        $ticket_message->user_id = $ticket->user_id;
-        $ticket_message->ticket_id = $ticket->id;
-        $ticket_message->save();
 
         if ($request->has('ticket_file')) {
             foreach ($request->input('ticket_file') as $index => $token) {
                 $ticket_file = TicketFile::where('token', $token)->first();
 
                 $ticket_file->ticket_id = $ticket->id;
-                $ticket_file->ticket_message_id = $ticket_message->id;
+                $ticket_file->ticket_message_id = $ticket->messages->first()->id;
 
                 $ticket_file->save();
             }
@@ -145,7 +140,19 @@ class TicketController extends Controller
      */
     public function update(Ticket $ticket, Request $request)
     {
-        $ticket->title = $request->input('title');
+        $this->authorize('update', $ticket);
+
+        if ($request->has('title')) {
+            $ticket->title = $request->input('title');
+        }
+
+        if ($request->has('status')) {
+            $ticket->status = $request->input('status');
+            $ticket->save();
+            
+            return redirect()->route('tickets.show', $ticket->id);
+        }
+
         $ticket->save();
 
         return redirect()->back();
@@ -158,6 +165,8 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket, Request $request)
     {
+        $this->authorize('delete', $ticket);
+        
         $ticket->delete();
 
         if (! $request->wantsJson()) {

@@ -10,11 +10,29 @@ class TicketPolicy
 {
     use HandlesAuthorization;
 
+    /**
+     * Give admin and staff permission to every ticket.
+     *
+     * @param  \App\User  $user
+     * @param  string $ability
+     * @return boolean
+     */
     public function before(User $user, $ability)
     {
-        if ($user->isStaff()) {
+        if ($user->isStaff() || $user->isAdmin()) {
             return true;
         }
+    }
+
+    /**
+     * Determine whether the user can view the ticket index.
+     *
+     * @param  \App\User  $user
+     * @return boolean
+     */
+    public function index(User $user)
+    {
+        return true;
     }
 
     /**
@@ -22,7 +40,7 @@ class TicketPolicy
      *
      * @param  \App\User  $user
      * @param  \App\Ticket  $ticket
-     * @return mixed
+     * @return boolean
      */
     public function view(User $user, Ticket $ticket)
     {
@@ -33,7 +51,7 @@ class TicketPolicy
      * Determine whether the user can create tickets.
      *
      * @param  \App\User  $user
-     * @return mixed
+     * @return boolean
      */
     public function create(User $user)
     {
@@ -45,7 +63,7 @@ class TicketPolicy
      *
      * @param  \App\User  $user
      * @param  \App\Ticket  $ticket
-     * @return mixed
+     * @return boolean
      */
     public function update(User $user, Ticket $ticket)
     {
@@ -57,7 +75,7 @@ class TicketPolicy
      *
      * @param  \App\User  $user
      * @param  \App\Ticket  $ticket
-     * @return mixed
+     * @return boolean
      */
     public function delete(User $user, Ticket $ticket)
     {

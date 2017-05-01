@@ -28,8 +28,16 @@ class TicketMessageController extends Controller
     public function store(Ticket $ticket, Request $request)
     {
         // TODO: Check user has permission to ticket thread.
+        // $this->authorize('update', Ticket::class);
 
         $ticketMessage = new TicketMessage();
+
+        if ($request->input('status_change') !== null) {
+            $ticket->status = intval($request->input('status_change'));
+            $ticket->save();
+
+            $ticketMessage->status_change = intval($request->input('status_change'));
+        }
 
         $ticketMessage->ticket_id = $ticket->id;
         $ticketMessage->user_id = Auth::user()->id;
