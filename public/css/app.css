@@ -6404,7 +6404,9 @@ label.panel-block:hover {
   padding: 3rem 1.5rem 6rem;
 }
 
-*, body {
+*,
+body,
+*:after {
   box-sizing: border-box;
 }
 
@@ -6413,24 +6415,33 @@ label.panel-block:hover {
 }
 
 h1 {
-  font-size: 3.5rem;
+  font-size: 2.625rem;
   margin-bottom: .7em;
 }
 
-h2 {
-  font-size: 2.75rem;
+h2, .title.is-2 {
+  font-size: 2.0625rem;
   margin-bottom: .5em;
 }
 
 h3 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin-bottom: .3em;
+}
+
+.is-label {
+  margin-right: .3em;
 }
 
 .button.is-wide {
   height: auto;
   padding: .75em 0;
   width: 100%;
+}
+
+.control.is-grouped.has-text-centered {
+  -webkit-box-pack: center;
+  justify-content: center;
 }
 
 body {
@@ -6472,14 +6483,10 @@ body.has-top-navbar {
   margin-top: 0 !important;
 }
 
-.nav .dropdown-menu {
-  margin: 5px 0;
-}
-
 .nav .dropdown-menu .button {
   background-color: #242424;
   border: 0;
-  color: #fff;
+  color: white;
 }
 
 .nav .dropdown-menu .menu {
@@ -6523,7 +6530,6 @@ p {
 
 .main-container {
   background-color: #fff;
-  padding: 2em 4em;
 }
 
 .small-container {
@@ -6549,10 +6555,14 @@ p {
 
 .ticket-listing {
   cursor: pointer;
+  clear: both;
+  margin-bottom: 1.5em;
 }
 
-.ticket-listing .controls {
-  visibility: hidden;
+.ticket-listing:after {
+  clear: both;
+  content: " ";
+  display: table;
 }
 
 .ticket-listing:hover {
@@ -6563,6 +6573,15 @@ p {
   visibility: visible;
 }
 
+.ticket-listing .controls {
+  visibility: hidden;
+}
+
+.ticket-listing:not(:last-of-type) {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0;
+}
+
 .fa.is-big {
   font-size: 2.5em;
   height: 40px;
@@ -6571,14 +6590,26 @@ p {
 
 .icon-box {
   background-color: #21a8bd;
-  cursor: pointer;
-  height: 235px;
-  padding: 3.2em 1em;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  padding: 0;
+  text-align: center;
 }
 
 .icon-box,
 .icon-box a {
   color: white;
+}
+
+.icon-box a {
+  -webkit-box-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  min-height: 145px;
+  padding: 2em 1em 1em;
 }
 
 .icon-box:hover {
@@ -6672,6 +6703,11 @@ p {
   }
 }
 
+.fade-out {
+  -webkit-animation: 1s fadeOut both ease;
+  animation: 1s fadeOut both ease;
+}
+
 form .status-indicator {
   -webkit-box-align: center;
   align-items: center;
@@ -6698,9 +6734,9 @@ form .status-indicator {
 }
 
 form.is-submitting .status-indicator,
-form.had-successful-submit .status-indicator,
-form.had-unsuccessful-submit .status-indicator,
-form.had-error-submit .status-indicator {
+form.has-message .status-indicator,
+form.has-message .status-indicator,
+form.has-message .status-indicator {
   -webkit-animation: 1s fadeIn both ease;
   animation: 1s fadeIn both ease;
   display: -webkit-box;
@@ -6730,21 +6766,21 @@ form.had-unsuccessful-submit .status-indicator {
 
 form.had-successful-submit .status-message {
   background-color: rgba(42, 178, 123, 0.8);
-  color: #fff;
+  color: white;
   -webkit-transition: background-color 1.5s ease;
   transition: background-color 1.5s ease;
 }
 
 form.had-unsuccessful-submit .status-message {
   background-color: rgba(203, 185, 86, 0.8);
-  color: #fff;
+  color: white;
   -webkit-transition: background-color 1.5s ease;
   transition: background-color 1.5s ease;
 }
 
 form.had-error-submit .status-message {
   background-color: rgba(191, 83, 41, 0.8);
-  color: #fff;
+  color: white;
   -webkit-transition: background-color 1.5s ease;
   transition: background-color 1.5s ease;
 }
@@ -6770,6 +6806,51 @@ form.had-error-submit .status-message {
 
 form.had-error-submit .status-error {
   display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .is-centered-mobile {
+    text-align: center;
+  }
+  .button {
+    height: auto;
+    line-height: 1.2em;
+    padding: 1em 1.5em;
+    width: 100%;
+  }
+  .nav .dropdown-menu {
+    height: 100%;
+  }
+  .nav .dropdown-menu .button {
+    border: 0;
+    height: 100%;
+    margin-left: -8px;
+    margin-top: -4px;
+    text-align: center;
+  }
+  .nav .nav-toggle {
+    background-color: inherit;
+  }
+  .icon-box {
+    margin-bottom: 1em;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .dropdown-menu {
+    margin: 5px 0;
+  }
+  .main-container {
+    background-color: #fff;
+    padding: 2em 4em 4em;
+  }
+  .icon-box a {
+    height: 235px;
+    padding: 3.2em 1em;
+  }
+  .icon-box:not(:last-child) {
+    margin-right: 1.5em;
+  }
 }
 
 /*# sourceMappingURL=app.css.map */

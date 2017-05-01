@@ -21,17 +21,16 @@ Vue.directive('inline-submit', {
                     validation_scope = el.getAttribute('data-vv-scope');
                 }
 
-                console.log('validation_scope: ', validation_scope);
+                form_instance.classList.remove('had-successful-submit');
+                form_instance.classList.remove('had-unsuccessful-submit');
+                form_instance.classList.remove('had-error-submit');
 
                 // Validation wrapper, ie. fail silently
                 let validator = new Promise((resolve, reject) => {
                     if (window.app !== undefined && window.app.$validator !== undefined) {
                         window.app.$validator.validateAll(validation_scope).then(() => {
-                            console.log('validator_promise::then');
                             return resolve(el);
                         }).catch((error) => {
-                            console.log('validator_promise::catch');
-                            console.log(window.app.$validator.errorBag.all());
                             reject(error);
                         });
                     } else {
@@ -40,12 +39,25 @@ Vue.directive('inline-submit', {
                     }
                 });
 
+                // Resets a form but ignores fields with readonly attributes
+                function resetForm(form_element) {
+                    let inputs = form_element.querySelectorAll('input, select, textarea');
+
+                    if (! inputs) {
+                        return false;
+                    }
+
+                    inputs.forEach(function (input) {
+                        if (! input.hasAttribute('readonly')) {
+                            input.value = '';
+                        }
+                    });
+                }
+
                 // Validation
                 validator.then((el) => {
-                    console.log('validator::then');
-
                     // Submission
-                    let submit_button = el.querySelector('button[type="submit"]');
+                    const submit_button = el.querySelector('button[type="submit"],input[type="submit"]');
                     submit_button.disabled = true;
 
                     const form_data = new FormData(el);
@@ -53,50 +65,62 @@ Vue.directive('inline-submit', {
                     form_instance.classList.add('is-submitting');
 
                     Vue.http[form_method](el.action, form_data)
-                        .catch(() => {
+                        .catch((response) => {
                             submit_button.disabled = false;
                             form_instance.classList.remove('is-submitting');
-                            form_instance.classList.add('had-error-submit');
+
+                            // Wsas form submitted but had bad data...
+                            if (response.status == 422) {
+                                form_instance.classList.add('had-unsuccessful-submit');
+                                form_instance.classList.add('has-message');
+                            } else {
+                                form_instance.classList.add('had-error-submit');
+                                form_instance.classList.add('has-message');
+                            }
                         })
                         .then((response) => {
                             // This function gets called even after an error
                             if (response === undefined) {
+                                setTimeout(() => {
+                                    form_instance.classList.remove('has-message');
+                                }, 3000);
                                 return;
                             }
 
                             submit_button.disabled = false;
                             form_instance.classList.remove('is-submitting');
 
-                            if (true) {
+                            if (response.data.hasOwnProperty('status') && response.data.status === false) {
+                                // Form was received and processed but did not contain correct info
+                                // Used for login forms etc.
+                                form_instance.classList.add('had-unsuccessful-submit');
+                                form_instance.classList.add('has-message');
+                            } else {
                                 form_instance.classList.add('had-successful-submit');
-                                form_instance.reset();
+                                form_instance.classList.add('has-message');
+                                // This clears readonly inputs too
+                                resetForm(form_instance);
 
                                 if (el.hasAttribute('data-redirect-on-success')) {
                                     setTimeout(() => {
                                         window.location.replace(el.getAttribute('data-redirect-on-success'));
-                                    }, 500);
+                                    }, 2500);
                                 }
-                            } else {
-                                form_instance.classList.add('had-unsuccessful-submit');
+
+                                if (el.hasAttribute('data-hide-modal-on-success')) {
+                                    setTimeout(() => {
+                                        window.eventbus.$emit('hide-modal', el.getAttribute('data-hide-modal-on-success'))
+                                    }, 2500);
+                                }
                             }
 
                             // Note the CSS may remove the visibility early
                             setTimeout(() => {
-                                form_instance.classList.remove('had-successful-submit');
-                                form_instance.classList.remove('had-unsuccessful-submit');
-                            }, 4000);
+                                form_instance.classList.remove('has-message');
+                            }, 3000);
                         });
 
                 });
-
-                // .catch(() => {
-                //     console.log('validator::catch');
-                //     form_instance.classList.add('had-unsuccessful-submit');
-
-                //     setTimeout(() => {
-                //         form_instance.classList.remove('had-unsuccessful-submit');
-                //     }, 3000);
-                // })
             });
     },
 });

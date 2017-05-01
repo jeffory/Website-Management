@@ -6,30 +6,34 @@
     <br>
 
     <div class="columns">
-        <div class="column is-3 box has-text-centered icon-box">
+        <div class="column is-3 icon-box">
             <a href="{{ route('tickets.index') }}">
-            <i class="icon fa fa-ticket is-big"></i>
-            @if($user->isAdmin())
-                <h3>Support Tickets</h3>
-            @else
-                <h3>My Tickets</h3>
-            @endif
-            </a>
+                <div>
+                    <i class="icon fa fa-ticket is-big"></i>
+                    @if($user->isAdmin())
+                        <h3>Support Tickets</h3>
+                    @else
+                        <h3>My Tickets</h3>
+                    @endif
 
-            <p>
-                @if($user->isAdmin())
-                <a href="{{ route('tickets.index') }}">There are {{ $ticket_count }} ticket(s) open</a>
-                @else
-                <a href="{{ route('tickets.index') }}">You have {{ $ticket_count }} ticket(s) open</a>
-                @endif
-            </p>
+                    <p>
+                        @if($user->isAdmin())
+                            There are {{ $ticket_count }} ticket(s) open.
+                        @else
+                            You have {{ $ticket_count }} ticket(s) open.
+                        @endif
+                    </p>
+                </div>
+            </a>
         </div>
 
         @if($user->hasServerAccess())
-        <div class="column is-3 box has-text-centered icon-box" style="margin-left: 1em">
+        <div class="column is-3 icon-box">
             <a href="{{ route('server.index') }}">
-                <i class="icon fa fa-server is-big"></i>
-                <h3>Website management</h3>
+                <div>
+                    <i class="icon fa fa-server is-big"></i>
+                    <h3>Website management</h3>
+                </div>
             </a>
         </div>
         @endif

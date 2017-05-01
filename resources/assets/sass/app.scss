@@ -13,7 +13,9 @@ $primary: #21a8bd;
 // Bulma
 @import "node_modules/bulma/bulma.sass";
 
-*, body {
+*,
+body,
+*:after {
     box-sizing: border-box;
 }
 
@@ -22,24 +24,32 @@ $primary: #21a8bd;
 }
 
 h1 {
-    font-size: $size-1;
+    font-size: $size-1 * .75;
     margin-bottom: .7em;
 }
 
-h2 {
-    font-size: $size-2;
+h2, .title.is-2 {
+    font-size: $size-2 * .75;
     margin-bottom: .5em;
 }
 
 h3 {
-    font-size: $size-3;
+    font-size: $size-3 * .75;
     margin-bottom: .3em;
+}
+
+.is-label {
+    margin-right: .3em;
 }
 
 .button.is-wide {
     height: auto;
     padding: .75em 0;
     width: 100%
+}
+
+.control.is-grouped.has-text-centered {
+    justify-content: center;
 }
 
 body {
@@ -80,12 +90,12 @@ body {
     }
 
     .dropdown-menu {
-        margin: 5px 0;
+        // margin: 5px 0;
 
         .button {
             background-color: #242424;
             border: 0;
-            color: #fff;
+            color: $white;
         }
 
         .menu {
@@ -131,12 +141,11 @@ p {
 
 .main-container {
     background-color: $panel-default-main-content;
-    padding: 2em 4em;
 }
 
 .small-container {
     background-color: rgba(255, 255, 255, .95);
-    // color: #fff;
+    // color: $white;
     max-width: 400px;
     // overflow: hidden;
     padding: 2em;
@@ -159,10 +168,10 @@ p {
 
 .ticket-listing {
     cursor: pointer;
+    clear: both;
+    margin-bottom: 1.5em;
 
-    .controls {
-        visibility: hidden;
-    }
+    @include clearfix();
 
     &:hover {
         background-color: lighten($primary, 50%);
@@ -170,6 +179,15 @@ p {
         .controls {
             visibility: visible;
         }
+    }
+
+    .controls {
+        visibility: hidden;
+    }
+
+    &:not(:last-of-type) {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0;
     }
 }
 
@@ -181,13 +199,22 @@ p {
 
 .icon-box {
     background-color: $primary;
-    cursor: pointer;
-    height: 235px;
-    padding: 3.2em 1em;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    padding: 0;
+    text-align: center;
 
     &,
     a {
         color: $white;
+    }
+
+    a {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        min-height: 145px;
+        padding: 2em 1em 1em;
     }
 
     &:hover {
@@ -256,6 +283,10 @@ p {
     }
 }
 
+.fade-out {
+    animation: 1s fadeOut both ease;
+}
+
 form .status-indicator {
     align-items: center;
     background-color: rgba(255, 255, 255, .8);
@@ -279,11 +310,12 @@ form .status-indicator {
 }
 
 form.is-submitting .status-indicator,
-form.had-successful-submit .status-indicator,
-form.had-unsuccessful-submit .status-indicator,
-form.had-error-submit .status-indicator {
+form.has-message .status-indicator,
+form.has-message .status-indicator,
+form.has-message .status-indicator {
     animation: 1s fadeIn both ease;
     display: flex;
+
 }
 
 form .status-message {
@@ -307,19 +339,19 @@ form.had-unsuccessful-submit .status-indicator {
 
 form.had-successful-submit .status-message {
     background-color: rgba($brand-success, .8);
-    color: #fff;
+    color: $white;
     transition: background-color 1.5s ease;
 }
 
 form.had-unsuccessful-submit .status-message {
     background-color: rgba($brand-warning, .8);
-    color: #fff;
+    color: $white;
     transition: background-color 1.5s ease;
 }
 
 form.had-error-submit .status-message {
     background-color: rgba($brand-danger, .8);
-    color: #fff;
+    color: $white;
     transition: background-color 1.5s ease;
 }
 
@@ -346,3 +378,59 @@ form.had-error-submit .status-error {
     display: block;
 }
 
+// ====== Mobile ======
+
+@include mobile {
+    .is-centered-mobile {
+        text-align: center;
+    }
+
+    .button {
+        height: auto;
+        line-height: 1.2em;
+        padding: 1em 1.5em;
+        width: 100%;
+    }
+
+    .nav .dropdown-menu {
+        height: 100%;
+    }
+
+    .nav .dropdown-menu .button {
+        border: 0;
+        height: 100%;
+        margin-left: -8px;
+        margin-top: -4px;
+        text-align: center;
+    }
+
+    .nav .nav-toggle {
+        background-color: inherit;
+    }
+
+    .icon-box {
+        margin-bottom: 1em;
+    }
+}
+
+// ====== Larger than mobile ======
+
+@include tablet {
+    .dropdown-menu {
+        margin: 5px 0;
+    }
+    
+    .main-container {
+        background-color: $panel-default-main-content;
+        padding: 2em 4em 4em;
+    }
+
+    .icon-box a {
+        height: 235px;
+        padding: 3.2em 1em;
+    }
+
+    .icon-box:not(:last-child) {
+        margin-right: 1.5em;
+    }
+}

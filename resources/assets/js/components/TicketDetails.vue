@@ -13,13 +13,17 @@
         data() {
             return {
                 attachments: [],
-                ticket: this.data,
+                eventbus: this.$parent.eventbus,
+                // Laravel echo instance
+                echo: null,
+                loaded: false,
                 new_message: '',
-                viewers: [],
+                new_status: null,
+                ticket: this.data,
                 ticket_pending : {},
                 users_typing: [],
-                echo: null,
-                user_typing_timer: null
+                user_typing_timer: null,
+                viewers: [],
             }
         },
         computed: {
@@ -30,6 +34,8 @@
         mounted() {
             this.getTicket();
             this.listen();
+            
+            this.loaded = true;
         },
         methods: {
             /**
@@ -93,14 +99,16 @@
              * Delete a ticket.
              */
             storeMessage() {
-                // One at a time, prevent spam and it should be unncessary.
+                // One at a time, prevent spamming and it should be unncessary.
                 if ('uuid' in this.ticket_pending) {
                     return;
                 }
 
+                console.log(this.new_status);
+
                 this.ticket_pending = {
                     uuid: this.generateUUID(),
-                    status: 0,
+                    status_change: this.new_status,
                     message: this.new_message,
                     created_at: new Date(),
                     updated_at: new Date(),
@@ -117,6 +125,7 @@
 
                 let postData = {
                     message: this.new_message,
+                    status_change: this.new_status,
                     ticket_files: this.attachments
                 };
 
@@ -125,21 +134,30 @@
                         let ticket_id = self.findMessageIndex('uuid', self.ticket_pending.uuid);
 
                         if (typeof(ticket_id) !== 'undefined') {
-                            self.ticket.messages[ticket_id] = response.data
+                            self.ticket.messages[ticket_id] = response.data;
+
+                            if (response.data.status_change !== null) {
+                                this.ticket.status = response.data.status_change;
+                            }
                         } else {
                             console.error('Cannot find pending ticket!!');
                         }
 
                         self.new_message = '';
+                        self.new_status = null;
                         self.ticket_pending = {};
 
-                        eventHub.$emit('clearAttachments');
+                        eventbus.$emit('clearAttachments');
                         return;
                     });
             },
 
             addMessage(message) {
                 this.ticket.messages.push(message);
+
+                if (message.status_change !== null) {
+                    this.ticket.status = message.status_change;
+                }
             },
 
             findMessageIndex(field, value=null) {
@@ -208,7 +226,7 @@
                 }, 500);
             },
 
-            setUserTyping () {
+            setUserTyping() {
                 this.echo.whisper('TicketUserTyping', {
                     user: this.username
                 });
@@ -224,9 +242,6 @@
             removeAttachment(attachment) {
                 
             },
-        },
-        watch: {
-
         }
     }
 </script>

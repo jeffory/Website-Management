@@ -9,8 +9,8 @@
     <h2 class="title is-2">Email accounts for: {{ $domain }}</h2>
     
     <div class="level">
-        <div class="level-left">
-            <button class="button is-primary" @click="showModal('new_email')">
+        <div class="level-left is-centered-mobile">
+            <button class="button is-primary" @click="eventbus.$emit('show-modal', {id: 'new-email-modal'})">
                 <span class="icon is-small">
                     <i class="fa fa-plus"></i>
                 </span>
@@ -22,7 +22,7 @@
         <div class="level-right">
             <div class="level-item">
                 <p class="control has-icon is-marginless">
-                    <input class="input" type="text" placeholder="Search accounts" v-model="query">
+                    <input class="input" type="text" placeholder="Search accounts" v-model="table_query">
                 
                     <span class="icon is-small">
                         <i class="fa fa-search"></i>
@@ -32,64 +32,49 @@
         </div>
     </div>
     
-    <data-table :data="accounts" :columns="[['Email address', 'email'], ['Disk usage', 'humandiskused'], ['Disk limit', 'humandiskquota']]" :query="query" inline-template v-cloak>
-        <table class="table data-table">
-            <thead>
-                <tr>
-                    <th v-for="(column, index) in view_columns">
-                        <span>@{{ column }}</span>
-
-                        <div style="float: right; cursor: pointer; margin-top: 4px">
-                            <span @click="column_toggle_sort(index)" class="icon is-small">
-                                <i v-if="sort.index == index &amp;&amp; sort.desc" class="fa fa-sort-desc"></i>
-                                <i v-else-if="sort.index == index &amp;&amp; !sort.desc" class="fa fa-sort-asc"></i>
-                                <i v-else style="opacity:.4;" class="fa fa-sort"></i>
-                            </span>
-                        </div>
-                    </th>
-
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr v-for="row in view_data">
-                    <td v-for="(column, index) in row">
-                        @{{ column }}
-                    </td>
-
-                    <td class="has-text-centered">
-                        <button class="button is-danger" @click="showModal('delete_email', { email: row[0] })">
-                                <span class="icon is-small">
-                                    <i class="fa fa-times"></i>
-                                </span>
-
-                                <span>Delete</span>
-                        </button>
-
-                        <button class="button" @click="showModal('change_email_password', { email: row[0] })">
-                            <span class="icon is-small">
-                                <i class="fa fa-key"></i>
-                            </span>
-
-                            <span>Options</span>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr v-if="view_data.length == 0">
-                    <td :colspan="view_columns.length" class="has-text-centered">No data specified.</td>
-                </tr>
-            </tbody>
-        </table>
-    </data-table>
-
-    <hr>
+    <data-table :data="accounts" :query="table_query" v-cloak></data-table>
 </div>
 @endsection
 
 @section('inline-script')
 <script>
-    var accounts = {!! json_encode($accounts) !!};
+    var accounts = {};
+    // [['Email address', 'email'], ['Disk usage', 'humandiskused'], ['Disk limit', 'humandiskquota']]
+    accounts.columns = [
+        {
+            caption: 'Email',
+            key: 'email',
+            mobile_caption: true
+        },
+        {
+            caption: 'Disk usage',
+            key: 'humandiskused',
+            mobile_caption: true
+        },
+        {
+            caption: 'Disk limit',
+            key: 'humandiskquota',
+            mobile_caption: true
+        },
+        {
+            key: 'buttons',
+            type: 'buttons',
+            buttons: [
+                {
+                    caption: 'Delete',
+                    classes: 'is-danger mobile-half-width',
+                    faIcon: 'times',
+                    emit: 'delete-email'
+                },
+                {
+                    caption: 'Options',
+                    classes: 'mobile-half-width',
+                    faIcon: 'key',
+                    emit: 'email-options'
+                },
+            ]
+        }
+    ]
+    accounts.data = {!! json_encode($accounts) !!}
 </script>
 @endsection

@@ -4,6 +4,37 @@
 <div class="container main-container" id="tickets-management">
     <h2>My tickets</h2>
 
+    <div class="level">
+        <div class="level-left is-centered-mobile">
+            <a class="button is-primary {{ (!$user->isVerified()) ? 'is-disabled': '' }}" href="{{ route('tickets.create') }}">
+                <span class="icon is-small">
+                    <i class="fa fa-plus"></i>
+                </span>
+                <span>Create new ticket</span>
+            </a>
+        </div>
+
+        <div class="level-right">
+            <div class="field is-horizontial">
+
+                <form method="get">
+                    <strong style="margin-right: 1em">Show tickets that are:</strong>
+                
+                    <label class="radio">
+                        <input type="radio" name="status" value="0" {{ ($ticket_status_sort === 0) ? ' checked': '' }} onChange="this.form.submit()">
+                        Open
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="status" {{ ($ticket_status_sort === 1) ? ' checked': '' }} value="1" onChange="this.form.submit()">
+                        Closed
+                    </label>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
     @if (! $user->isVerified())
     <article class="message is-warning">
         <div class="message-body">
@@ -13,62 +44,63 @@
     @endif
 
     @if ($tickets->count() == 0)
-    <p style="font-size: 13pt; padding: 1em 0; text-align: center">
-        No active support tickets found.<br>
-        <i class="fa fa-smile-o"></i>
-    </p>
+        <p style="font-size: 13pt; padding: 1em 0; text-align: center">
+
+            @if ($ticket_status_sort === '0')
+                No open support tickets found.<br>
+            @else
+                No closed support tickets found.<br>
+            @endif
+            <i class="fa fa-smile-o"></i>
+        </p>
     @else
-    <table class="table" style="table-layout:auto">
-        <thead>
-            <tr>
-                <th>Status</th>
-                <th>Title</th>
-                <th>Creator</th>
-                <th>Last update</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($tickets as $index => $ticket)
-                <tr>
-                    <td>
-                        @if ($ticket->trashed())
-                        <span class="tag is-danger">Trashed</span>
-                        @endif
+        <data-table :data="tickets" :query="table_query" v-cloak></data-table>
 
-                        @if ($ticket->isOpen())
-                        <span class="tag is-info">Open</span>
-                        @endif
-                    </td>
-
-                    <td>
-                        <a href="{{ route('tickets.show', ['ticket' => $ticket]) }}">{{ $ticket->title }}</a>
-                    </td>
-
-                    <td>
-                        {{ $ticket->user->name }}
-                    </td>
-
-                    <td style="width: 20%">{{ $ticket->updated_at->diffForHumans() }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    @if ($tickets->count() > 1)
-        {{ $tickets->links('partials.bulma-pagination') }}
+        <!-- Pagination -->
+        {{ $tickets->appends(['status' => $ticket_status_sort])->links('partials.bulma-pagination') }}
     @endif
-    
-    @endif
-
-    <div class="column">
-
-        <a class="button is-primary {{ (!$user->isVerified()) ? 'is-disabled': '' }}" href="{{ route('tickets.create') }}">
-            <span class="icon is-small">
-                <i class="fa fa-plus"></i>
-            </span>
-            <span>Create new ticket</span>
-        </a>
-
-    </div>
 </div>
+@endsection
+
+@section('inline-script')
+<script>
+    var tickets = {}
+    tickets.columns = [
+        {
+            caption: 'Status',
+            classes: 'is-inline-block-mobile',
+            key: 'status',
+            type: 'tags',
+            tags: {
+                0: {
+                    classes: 'is-info',
+                    text: 'Open'
+                },
+                1: {
+                    classes: 'is-danger',
+                    text: 'Closed'
+                }
+            }
+        },
+        {
+            caption: 'Title',
+            classes: 'is-inline-block-mobile',
+            key: 'title',
+            mobile_caption: true
+        },
+        {
+            caption: 'Creator',
+            classes: 'mobile-full-width',
+            key: 'user_name',
+            mobile_caption: true
+        },
+        {
+            caption: 'Last update',
+            classes: 'mobile-full-width',
+            key: 'updated_at',
+            mobile_caption: true
+        }
+    ]
+    tickets.data = {!! json_encode($tickets->toArray()['data']) !!}
+</script>
 @endsection

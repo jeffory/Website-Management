@@ -47,7 +47,7 @@
             }
         },
         mounted() {
-            eventHub.$on('clearAttachments', this.clearAttachments);
+            eventbus.$on('clearAttachments', this.clearAttachments);
         },
         methods: {
             upload(e) {

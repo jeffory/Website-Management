@@ -4,61 +4,65 @@
 <div class="container main-container">
     <h2 class="title is-2">Website management</h2>
 
-    <p>
-        From this area you can manage some aspects of your websites, such as emails.
-    </p>
-
-    <div class="panel" style="max-width: 650px">
-        <h3 class="panel-heading">
-            Accounts
-        </h3>
-
-{{--         <div class="panel-block">
-            <p class="control has-icon" style="margin-bottom: 0;">
-                <input class="input is-small" type="text" placeholder="Search">
-
-                <span class="icon is-small">
-                    <i class="fa fa-search"></i>
-                </span>
+    <div class="level">
+        <div class="level-left">
+            <p>
+                From this area you can manage some aspects of your websites, such as emails.
             </p>
-        </div> --}}
-
-        <div class="panel-block">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Domain</th>
-                        <th>Disk usage</th>
-                        <th>Manage</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach ($accounts as $account)
-                        <tr>
-                            <td style="line-height: 2.8em">
-                                {{ $account->domain }}
-                            </td>
-                    
-                            <td>
-                                {{ round( ($account['disk-used'] / $account['disk-limit']) * 100, 2) }}%
-                            </td>
-                    
-                            <td class="has-text-right">
-                                <a class="button is-primary" href="{{ route('server.show', ['domain' => $account->domain]) }}">
-                                    <span>Email</span>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
 
-        <div>
-            <p>Note: Disk usage information is not realtime and may be up to a day old.</p>
+        <div class="level-right">
+            <div class="level-item">
+                <p class="control has-icon is-marginless">
+                    <input class="input" type="text" placeholder="Search accounts" v-model="table_query">
+                
+                    <span class="icon is-small">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </p>
+            </div>
         </div>
+    </div>
+    
+    <data-table :data="accounts" :query="table_query" v-cloak></data-table>
+
+    <div>
+        <p>Note: Disk usage information is not realtime and may be up to a day old.</p>
     </div>
 
 </div>
+@endsection
+
+@section('inline-script')
+<script>
+    var accounts = {}
+    accounts.columns = [
+        {
+            caption: 'Domain',
+            key: 'domain',
+            mobile_caption: true
+        },
+        {
+            caption: 'Email Limit',
+            key: 'max-emails',
+            mobile_caption: true
+        },
+        {
+            caption: 'Disk used',
+            key: 'disk-used-percentage',
+            mobile_caption: true
+        },
+        {
+            key: 'buttons',
+            type: 'buttons',
+            buttons: [{
+                caption: 'Email',
+                classes: 'is-primary',
+                faIcon: 'envelope',
+                link: '/client-area/management/email/{domain}'
+            }]
+        },
+    ]
+    accounts.data = {!! json_encode($accounts) !!}
+</script>
 @endsection

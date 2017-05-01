@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown-menu">
-        <button @click="toggleMenu()" class="button is-outlined">
+        <button @click="toggleMenu()" class="button is-outlined" @blur="hideMenu">
             <slot name="button"></slot>
         </button>
 
@@ -29,11 +29,14 @@
             }
         },
         methods: {
-            mounted() {
-                console.log(this.class);
-            },
             toggleMenu() {
                 this.showMenu = !this.showMenu;
+            },
+            hideMenu() {
+                // Without a timeout the menu is closed before the element can be clicked.
+                setTimeout(() => {
+                    this.showMenu = false;
+                }, 200);
             }
         }
     }
