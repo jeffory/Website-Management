@@ -18,7 +18,7 @@ class CreateTicketMessagesTable extends Migration
             $table->integer('ticket_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->text('message');
-            $table->integer('status')->nullable();
+            $table->integer('status_change')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

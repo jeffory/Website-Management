@@ -24,6 +24,9 @@ Route::group(['prefix' => 'client-area'], function () {
 
     Route::resource('/tickets', 'TicketController');
     
+    Route::put('/tickets/{ticket}', 'TicketController@update')
+        ->name('tickets.update');
+
     Route::post('/tickets/{ticket}/message', 'TicketMessageController@store')
         ->name('ticket_message.store');
 
