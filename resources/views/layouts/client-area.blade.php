@@ -1,3 +1,4 @@
+ @inject('flash', '\App\Helpers\FlashMessage')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +23,14 @@
 </head>
 <body class="has-top-navbar">
     <div id="app">
+        @if ($flash->has())
+            <div class="notification is-info" data-timeout="3000">
+                <button class="delete"></button>
+
+                {{ $flash->get()['message'] }}
+            </div>
+        @endif
+
         <nav class="nav container">
             <div class="nav-left">
                 <a class="nav-item nav-brand" href="{{ route('home') }}">
@@ -65,7 +74,11 @@
                                 <a href="{{ route('tickets.index') }}">My tickets</a>
                             </li>
                             <li>
-                                <a>Logout</a>
+                                <a class="nav-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
                             </li>
                         </ul>
                     </template>

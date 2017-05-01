@@ -33,7 +33,5 @@
     <!-- Scripts -->
     @yield('inline-script')
     <script src="/js/app.js"></script>
-
-    <script src="http://livejs.com/live.js"></script>
 </body>
 </html>

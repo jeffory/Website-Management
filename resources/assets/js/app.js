@@ -70,6 +70,26 @@ Vue.component('flash-message', require('./components/FlashMessage.vue'));
 
 
 window.eventHub = new Vue({});
+window.onload = function() {
+    let notifications = document.getElementsByClassName("notification");
+
+    for (var i = 0; i < notifications.length; i++) {
+        let notification = notifications[i];
+        let timeout = notification.getAttribute('data-timeout');
+
+        if (timeout !== null) {
+            timeout = parseInt(timeout);
+
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+            }, timeout);
+        }
+
+        notification.getElementsByClassName('delete')[0].onclick = function (event) {
+            event.target.parentNode.classList.add('fade-out');
+        }
+    }
+};
 
 window.app = new Vue({
     data: {
