@@ -23,25 +23,6 @@
                             </template>
             
                             <template slot="menu">
-                                <ul class="menu-list">
-                                    <li class="is-danger" v-if="ticket.status == 1">
-                                        <a href="#"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('ticket-status-form').submit();">
-                                            Reopen Ticket
-                                        </a>
-                                        
-                                        <form id="ticket-status-form"
-                                            action="{{ route('tickets.update', ['ticket' => $ticket->id]) }}"
-                                            method="POST" style="display: none;">
-                                            
-                                            {{ csrf_field() }}
-                                            {{ method_field('PUT') }}
-
-                                            <input type="text" name="status" value="0">
-                                        </form>
-                                    </li>
-
                                     <li>
                                         <a @click="eventbus.$emit('show-modal', {id: 'delete-ticket-modal'})">Delete Ticket</a>
                                     </li>
