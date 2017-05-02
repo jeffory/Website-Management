@@ -13,7 +13,7 @@
 
         <div class="level-right">
             <div class="level-item">
-                <p class="control has-icon is-marginless">
+                <p class="control has-icon is-marginless is-full-width-mobile">
                     <input class="input" type="text" placeholder="Search accounts" v-model="table_query">
                 
                     <span class="icon is-small">
@@ -56,7 +56,7 @@
             key: 'buttons',
             type: 'buttons',
             buttons: [{
-                caption: 'Email',
+                caption: 'Email accounts',
                 classes: 'is-primary',
                 faIcon: 'envelope',
                 link: '/client-area/management/email/{domain}'

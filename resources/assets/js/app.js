@@ -33,7 +33,7 @@ Vue.use(VueTimeago, {
 Vue.use(VeeValidate);
 
 Validator.extend('cpanel_verify', {
-    getMessage: field => `Password is not complex enough. The server requires mixed-case letters, symbols, and common words avoidance`,
+    getMessage: field => `Password is not complex enough.`,
     validate: value => {
         const url = '/client-area/management/email-password-strength';
 

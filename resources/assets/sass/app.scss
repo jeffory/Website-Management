@@ -141,6 +141,7 @@ p {
 
 .main-container {
     background-color: $panel-default-main-content;
+    padding: 1em 2em;
 }
 
 .small-container {
@@ -378,11 +379,23 @@ form.had-error-submit .status-error {
     display: block;
 }
 
+.help {
+    font-size: .9em;
+}
+
 // ====== Mobile ======
 
 @include mobile {
+    h2 {
+        text-align: center;
+    }
+
     .is-centered-mobile {
         text-align: center;
+    }
+
+    .is-full-width-mobile {
+        width: 100%;
     }
 
     .button {

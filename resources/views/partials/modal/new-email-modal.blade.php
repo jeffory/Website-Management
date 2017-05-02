@@ -20,33 +20,44 @@
                     {{ '@'. $domain }}
                 </span>
 
-                <span v-show="errors.has('email_creation_form.username')" class="help is-danger" v-cloak style="clear: both; width: 100%">
+                <div v-show="errors.has('email_creation_form.username')" class="help is-danger" v-cloak style="clear: both; width: 100%">
                     @{{ errors.first('email_creation_form.username') }}
-                </span>
+                </div>
             </p>
         </div>
+        <div class="columns">
+            <div class="column">
+                <div class="control">
+                    <label class="control-label">Password</label>
 
-        <div class="control">
-            <label class="control-label">Password</label>
+                    <input name="password" class="input" type="password" v-validate="'required|cpanel_verify'" data-vv-delay="500" :class="{ 'is-danger': errors.has('email_creation_form.password') }" v-model="email_creation_form.password">
 
-            <input name="password" class="input" type="password" v-validate="'required|cpanel_verify'" data-vv-delay="500" :class="{ 'is-danger': errors.has('email_creation_form.password') }" v-model="email_creation_form.password">
+                    <span v-show="errors.has('email_creation_form.password')" class="help is-danger" v-cloak>
+                        Score: @{{ password_strength }} / 50 -
+                        @{{ errors.first('email_creation_form.password') }}
+                    </span>
+                </div>
 
-            <span v-show="errors.has('email_creation_form.password')" class="help is-danger" v-cloak>
-                Score: @{{ password_strength }} / 50 -
-                @{{ errors.first('email_creation_form.password') }}
-            </span>
-        </div>
+                <div class="control">
+                    <label class="control-label">Confirm password</label>
 
-        <div class="control">
-            <label class="control-label">Confirm password</label>
+                    <p class="control">
+                        <input name="password_confirmation" type="password" class="input" :class="{ 'is-danger': errors.has('email_creation_form.password_confirmation') }" v-validate="'confirmed:password'">
 
-            <p class="control">
-                <input name="password_confirmation" type="password" class="input" :class="{ 'is-danger': errors.has('email_creation_form.password_confirmation') }" v-validate="'confirmed:password'">
+                        <span v-show="errors.has('email_creation_form.password_confirmation')" class="help is-danger" v-cloak>
+                            The password confirmation does not match the original password.
+                        </span>
+                    </p>
+                </div>
+            </div>
 
-                <span v-show="errors.has('email_creation_form.password_confirmation')" class="help is-danger" v-cloak>
-                    The password confirmation does not match the original password.
-                </span>
-            </p>
+            <div class="column is-5">
+                <div class="message is-info">
+                    <p class="message-body">
+                        The server requires a password with mixed-case letters and symbols, avoiding common words where possible.
+                    </p>
+                </div>
+            </div>
         </div>
 
         <div class="control is-grouped">
