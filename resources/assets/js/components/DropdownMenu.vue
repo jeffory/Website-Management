@@ -47,7 +47,7 @@
         background-color: #fff;
         border: 1px solid #dbdbdb;
         position: absolute;
-        transform: translateX(-57%);
+        transform: translateX(-53%);
         width: fit-content;
         z-index: 9010;
     }

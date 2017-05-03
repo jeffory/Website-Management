@@ -23,6 +23,7 @@
                             </template>
             
                             <template slot="menu">
+                                <ul class="menu-list">
                                     <li>
                                         <a @click="eventbus.$emit('show-modal', {id: 'delete-ticket-modal'})">Delete Ticket</a>
                                     </li>
