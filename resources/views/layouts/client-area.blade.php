@@ -23,13 +23,7 @@
 </head>
 <body class="has-top-navbar">
     <div id="app">
-        @if ($flash->has())
-            <div class="notification is-info" data-timeout="3000">
-                <button class="delete"></button>
-
-                {{ $flash->get()['message'] }}
-            </div>
-        @endif
+        {{ $flash->displayBulma() }}
 
         <nav class="nav container">
             <div class="nav-left">

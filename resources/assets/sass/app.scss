@@ -383,6 +383,17 @@ form.had-error-submit .status-error {
     font-size: .9em;
 }
 
+.notification {
+    margin-top: -150px;
+    transition: margin-top 600ms cubic-bezier(.55, .085, .68, .53);
+    
+    &.is-active {
+        margin-top: 0;
+        transition: margin-top 600ms cubic-bezier(.55, .085, .68, .53);
+    }
+}
+
+
 // ====== Mobile ======
 
 @include mobile {

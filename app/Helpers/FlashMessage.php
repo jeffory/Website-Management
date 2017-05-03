@@ -53,9 +53,26 @@ class FlashMessage
      *
      * @return void
      */
-    public function set($message, $level = 0)
+    public function set($message, $level = 'info')
     {
         $this->request->session()->flash('flash.message', $message);
         $this->request->session()->flash('flash.level', $level);
+    }
+
+    /**
+     * Display flash message with Bulma framework styling.
+     *
+     * @return void
+     */
+    public function displayBulma($timeout = 5000)
+    {
+        $css_class = $this->get()['level'];
+
+        if ($this->has()) {
+            echo "<div class='notification is-{$css_class}' data-timeout='{$timeout}'>";
+            echo "<button class='delete'></button>";
+            echo $this->get()['message'];
+            echo "</div>";
+        }
     }
 }
