@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TicketCreationEmail;
+use App\Mail\UserCreatedTicket;
 
 class SendTicketCreationEmail
 {
@@ -33,5 +34,11 @@ class SendTicketCreationEmail
 
         Mail::to($ticket->user->email)
             ->queue(new TicketCreationEmail($ticket));
+
+        // Send email to any assigned staff to indicate a ticket was opened
+        foreach ($ticket->usersToNotify() as $user) {
+            Mail::to($user->email)
+                ->queue(new UserCreatedTicket($ticket->user, $ticket));
+        }
     }
 }

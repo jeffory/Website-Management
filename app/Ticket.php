@@ -123,4 +123,22 @@ class Ticket extends Model
     {
         return $this->status == 1;
     }
+
+    /**
+     * Retrieve a list of the users to notify about changes on a ticket.
+     *
+     * @return array
+     */
+    public function usersToNotify()
+    {
+        if ($this->assigned_to !== null) {
+            return [
+                User::find($this->assigned_to)
+            ];
+        }
+
+        return User::where('is_staff', 1)
+                   ->orWhere('is_admin', 1)
+                   ->get();
+    }
 }
