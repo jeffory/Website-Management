@@ -178,7 +178,12 @@
         */
       row_click (row) {
         if (this.row_has_link(row)) {
-          document.location.href = row['_link']
+
+          if (typeof(Turbolinks) !== 'undefined') {
+            Turbolinks.visit(row['_link'], {action: 'advance'})
+          } else {
+            document.location.href = row['_link']
+          }
         }
       },
       /**
