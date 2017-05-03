@@ -6,19 +6,18 @@
     <p>Hello {{ $user->name }},</p>
 
     <p>
-        Welcome to the support centre.
+        Welcome to the Geckode support centre.
     </p>
 
     <p>
-        Click the button below to verify your email address:
+        Please click the button below to verify your email address:
     </p>
 
-    <p style="padding: .8em 2em;">
+    <p style="padding: 1.5em 0;">
         <a href="{{ route('user.verify', ['token' => $user->verification_token]) }}" style="background-color: #21a8bd; color: #fff; padding: 1em 3em; text-decoration: none; border-radius: 4px">
             Verify Email
         </a>
     </p>
-    
 @endsection
 
 @section('markup')
