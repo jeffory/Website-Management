@@ -18,6 +18,7 @@ class CreateTicketFilesTable extends Migration
             $table->string('name');
             $table->string('path');
             $table->string('url');
+            $table->integer('file_size');
             $table->integer('user_id')->unsigned();
             $table->integer('ticket_id')->unsigned()->nullable();
             $table->integer('ticket_message_id')->unsigned()->nullable();

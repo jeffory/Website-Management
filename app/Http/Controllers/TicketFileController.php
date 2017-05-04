@@ -54,7 +54,7 @@ class TicketFileController extends Controller
     {
         $file = $this->processFileUpload($request, "upload_file");
 
-        // If the file hasn't finished uploading yet...
+        // If the file hasn't finished uploading yet - this fuction will be called again.
         if (! $file->isFinished()) {
             return;
         }
@@ -74,6 +74,7 @@ class TicketFileController extends Controller
         $TicketFile->name = $filename;
         $TicketFile->path = $filepath;
         $TicketFile->url = Storage::url($filepath);
+        $TicketFile->file_size = Storage::size($filepath);
 
         $TicketFile->user_id = Auth::user()->id;
         $TicketFile->token = str_random(60);
@@ -93,10 +94,12 @@ class TicketFileController extends Controller
      */
     public function destroy(Request $request, $query)
     {
-        if (strlen($query) >= 40) {
-            $TicketFile = TicketFile::where('token', $query)->first();
-        } else {
+        // TODO: Needs authorisation.
+
+        if (is_int($query) && strlen($query) < 20) {
             $TicketFile = TicketFile::where('id', $query)->first();
+        } else {
+            $TicketFile = TicketFile::where('token', $query)->first();
         }
 
         if ($request->wantsJson()) {
