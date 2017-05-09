@@ -18,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         TicketFile::observe(TicketFileObserver::class);
+
+        if (env('FORCE_HTTPS', false) === true) {
+            \URL::forceScheme('https');
+        }
     }
 
     /**
