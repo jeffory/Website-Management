@@ -11,6 +11,7 @@ use App\TicketMessage;
 use App\TicketFile;
 use Auth;
 use App\Events\TicketCreated;
+use App\Facades\Flash;
 
 class TicketController extends Controller
 {
@@ -167,7 +168,9 @@ class TicketController extends Controller
     {
         $this->authorize('delete', $ticket);
         
-        $ticket->delete();
+        if ($ticket->delete()) {
+            Flash::set('Ticket deleted', 'success');
+        }
 
         if (! $request->wantsJson()) {
             return redirect()->route('tickets.index');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Facades\Flash;
 use App\RemoteServer;
 
 use Auth;
@@ -54,6 +55,8 @@ class ServerManagementController extends Controller
             $request->input('password'),
             $request->input('domain')
         );
+
+        Flash::set('Email created.');
 
         if ($response) {
             return [
