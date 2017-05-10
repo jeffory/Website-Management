@@ -2,46 +2,42 @@
 
 <!-- Main Content -->
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+<div class="container small-container">
+    <h2><i class="fa fa-undo"></i><br>Reset Password</h2>
+    @if (session('status'))
+        <div class="message is-success">
+            <div class="message-body">
+                <span class="icon is-small" style="margin-top: 3px">
+                    <i class="fa fa-check"></i>
+                </span>
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Send Password Reset Link
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <span>
+                    {{ session('status') }}
+                </span>
             </div>
         </div>
-    </div>
+    @endif
+
+    <form role="form" method="POST" action="{{ url('/password/email') }}">
+        {{ csrf_field() }}
+
+        <p class="control has-icon">
+            <input class="input{{ $errors->has('email') ? ' is-danger' : '' }}" name="email" type="text" placeholder="Email address" value="{{ old('email') }}" required autofocus>
+
+            <span class="icon is-small">
+                <i class="fa fa-envelope"></i>
+            </span>
+
+            @if ($errors->has('email'))
+                <span class="help is-danger">{{ $errors->first('email') }}</span>
+            @endif
+        </p>
+
+        <p class="control">
+            <button type="submit" class="button is-wide">
+                Send Password Reset Link
+            </button>
+        </p>
+    </form>
 </div>
 @endsection

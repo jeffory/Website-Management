@@ -39,7 +39,6 @@
                     <a class="nav-item" href="{{ route('register') }}">Register</a>
                 @else
                 <a class="nav-item" href="{{ route('tickets.index') }}">My tickets</a>
-
                 
                 <a class="nav-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
