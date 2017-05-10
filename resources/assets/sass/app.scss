@@ -239,6 +239,12 @@ p {
     padding: 1em;
 }
 
+.level-left,
+.level-right,
+.level-item {
+    max-width: 100%;
+}
+
 .pagination {
     margin-bottom: 1em;
 
@@ -447,6 +453,11 @@ form.had-error-submit .status-error {
     .main-container {
         background-color: $panel-default-main-content;
         padding: 2em 4em 4em;
+
+        // Stop titles pushing options button off screen.
+        .level-left {
+            max-width: 90%;
+        }
     }
 
     .icon-box a {
