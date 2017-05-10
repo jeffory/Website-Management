@@ -395,6 +395,45 @@ class WHMApi
     }
 
     /**
+     * Create a user session.
+     *
+     * CPanel UAPI Function. Documentation:
+     * https://documentation.cpanel.net/display/SDK/WHM+API+1+Functions+-+create_user_session
+     *
+     * @param string cpanel user to run the command under
+     * @param string email account username
+     * @param string password
+     *
+     * @return object|boolean JSON data or FALSE on request failure.
+     */
+    public function createUserSession($cpanel_user, $service = 'cpaneld', $locale = 'en')
+    {
+        $data = $this->call(
+            'create_user_session',
+            [
+                'user' => $cpanel_user,
+                'api.version' => 1,
+                'service' => $service,
+                'locale' => $locale
+            ]
+        );
+
+        if (isset($data->data)) {
+            $data = $data->data;
+            $data->status = true;
+
+            return $data;
+        } else {
+            if (isset($data->metadata)) {
+                return [
+                    'status' => false,
+                    'error' => $data->metadata->reason
+                ];
+            }
+        }
+    }
+
+    /**
      * Debug function to echo last HTTP requests.
      */
     public function dumpRequests()
