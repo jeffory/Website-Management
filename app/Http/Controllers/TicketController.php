@@ -64,7 +64,7 @@ class TicketController extends Controller
     /**
      * Show ticket.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|String
      */
     public function show(Ticket $ticket, Request $request)
     {
@@ -83,7 +83,7 @@ class TicketController extends Controller
         return view('ticket.show', [
             'ticket' => $ticket,
             'user' => Auth::user()
-            ]);
+        ]);
     }
 
     /**

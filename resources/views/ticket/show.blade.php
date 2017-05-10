@@ -64,7 +64,7 @@
                             <div v-if="message.file.length > 0">
                                 <ul style="display: inline-block;">
                                     <li v-for="file in message.file" style="background-color: hsl(271, 100%, 71%); margin: 3px;" class="tag is-medium">
-                                        <a :href="file.url" style="color: #fff">@{{ file.name }}</a>
+                                        <a :href="file.url" style="color: #fff" :title="file.file_size">@{{ file.name }}</a>
                                     </li>
                                 </ul>
                             </div>

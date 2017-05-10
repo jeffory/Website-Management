@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 
-use App\TicketMessage;
-
 class Ticket extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
@@ -65,7 +63,7 @@ class Ticket extends Model
     /**
      * Return messages associated with the ticket.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function messages()
     {
@@ -77,7 +75,7 @@ class Ticket extends Model
      *
      * Used for cascading deletions.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function files()
     {
@@ -87,7 +85,7 @@ class Ticket extends Model
     /**
      * Ticket is owned by a user.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -97,11 +95,11 @@ class Ticket extends Model
     /**
      * Determine if this Ticket is owned by a particular user.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return boolean
      */
     public function ownedBy(User $user)
     {
-        return $this->user_id == $user->id;
+        return (int) $this->user_id === (int) $user->id;
     }
 
     /**
