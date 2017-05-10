@@ -29,7 +29,8 @@ class TicketCreationTest extends DuskTestCase
                     ->create(
                         $ticket->title,
                         $ticket->message,
-                        'c:\\test_files\\cheese-01.jpg'
+                        '/home/seluser/cheese-01.jpg'
+                        // app_path(). 'tests/testfiles/cheese-01.jpg'
                     );
 
             $ticket = Ticket::where('title', $ticket->title)

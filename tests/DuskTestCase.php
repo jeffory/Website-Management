@@ -22,7 +22,11 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        static::startChromeDriver();
+        if (env('WEBDRIVER_HOST', 'localhost') == 'localhost' ||
+            env('WEBDRIVER_HOST') == '127.0.0.1' &&
+            env('WEBDRIVER_PORT', 9515) == 9515) {
+            static::startChromeDriver();
+        }
     }
 
     /**
@@ -33,7 +37,7 @@ abstract class DuskTestCase extends BaseTestCase
     protected function driver()
     {
         $driver_server = env('WEBDRIVER_HOST', 'localhost');
-        $driver_port = env('WEBDRIVER_PORT', '9515');
+        $driver_port = env('WEBDRIVER_PORT', 9515);
 
         return RemoteWebDriver::create(
             'http://'. $driver_server. ':'. $driver_port,
