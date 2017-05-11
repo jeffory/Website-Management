@@ -48,7 +48,7 @@ class TicketFileController extends Controller
     /**
      * Store a new file.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|void
      */
     public function upload(Request $request)
     {
@@ -90,7 +90,7 @@ class TicketFileController extends Controller
     /**
      * Delete a file via token or ID.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|array
      */
     public function destroy(Request $request, $query)
     {

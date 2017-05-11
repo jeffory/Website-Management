@@ -24,7 +24,7 @@ class RemoteServerPolicy
     }
 
     /**
-     * Determine whether the user can view the server manangement index.
+     * Determine whether the user can view the server management index.
      *
      * @param  \App\User  $user
      * @return mixed

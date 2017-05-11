@@ -5,7 +5,7 @@
     },
     "rules": {
         "indent": ["error", 4],
-        "camelcase": ["error", "never"]
+        "camelcase": ["error", { "properties": "never" }]
     },
     "globals": {
         "Vue": true,
