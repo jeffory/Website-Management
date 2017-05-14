@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Class User
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -30,7 +33,7 @@ class User extends Authenticatable
     /**
      * Get all the tickets a User can view/edit.
      *
-     * @return boolean
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tickets()
     {
@@ -40,7 +43,7 @@ class User extends Authenticatable
     /**
      * Get all the tickets a User can view/edit.
      *
-     * @return boolean
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function remoteServers()
     {
@@ -50,9 +53,9 @@ class User extends Authenticatable
     /**
      * Get all the tickets a User can view/edit.
      *
-     * @return boolean
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function assessibleServers()
+    public function accessibleServers()
     {
         if ($this->is_admin) {
             return RemoteServer::all();
@@ -104,7 +107,7 @@ class User extends Authenticatable
     /**
      * Retrieve a list of the users viewable tickets.
      *
-     * @return collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function myTickets($status = null)
     {

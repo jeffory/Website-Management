@@ -48,7 +48,8 @@ class TicketFileController extends Controller
     /**
      * Store a new file.
      *
-     * @return \Illuminate\Http\Response|void
+     * @param Request $request
+     * @return TicketFile|\Illuminate\Http\RedirectResponse|void
      */
     public function upload(Request $request)
     {

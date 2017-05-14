@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\User;
-use App\RemoteUser;
+use App\RemoteServer;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -11,9 +11,16 @@ class RemoteServerPolicy
 {
     use HandlesAuthorization;
 
+    /**
+     * At the bare minimum a user must have 'has_server_access' for any actions.
+     * Users that are admin can access every server.
+     *
+     * @param \App\User $user
+     * @param string $ability
+     * @return mixed
+     */
     public function before(User $user, $ability)
     {
-        // Reject early - even an admin user specifically needs server access.
         if (! $user->hasServerAccess()) {
             return false;
         }
@@ -43,7 +50,7 @@ class RemoteServerPolicy
      */
     public function view(User $user, RemoteServer $server)
     {
-        
+        return $server->hasAuthorisedUser($user);
     }
 
     /**
@@ -52,9 +59,9 @@ class RemoteServerPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, RemoteServer $server)
     {
-        
+        return $server->hasAuthorisedUser($user);
     }
 
     /**
@@ -66,7 +73,7 @@ class RemoteServerPolicy
      */
     public function update(User $user, RemoteServer $server)
     {
-        
+        return $server->hasAuthorisedUser($user);
     }
 
     /**
@@ -78,6 +85,6 @@ class RemoteServerPolicy
      */
     public function delete(User $user, RemoteServer $server)
     {
-        
+        return $server->hasAuthorisedUser($user);
     }
 }
