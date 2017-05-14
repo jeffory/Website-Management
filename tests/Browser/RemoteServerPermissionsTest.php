@@ -30,6 +30,27 @@ class RemoteServerPermissionsTest extends DuskTestCase
     }
 
     /**
+     * Test an unauthorised user can't access a server they are not associated with.
+     *
+     * @return void
+     */
+    public function testUserCannotAccessAnUnassociatedServers()
+    {
+        $domain = 'geckode.com.au';
+        $user = factory(User::class)->create([
+            'has_server_access' => true
+        ]);
+
+        $this->browse(function (Browser $browser) use ($user, $domain) {
+            $browser->loginAs($user)
+                ->visit("/client-area/management/email/{$domain}")
+                ->assertSee('This action is unauthorized');
+        });
+
+        $user->forceDelete();
+    }
+
+    /**
      * Test an authorised user can access the servers.
      *
      * @return void
@@ -44,7 +65,7 @@ class RemoteServerPermissionsTest extends DuskTestCase
         
         $this->browse(function (Browser $browser) use ($user, $server) {
             // Should be able to see the servers interface, but should not be able to see
-            // any servers the user is not explictly associated with.
+            // any servers the user is not explicitly associated with.
             $browser->loginAs($user)
                     ->visit('/client-area/management/')
                     ->assertDontSee('This action is unauthorized')
