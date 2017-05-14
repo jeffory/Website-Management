@@ -8,7 +8,9 @@
             <p class="has-text-centered" style="color: #000; font-size: 1.3em; font-weight: bold">@{{ eventbus.modal['delete-email-modal'].email }}</p>
         </section>
 
-        <form method="post" action="{{ route('server.deleteEmail') }}" id="delete_email_form">
+        <form method="post"
+              :action="'{{ route('server_email.destroy', ['remoteserver' => $domain]) }}' + '/' + eventbus.modal['delete-email-modal'].email"
+              id="delete_email_form">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 

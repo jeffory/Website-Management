@@ -3,7 +3,9 @@
         <h3>New account</h3>
     </section>
 
-    <form v-inline-submit method="post" autocomplete="off" action="{{ route('server.storeNewEmail') }}" data-vv-scope="email_creation_form" data-redirect-on-success="{{ route('server.show', ['domain' => $domain]) }}">
+    <form v-inline-submit method="post" autocomplete="off"
+          action="{{ route('server_email.store', ['remoteserver' => $domain]) }}"  data-vv-scope="email_creation_form"
+          data-redirect-on-success="{{ route('server_email.index', ['remoteserver' => $domain]) }}">
         {{ csrf_field() }}
 
         @include('partials/form-status-indicator')
@@ -30,7 +32,9 @@
                 <div class="control">
                     <label class="control-label">Password</label>
 
-                    <input name="password" class="input" type="password" v-validate="'required|cpanel_verify'" data-vv-delay="500" :class="{ 'is-danger': errors.has('email_creation_form.password') }" v-model="email_creation_form.password">
+                    <input name="password" class="input" type="password" v-validate="'required|cpanel_verify'"
+                           data-vv-delay="500" :class="{ 'is-danger': errors.has('email_creation_form.password') }"
+                           v-model="email_creation_form.password">
 
                     <span v-show="errors.has('email_creation_form.password')" class="help is-danger" v-cloak>
                         Score: @{{ password_strength }} / 50 -
@@ -42,7 +46,9 @@
                     <label class="control-label">Confirm password</label>
 
                     <p class="control">
-                        <input name="password_confirmation" type="password" class="input" :class="{ 'is-danger': errors.has('email_creation_form.password_confirmation') }" v-validate="'confirmed:password'">
+                        <input name="password_confirmation" type="password" class="input"
+                               :class="{ 'is-danger': errors.has('email_creation_form.password_confirmation') }"
+                               v-validate="'confirmed:password'">
 
                         <span v-show="errors.has('email_creation_form.password_confirmation')" class="help is-danger" v-cloak>
                             The password confirmation does not match the original password.

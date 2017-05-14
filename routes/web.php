@@ -13,7 +13,6 @@
 
 Auth::routes();
 
-# TODO: Somewhere in the code there is a redirect to /home when logging in.
 Route::get('/home', function () {
     return redirect()->route('home');
 });
@@ -41,26 +40,32 @@ Route::post('/tickets/file_upload', 'TicketFileController@upload')
     ->name('tickets.file_upload');
 
 Route::group(['prefix' => 'client-area/management'], function () {
-    Route::get('/', 'ServerManagementController@index')
+    Route::get('/', 'ServerController@index')
         ->name('server.index');
+});
 
-    Route::get('/email/{domain}', 'ServerManagementController@show')
-        ->name('server.show');
+Route::bind('remoteserver', function($value) {
+    return App\RemoteServer::where('domain', $value)->firstOrFail();
+});
 
-    Route::post('/email-password-strength', 'ServerManagementController@emailPasswordStrength')
-        ->name('server.emailPasswordStrength');
+Route::group(['prefix' => 'client-area/management/email/{remoteserver}'], function () {
+    Route::get('/', 'ServerEmailController@index')
+         ->name('server_email.index');
 
-    Route::post('/email-password-change', 'ServerManagementController@emailPasswordChange')
-        ->name('server.emailChangePassword');
+    Route::post('/', 'ServerEmailController@store')
+         ->name('server_email.store');
 
-    Route::post('/email-password-check', 'ServerManagementController@emailPasswordCheck')
-        ->name('server.emailPasswordCheck');
+    Route::delete('/{email?}', 'ServerEmailController@destroy')
+           ->name('server_email.destroy');
 
-    Route::post('/email-new-account', 'ServerManagementController@storeNewEmail')
-        ->name('server.storeNewEmail');
+    Route::put('/{email?}', 'ServerEmailController@update')
+         ->name('server_email.update');
 
-    Route::delete('/email-delete-account', 'ServerManagementController@deleteEmail')
-        ->name('server.deleteEmail');
+    Route::post('/password-check', 'ServerEmailController@password_strength')
+         ->name('server_email.password_check');
+
+    Route::post('/account-check/{email?}', 'ServerEmailController@confirm')
+        ->name('server_email.account_check');
 });
 
 Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')

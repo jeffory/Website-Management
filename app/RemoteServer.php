@@ -16,9 +16,19 @@ class RemoteServer extends Model
                            'max-emails', 'disk-used', 'disk-limit', 'active'];
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'domain';
+    }
+
+    /**
      * The users that belong to the server.
      *
-     * @return Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
     public function users()
     {
@@ -83,12 +93,12 @@ class RemoteServer extends Model
     /**
      * Authorises a user to use server.
      *
-     * @return boolean
+     * @return void
      */
     public function addAuthorisedUser(User $user)
     {
         if (! $this->hasAuthorisedUser($user)) {
-            return $this->users()->attach($user);
+            $this->users()->attach($user);
         }
     }
 
@@ -128,17 +138,21 @@ class RemoteServer extends Model
     /**
      * Create an email account.
      *
-     * @param string email username, ie. user
-     * @param string account password
-     * @param string domain
-     * @param string account quota in MB
+     * @param string $username email username, ie. user
+     * @param string $password account password
+     * @param string $quota account quota in MB
      *
      * @return boolean|array
      */
-    public static function createEmail($email, $password, $domain, $quota = 2048)
+    public function createEmail($username, $password, $quota = 2048)
     {
-        $cpanel_user = self::getDomainUsername($domain);
-        $result = WHMApi::emailCreateAccount($cpanel_user, $email, $password, $domain, $quota);
+        $result = WHMApi::emailCreateAccount(
+            $this->username,
+                $username,
+                $password,
+                $this->domain,
+                $quota
+        );
 
         return $result;
     }
@@ -146,34 +160,38 @@ class RemoteServer extends Model
     /**
      * Delete an email account.
      *
-     * @param string email username, ie. user
-     * @param string domain
+     * @param string $email_username email username, ie. user
+     * @param string $domain domain
      *
      * @return boolean|array
      */
-    public static function deleteEmail($email_username, $domain)
+    public function deleteEmail($email)
     {
-        $cpanel_user = self::getDomainUsername($domain);
-        $result = WHMApi::emailDeleteAccount($cpanel_user, $email_username, $domain);
+        list($username, $domain) = explode('@', $email);
 
-        return $result;
+        // Trying to change an email outside of the server's scope.
+        if ($domain !== $this->domain) {
+            abort(400);
+        }
+
+        return WHMApi::emailDeleteAccount($this->username, $username, $this->domain);
     }
 
     /**
      * Downloads a list of the current emails for a given domain.
      *
-     * @param string the domain's email accounts to look up
-     *
      * @return array
      */
-    public function emailList($domain)
+    public function emailList()
     {
-        $username = $this->getDomainUsername($domain);
+//        $username = $this->getDomainUsername($this->domain);
 
         return [
-            'domain' => $domain,
-            'username' => $username,
-            'accounts' => WHMApi::emailList($username, $domain)
+            'domain' => $this->domain,
+            'username' => $this->username,
+            'accounts' => WHMApi::emailList(
+                $this->username, $this->domain
+            )
         ];
     }
 
@@ -181,8 +199,9 @@ class RemoteServer extends Model
      * Retrieve the strength of a email password.
      *
      * @param array
+     * @return array
      */
-    public static function emailPasswordStrength($password)
+    public function emailPasswordStrength($password)
     {
         return [
             'strength' => WHMApi::emailPasswordStrength($password)
@@ -194,28 +213,32 @@ class RemoteServer extends Model
      *
      * @param array
      */
-    public static function emailChangePassword($email, $password)
+    public function emailChangePassword($email, $password)
     {
         list($username, $domain) = explode('@', $email);
-        $cpanel_user = self::getDomainUsername($domain);
+
+        // Trying to change an email outside of the server's scope.
+        if ($domain !== $this->domain) {
+            abort(400);
+        }
 
         return [
-            'status' => WHMApi::emailChangePassword($cpanel_user, $username, $password, $domain)
+            'status' => WHMApi::emailChangePassword($this->username, $username, $password, $this->domain)
         ];
     }
 
-    /**
-     * Check an email accounts password.
-     *
-     * @param array
-     */
-    public static function emailVerifyPassword($email, $password)
-    {
-        list($username, $domain) = explode('@', $email);
-        $cpanel_user = self::getDomainUsername($domain);
 
+    /**
+     * Verify the email/password of an account.
+     *
+     * @param $email
+     * @param $password
+     * @return array
+     */
+    public function emailVerifyPassword($email, $password)
+    {
         return [
-            'status' => WHMApi::emailVerifyAccount($cpanel_user, $email, $password)
+            'status' => WHMApi::emailVerifyAccount($this->username, $email, $password)
         ];
     }
 }

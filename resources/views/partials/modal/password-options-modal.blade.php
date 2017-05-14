@@ -9,8 +9,13 @@
                     </h3>
                 </section>
         
-                <form method="post" autocomplete="off" v-inline-submit action="{{ route('server.emailChangePassword') }}" :reset="true" data-vv-scope="password_change_form" id="password_change_form" data-hide-modal-on-success="email-options-modal">
+                <form method="post" autocomplete="off" v-inline-submit
+                      action="{{ route('server_email.update', ['remoteserver' => $domain]) }}"
+                      :action="'{{ route('server_email.update', ['remoteserver' => $domain]) }}' + '/' + eventbus.modal['email-options-modal'].email"
+                      :reset="true" data-vv-scope="password_change_form" id="password_change_form"
+                      data-hide-modal-on-success="email-options-modal">
                     {{ csrf_field() }}
+                    {{ method_field('PUT') }}
         
                     @include('partials/form-status-indicator')
                     
@@ -18,7 +23,8 @@
                         <label class="control-label">Email</label>
                     
                         <p class="control">
-                            <input name="email" class="input readonly" type="text" :value="eventbus.modal['email-options-modal'].email" readonly>
+                            <input name="email" class="input readonly" type="text"
+                                   :value="eventbus.modal['email-options-modal'].email" readonly>
                         </p>
                     </div>
                     
@@ -27,7 +33,10 @@
                             <div class="control">
                                 <label class="control-label">Password</label>
                 
-                                <input name="password" class="input" type="password" v-validate="'required|cpanel_verify'" data-vv-delay="500" :class="{ 'is-danger': errors.has('password_change_form.password') }" v-model="password_change_form.password">
+                                <input name="password" class="input" type="password"
+                                       v-validate="'required|cpanel_verify'" data-vv-delay="500"
+                                       :class="{ 'is-danger': errors.has('password_change_form.password') }"
+                                       v-model="password_change_form.password">
                 
                                 <span v-show="errors.has('password_change_form.password')" class="help is-danger" v-cloak>
                                     Score: @{{ password_strength }} / 50 -
@@ -39,9 +48,12 @@
                                 <label class="control-label">Confirm password</label>
                 
                                 <p class="control">
-                                    <input name="password_confirmation" type="password" class="input" :class="{ 'is-danger': errors.has('password_change_form.password_confirmation') }" v-validate="'confirmed:password_change_form.password'">
+                                    <input name="password_confirmation" type="password" class="input"
+                                           :class="{ 'is-danger': errors.has('password_change_form.password_confirmation') }"
+                                           v-validate="'confirmed:password_change_form.password'">
                 
-                                    <span v-show="errors.has('password_change_form.password_confirmation')" class="help is-danger" v-cloak>
+                                    <span v-show="errors.has('password_change_form.password_confirmation')"
+                                          class="help is-danger" v-cloak>
                                         The password confirmation does not match the original password.
                                     </span>
                                 </p>
@@ -75,7 +87,11 @@
                     </h3>
                 </section>
         
-                <form method="post" action="{{ route('server.emailPasswordCheck') }}" :reset="true" data-vv-scope="password_verify_form" autocomplete="off" v-inline-submit>
+                <form method="post"
+                      action="{{ route('server_email.account_check', ['remoteserver' => $domain]) }}"
+                      :action="'{{ route('server_email.account_check', ['remoteserver' => $domain]) }}' + '/' + eventbus.modal['email-options-modal'].email"
+                      :reset="true"
+                      data-vv-scope="password_verify_form" autocomplete="off" v-inline-submit>
                     {{ csrf_field() }}
 
                     <div class="status-indicator">

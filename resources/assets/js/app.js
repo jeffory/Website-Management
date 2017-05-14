@@ -35,7 +35,7 @@ Vue.use(VeeValidate)
 Validator.extend('cpanel_verify', {
     getMessage: field => `Password is not complex enough.`,
     validate: value => {
-        const url = '/client-area/management/email-password-strength'
+        const url = '/client-area/management/email/geckode.com.au/password-check'
 
         if (value === '') {
             return false
