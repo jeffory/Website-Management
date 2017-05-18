@@ -2,15 +2,20 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 
 /**
  * Class User
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes, CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['tickets'];
 
     /**
      * The attributes that are mass assignable.

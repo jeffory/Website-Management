@@ -74,4 +74,15 @@ Route::get('/user/resend-verification', 'UserVerificationController@sendVerifica
 Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')
     ->name('user.verify');
 
+Route::group(['prefix' => 'client-area/admin/'], function () {
+    Route::get('/', 'AdminController@index')
+         ->name('admin.index');
+
+    Route::get('/users', 'AdminController@userIndex')
+         ->name('admin.user_index');
+
+    Route::delete('/users/{user?}', 'AdminController@userDestroy')
+         ->name('admin.user_destroy');
+});
+
 Route::get('/{page?}', 'PagesController@serve');

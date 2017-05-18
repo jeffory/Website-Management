@@ -116,7 +116,8 @@ window.app = new Vue({
         email_creation_form: {},
         password_change_form: {},
         password_verify_form: {},
-        loaded: false
+        loaded: false,
+        users: null
     },
     el: '#app',
     created() {
@@ -142,6 +143,14 @@ window.app = new Vue({
 
         this.eventbus.$on('email-options', function (data) {
             window.eventbus.$emit('show-modal', {id: 'email-options-modal', email: data.email})
+        })
+
+        this.eventbus.$on('delete-user', function (data) {
+            window.eventbus.$emit('show-modal', {
+                id: 'delete-user-modal',
+                user_id: data.id,
+                user_name: data.name
+            })
         })
     },
     mounted() {

@@ -38,6 +38,17 @@
         </div>
         @endif
 
+        @if($user->isAdmin())
+        <div class="column is-3 icon-box">
+            <a href="{{ route('admin.index') }}">
+                <div>
+                    <i class="icon fa fa-server is-big"></i>
+                    <h3>Admin</h3>
+                </div>
+            </a>
+        </div>
+        @endif
+
     </div>
 </div>
 @endsection
