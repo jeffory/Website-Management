@@ -12,7 +12,7 @@ class UpdateServerDetails extends Command
      *
      * @var string
      */
-    protected $signature = 'webservers:update';
+    protected $signature = 'remoteservers:update';
 
     /**
      * The console command description.

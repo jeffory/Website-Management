@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>File not found</title>
+        <title>Page not found</title>
         
         <link href="/css/app.css" rel="stylesheet" type="text/css">
 

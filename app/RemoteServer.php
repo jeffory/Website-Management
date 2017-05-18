@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Facades\WHMApi;
+use Illuminate\Support\Facades\Log;
 
 class RemoteServer extends Model
 {
@@ -55,6 +56,7 @@ class RemoteServer extends Model
 
         foreach ($accounts as $index => $account) {
             if (!in_array($account->domain, $whitelisted_servers)) {
+                Log::info('updateServerList() - Not in whitelist: '. $account->domain);
                 continue;
             }
 

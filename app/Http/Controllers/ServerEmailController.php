@@ -88,12 +88,11 @@ class ServerEmailController extends Controller
      * @param  \App\RemoteServer  $remoteServer
      * @return array
      */
-    public function update(Request $request, RemoteServer $remoteServer)
+    public function update(Request $request, RemoteServer $remoteServer, $email)
     {
         $this->authorize('update', $remoteServer);
 
         $this->validate($request, [
-            'email' => 'required',
             'password' => 'required|confirmed'
         ]);
 
@@ -139,7 +138,7 @@ class ServerEmailController extends Controller
         ]);
 
         return (array) $remoteServer->emailVerifyPassword(
-            $request->input('email'),
+            $email,
             $request->input('password')
         );
     }
