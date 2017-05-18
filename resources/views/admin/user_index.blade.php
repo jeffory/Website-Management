@@ -23,12 +23,17 @@
             mobile_caption: true
         },
         {
+            caption: 'Email',
+            key: 'email',
+            mobile_caption: true
+        },
+        {
             caption: 'Verified',
             key: 'is_verified',
             mobile_caption: true
         },
         {
-            caption: 'Has server access',
+            caption: 'Server access?',
             key: 'has_server_access',
             mobile_caption: true
         },
