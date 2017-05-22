@@ -38,7 +38,8 @@ class AccountVerification extends BasePage
     public function verifyByUser(Browser $browser, User $user)
     {
         $browser->visit('/user/verify/'. $user->verification_token)
-                ->assertSee('Verification complete');
+                ->waitFor('.notification')
+                ->assertSee('Email verified successfully');
     }
 
     /**

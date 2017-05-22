@@ -6,7 +6,17 @@
     <br>
 
     <div class="columns">
-        <div class="column is-3 icon-box">
+        <div class="column icon-box">
+            <a href="{{ route('user.edit') }}">
+                <div>
+                    <i class="icon fa fa-user is-big"></i>
+
+                    <h3>My Account Details</h3>
+                </div>
+            </a>
+        </div>
+
+        <div class="column icon-box">
             <a href="{{ route('tickets.index') }}">
                 <div>
                     <i class="icon fa fa-ticket is-big"></i>
@@ -28,7 +38,7 @@
         </div>
 
         @if($user->hasServerAccess())
-        <div class="column is-3 icon-box">
+        <div class="column icon-box">
             <a href="{{ route('server.index') }}">
                 <div>
                     <i class="icon fa fa-server is-big"></i>
@@ -39,10 +49,10 @@
         @endif
 
         @if($user->isAdmin())
-        <div class="column is-3 icon-box">
+        <div class="column icon-box">
             <a href="{{ route('admin.index') }}">
                 <div>
-                    <i class="icon fa fa-server is-big"></i>
+                    <i class="icon fa fa-bolt is-big"></i>
                     <h3>Admin</h3>
                 </div>
             </a>

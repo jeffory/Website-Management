@@ -44,7 +44,7 @@ Route::group(['prefix' => 'client-area/management'], function () {
         ->name('server.index');
 });
 
-Route::bind('remoteserver', function($value) {
+Route::bind('remoteserver', function ($value) {
     return App\RemoteServer::where('domain', $value)->firstOrFail();
 });
 
@@ -68,11 +68,17 @@ Route::group(['prefix' => 'client-area/management/email/{remoteserver}'], functi
         ->name('server_email.account_check');
 });
 
-Route::get('/user/resend-verification', 'UserVerificationController@sendVerificationEmail')
+Route::get('/user/resend-verification', 'UserController@sendVerificationEmail')
     ->name('user.sendVerification');
 
-Route::get('/user/verify/{token}', 'UserVerificationController@verifyUserByToken')
+Route::get('/user/verify/{token}', 'UserController@verifyUserByToken')
     ->name('user.verify');
+
+Route::get('/user/edit', 'UserController@edit')
+    ->name('user.edit');
+
+Route::post('/user/edit', 'UserController@update')
+    ->name('user.update');
 
 Route::group(['prefix' => 'client-area/admin/'], function () {
     Route::get('/', 'AdminController@index')
