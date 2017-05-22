@@ -24,7 +24,7 @@ class FlashMessage
     /**
      * Check if there is a message.
      *
-     * @return void
+     * @return boolean
      */
     public function has()
     {
@@ -34,14 +34,14 @@ class FlashMessage
     /**
      * Return message.
      *
-     * @return void
+     * @return array|boolean
      */
     public function get()
     {
         if ($this->has()) {
             return [
-                'message' => $this->request->session()->pull('flash.message'),
-                'level' => $this->request->session()->pull('flash.level')
+                'message' => $this->request->session()->get('flash.message'),
+                'level' => $this->request->session()->get('flash.level')
             ];
         } else {
             return false;

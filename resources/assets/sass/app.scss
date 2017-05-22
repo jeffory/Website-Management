@@ -54,7 +54,7 @@ h3 {
 
 body {
     background-color: $body-bg;
-    background-image: url('../img/body-background.jpg');
+    background-image: url('../images/body-background.jpg');
     background-size: cover;
     color: $text-color;
     font-family: $font-family-sans-serif;
@@ -461,12 +461,17 @@ form.had-error-submit .status-error {
         }
     }
 
-    .icon-box a {
-        height: 235px;
-        padding: 3.2em 1em;
-    }
+    .icon-box {
+        min-width: 180px;
+        max-width: 250px;
 
-    .icon-box:not(:last-child) {
-        margin-right: 1.5em;
+        a {
+            height: 235px;
+            padding: 3.2em 1em;
+        }
+
+        &:not(:last-child) {
+            margin-right: 1.5em;
+        }
     }
 }

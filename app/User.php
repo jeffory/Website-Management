@@ -112,6 +112,7 @@ class User extends Authenticatable
     /**
      * Retrieve a list of the users viewable tickets.
      *
+     * @param string $status
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function myTickets($status = null)
