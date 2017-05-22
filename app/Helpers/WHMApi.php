@@ -151,10 +151,10 @@ class WHMApi
      *
      * Defaults to API version 2 unless specified.
      *
-     * @param string cpanel module to query
-     * @param string cpanel function to run
-     * @param string cpanel username to run command under
-     * @param string data
+     * @param string $module CPanel module to query
+     * @param string $function CPanel function to run
+     * @param string $user CPanel username to run command under
+     * @param string $data
      *
      * @return object|boolean JSON data or FALSE on request failure.
      */
@@ -183,11 +183,11 @@ class WHMApi
      * CPanel UAPI function. Documentation:
      * https://documentation.cpanel.net/display/SDK/UAPI+Functions+-+Email%3A%3Aadd_pop
      *
-     * @param string cpanel user to run the command under
-     * @param string new email account's username, eg. user
-     * @param string new email account's password
-     * @param string new email account's domain
-     * @param integer new email account's quota
+     * @param string $cpanel_user CPanel user to run the command under
+     * @param string $username new email account's username, eg. user
+     * @param string $password new email account's password
+     * @param string $domain new email account's domain
+     * @param integer $quota new email account's quota
      *
      * @return object|boolean JSON data or FALSE on request failure.
      */
@@ -219,9 +219,9 @@ class WHMApi
      * CPanel UAPI function. Documentation:
      * https://documentation.cpanel.net/display/SDK/UAPI+Functions+-+Email%3A%3Aadd_pop
      *
-     * @param string cpanel user to run the command under
-     * @param string new email account's username, eg. user
-     * @param string new email account's domain
+     * @param string $cpanel_user CPanel user to run the command under
+     * @param string $username new email account's username, eg. user
+     * @param string $domain new email account's domain
      *
      * @return object|boolean JSON data or FALSE on request failure.
      */

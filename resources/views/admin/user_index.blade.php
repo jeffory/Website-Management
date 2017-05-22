@@ -25,7 +25,8 @@
         {
             caption: 'Email',
             key: 'email',
-            mobile_caption: true
+            mobile_caption: true,
+            link: '/client-area/management/email/'
         },
         {
             caption: 'Verified',
