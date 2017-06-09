@@ -180,6 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         
         App\Providers\WHMServiceProvider::class,
+        Mews\Purifier\PurifierServiceProvider::class,
     ],
 
     /*
@@ -229,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'WHMApi' => App\Facades\WHMApi::class,
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
     ],
 
 ];

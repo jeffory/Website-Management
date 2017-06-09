@@ -75,9 +75,13 @@ class TicketController extends Controller
         }, 'messages.file' => function ($q) {
             $q->select('id', 'name', 'path', 'url', 'user_id', 'ticket_message_id', 'file_size', 'created_at');
         }]);
-        
+
         if ($request->wantsJson()) {
             return [ 'ticket' => $ticket ];
+        }
+
+        foreach ($ticket->messages as &$message) {
+            $message->message = str_replace("\n", "<br>", clean($message->message));
         }
 
         return view('ticket.show', [
@@ -111,7 +115,7 @@ class TicketController extends Controller
 
         $ticket->title = $request->input('title');
         $ticket->user_id = Auth::user()->id;
-        $ticket->message = $request->input('message');
+        $ticket->message = clean($request->input('message'));
         $ticket->save();
 
         if ($request->has('ticket_file')) {

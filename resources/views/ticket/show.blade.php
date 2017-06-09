@@ -45,9 +45,7 @@
                         </div>
                 
                         <div class="ticket-message column is-9">
-                            <p class="content" v-if="message.message">
-                                @{{ message.message }}
-                            </p>
+                            <p class="content" v-if="message.message" v-html="message.message"></p>
 
                             <div class="message is-info" v-if="message.status_change !== null && parseInt(message.status_change) == 1">
                                 <p class="message-body">

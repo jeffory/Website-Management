@@ -16,6 +16,7 @@
     "laravel-elixir-vue-2": "^0.2.0",
     "laravel-elixir-webpack-official": "^1.0.2",
     "lodash": "^4.16.2",
+    "pusher-js": "^4.1.0",
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3"
   },
@@ -23,7 +24,6 @@
     "axios": "^0.15.3",
     "bulma": "^0.3.1",
     "laravel-echo": "^1.2.2",
-    "pusher-js": "^4.0.0",
     "turbolinks": "^5.0.0",
     "vee-validate": "^2.0.0-beta.25",
     "vue-timeago": "^3.1.5",
