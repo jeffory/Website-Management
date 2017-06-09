@@ -81,7 +81,7 @@ class TicketController extends Controller
         }
 
         foreach ($ticket->messages as &$message) {
-            $message->message = str_replace("\n", "<br>", clean($message->message));
+            $message->message = clean($message->message);
         }
 
         return view('ticket.show', [
