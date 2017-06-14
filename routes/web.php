@@ -42,6 +42,9 @@ Route::post('/tickets/file_upload', 'TicketFileController@upload')
 Route::group(['prefix' => 'client-area/management'], function () {
     Route::get('/', 'ServerController@index')
         ->name('server.index');
+
+    Route::get('/cpanel/{remoteserver}', 'ServerController@cpanelRedirect')
+        ->name('server.cpanel_redirect');
 });
 
 Route::bind('remoteserver', function ($value) {

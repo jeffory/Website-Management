@@ -55,13 +55,22 @@
         {
             key: 'buttons',
             type: 'buttons',
-            buttons: [{
-                caption: 'Email accounts',
-                classes: 'is-primary',
-                faIcon: 'envelope',
-                link: '/client-area/management/email/{domain}'
-            }]
-        },
+            classes: 'is-skinny',
+            buttons: [
+                {
+                    caption: 'Email accounts',
+                    classes: 'is-primary mobile-half-width',
+                    faIcon: 'envelope',
+                    link: '/client-area/management/email/{domain}'
+                },
+                {
+                    caption: 'CPanel',
+                    classes: 'is-orange mobile-half-width <?php if (!Auth::user()->isAdmin()) echo 'is-hidden' ?>',
+                    faIcon: 'gear',
+                    link: '/client-area/management/cpanel/{domain}'
+                }
+            ]
+        }
     ]
     accounts.data = {!! json_encode($accounts) !!}
 </script>

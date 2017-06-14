@@ -59,16 +59,17 @@
         {
             key: 'buttons',
             type: 'buttons',
+            classes: 'is-skinny',
             buttons: [
                 {
                     caption: 'Delete',
-                    classes: 'is-danger mobile-half-width',
+                    classes: 'is-danger mobile-half-width is-skinny',
                     faIcon: 'times',
                     emit: 'delete-email'
                 },
                 {
                     caption: 'Options',
-                    classes: 'mobile-half-width',
+                    classes: 'mobile-half-width is-skinny',
                     faIcon: 'key',
                     emit: 'email-options'
                 },

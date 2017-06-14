@@ -41,6 +41,7 @@
         {
             key: 'buttons',
             type: 'buttons',
+            classes: 'is-skinny',
             buttons: [
                 {
                     caption: 'Delete',

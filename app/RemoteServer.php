@@ -243,4 +243,20 @@ class RemoteServer extends Model
             'status' => WHMApi::emailVerifyAccount($this->username, $email, $password)
         ];
     }
+
+    /**
+     * Create a logged in cpanel session and return the URL.
+     *
+     * @param string $username email username, ie. user
+     * @param string $password account password
+     * @param string $quota account quota in MB
+     *
+     * @return boolean|array
+     */
+    public function createCpanelSession($username)
+    {
+        $result = WHMApi::createUserSession($this->username);
+
+        return $result;
+    }
 }

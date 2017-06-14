@@ -77,6 +77,18 @@ class RemoteServerPolicy
     }
 
     /**
+     * Determine whether the user can access cPanel for the server.
+     *
+     * @param  \App\User  $user
+     * @param  \App\RemoteServer  $server
+     * @return mixed
+     */
+    public function cpanel(User $user, RemoteServer $server)
+    {
+        return $server->hasAuthorisedUser($user) && $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can delete the ???.
      *
      * @param  \App\User  $user

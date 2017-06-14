@@ -33,12 +33,34 @@ class ServerController extends Controller
         $accounts = $user->accessibleServers();
 
         foreach ($accounts as $index => $account) {
-            $account['disk-used-percentage'] = round(($account['disk-used'] / $account['disk-limit']) * 100, 2) . '%';
+            $account['disk-used-percentage'] = round(
+                ($account['disk-used'] / $account['disk-limit']) * 100,
+                        2) . '%';
         }
 
         return view('server.index', [
             'accounts' => $accounts
             ]);
+    }
+
+    /**
+     * Start a cPanel session and redirect to it.
+     *
+     * @param RemoteServer $server
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function cpanelRedirect(RemoteServer $server)
+    {
+        $this->authorize('cpanel', RemoteServer::class);
+
+        if (Auth::user()->isAdmin()) {
+            $cpanel_session = ($server->createCpanelSession($server->domain));
+        }
+
+        if (isset($cpanel_session) && isset($cpanel_session->url)) {
+            return redirect($cpanel_session->url);
+        }
     }
 
 

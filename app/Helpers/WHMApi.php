@@ -404,7 +404,7 @@ class WHMApi
      * @param string email account username
      * @param string password
      *
-     * @return object|boolean JSON data or FALSE on request failure.
+     * @return array|boolean JSON data or FALSE on request failure.
      */
     public function createUserSession($cpanel_user, $service = 'cpaneld', $locale = 'en')
     {

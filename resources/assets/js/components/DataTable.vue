@@ -83,7 +83,7 @@
     vertical-align: middle;
   }
 
-  td button:not(:last-child) {
+  td .button:not(:last-child) {
     margin-right: 5px;
   }
 
