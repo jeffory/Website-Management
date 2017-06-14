@@ -36,16 +36,14 @@
 
   .menu {
     bottom: 0;
-    // height: 100%;
-    max-width: 350px;
+    max-width: 90%;
     padding: 20px;
     position: absolute;
     right: 0;
-    
+    width: 350px;
+
     .menu-item {
-      // border-top: 2px solid #fff;
       border-bottom: 2px solid #fff;
-      // margin-bottom: .5em;
       padding: .25em 0;
       position: relative;
 
@@ -64,7 +62,6 @@
       width: 100%;
 
       &:hover {
-        // background-color: rgba(255, 255, 255, .5);
         color: $primary;
         font-weight: bold;
       }

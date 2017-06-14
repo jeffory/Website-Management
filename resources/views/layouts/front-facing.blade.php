@@ -17,13 +17,13 @@
     <section class="hero-unit container">
         <div class="">
             <h1 class="title is-1">
-                <img src="images/geckode-logo.png" style="width: 100px;">
+                <img src="images/geckode-logo-small-white.png" style="width: 100px;">
                 <span>GEC<span style="color: #4ee559">KODE</span></span>
             </h1>
 
             <div class="menu">
                 <div class="menu-item"><a href="/client-area">Client area</a></div>
-                <div class="menu-item"><a href="/">Contact us</a></div>
+                <div class="menu-item"><a href="/contact-us">Contact us</a></div>
             </div>
         </div>
     </section>
