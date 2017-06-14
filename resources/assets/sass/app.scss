@@ -1,6 +1,6 @@
 
 // Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,500);
 @import url(https://fonts.googleapis.com/css?family=Archivo+Black);
 @import url(https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css);
 
@@ -8,10 +8,11 @@
 // Variables
 @import "variables";
 
-$primary: #21a8bd;
+$primary: #33C297;
 
 // Bulma
 @import "node_modules/bulma/bulma.sass";
+@import "front-page.scss";
 
 *,
 body,
@@ -23,9 +24,17 @@ body,
     display:none;
 }
 
-h1 {
-    font-size: $size-1 * .75;
-    margin-bottom: .7em;
+h1,
+.content h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 5em;
+    line-height: 1.5em;
+    margin-bottom: 0;
+    position: relative;
+
+    & > span {
+        line-height: 1em;
+    }
 }
 
 h2, .title.is-2 {
@@ -42,14 +51,28 @@ h3 {
     margin-right: .3em;
 }
 
-.button.is-wide {
-    height: auto;
-    padding: .75em 0;
-    width: 100%
+.button {
+    &.is-wide {
+        height: auto;
+        padding: .75em 0;
+        width: 100%
+    }
+
+    &.is-orange {
+        background-color: #f46b34;
+        color: #fff;
+    }
 }
 
 .control.is-grouped.has-text-centered {
     justify-content: center;
+}
+
+@include desktop {
+    td.is-skinny {
+        white-space: nowrap;
+        width: 1%;
+    }
 }
 
 body {
@@ -157,7 +180,7 @@ p {
         text-align: center;
 
         .fa {
-            color: #21a8bd;
+            color: $primary;
         }
     }
 
@@ -445,7 +468,6 @@ form.had-error-submit .status-error {
 }
 
 // ====== Larger than mobile ======
-
 @include tablet {
     .dropdown-menu {
         margin: 5px 0;

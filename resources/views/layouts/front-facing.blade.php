@@ -12,18 +12,21 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
-
-    <!-- Scripts -->
-    <script>
-        window.Laravel = <?php echo json_encode([
-            'csrfToken' => csrf_token(),
-        ]); ?>
-    </script>
 </head>
 <body>
-    <nav>
-        
-    </nav>
+    <section class="hero-unit container">
+        <div class="">
+            <h1 class="title is-1">
+                <img src="images/geckode-logo.png" style="width: 100px;">
+                <span>GEC<span style="color: #4ee559">KODE</span></span>
+            </h1>
+
+            <div class="menu">
+                <div class="menu-item"><a href="/client-area">Client area</a></div>
+                <div class="menu-item"><a href="/">Contact us</a></div>
+            </div>
+        </div>
+    </section>
 
     <div id="app">
         @yield('content')
@@ -31,6 +34,11 @@
     </div>
 
     <!-- Scripts -->
+    <script>
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
     @yield('inline-script')
     <script src="/js/app.js"></script>
 </body>

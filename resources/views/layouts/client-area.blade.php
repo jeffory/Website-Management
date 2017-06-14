@@ -27,6 +27,12 @@
 
         <nav class="nav container">
             <div class="nav-left">
+                <h1 style="font-size: 1.7em; padding: .25em .5em; margin-right: .5em; font-weight: 500">
+                    <a href="/">
+                        <span style="color: #fff">GEC</span><span style="color: #4EE559">KODE</span>
+                    </a>
+                </h1>
+
                 <a class="nav-item nav-brand" href="{{ route('home') }}">
                     Client Area
                 </a>
@@ -38,6 +44,7 @@
                     <a class="nav-item" href="{{ route('login') }}">Login</a>
                     <a class="nav-item" href="{{ route('register') }}">Register</a>
                 @else
+                <a class="nav-item" href="{{ route('server.index') }}">My Servers</a>
                 <a class="nav-item" href="{{ route('tickets.index') }}">My tickets</a>
                 
                 <a class="nav-item" href="{{ route('logout') }}"
