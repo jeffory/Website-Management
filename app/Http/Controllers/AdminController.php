@@ -46,7 +46,7 @@ class AdminController extends Controller
     {
         $users = \App\User::all();
 
-        return view('admin.user_index', [
+        return view('admin.user-index', [
             'users' => $users
         ]);
     }
@@ -60,6 +60,6 @@ class AdminController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.user_index');
+        return redirect()->route('admin.user-index');
     }
 }

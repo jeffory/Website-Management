@@ -45,11 +45,16 @@
                 </template>
               </div>
 
-              <template v-if="column.type == 'tags' && column.tags.hasOwnProperty(row[column.key])">
+              <div v-else-if="column.type == 'tick'" style="margin-left: .5em">
+                <span class="icon fa fa-check is-green" v-if="get_column_from_row(column.key, row) == 1"></span>
+                <span class="icon fa fa-times is-red" v-else></span>
+              </div>
+
+              <template v-else-if="column.type == 'tags' && column.tags.hasOwnProperty(row[column.key])">
                 <span class="tag" :class="column.tags[row[column.key]].classes" v-text="column.tags[row[column.key]].text"></span>
               </template>
 
-              <span v-else>
+              <template v-else>
                 <a :href="row._link" v-if="column._link">
                   {{ get_column_from_row(column.key, row) }}
                 </a>
@@ -57,7 +62,7 @@
                 <template v-else>
                   {{ get_column_from_row(column.key, row) }}
                 </template>
-              </span>
+              </template>
             </td>
 
           </template>

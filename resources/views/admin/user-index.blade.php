@@ -31,12 +31,14 @@
         {
             caption: 'Verified',
             key: 'is_verified',
-            mobile_caption: true
+            mobile_caption: true,
+            type: 'tick'
         },
         {
             caption: 'Server access?',
             key: 'has_server_access',
-            mobile_caption: true
+            mobile_caption: true,
+            type: 'tick'
         },
         {
             key: 'buttons',
