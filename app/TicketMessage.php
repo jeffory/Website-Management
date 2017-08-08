@@ -26,7 +26,7 @@ class TicketMessage extends Model
     /**
      * Determine if this ticket message is owned by a particular user.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -36,7 +36,7 @@ class TicketMessage extends Model
     /**
      * File relationship.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function file()
     {

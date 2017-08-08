@@ -178,7 +178,8 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        
+
+        Barryvdh\Debugbar\ServiceProvider::class,
         App\Providers\WHMServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
     ],
@@ -229,6 +230,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'WHMApi' => App\Facades\WHMApi::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
     ],

@@ -60,6 +60,6 @@ class AdminController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.user-index');
+        return redirect()->route('admin.user_index');
     }
 }
