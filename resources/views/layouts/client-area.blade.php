@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
@@ -12,7 +13,8 @@
     <title>Client Area | {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="/css/app.css" rel="stylesheet">
+    <link href="{{ url('/css/app.css') }}" rel="stylesheet" type="text/css">
+
 
     <!-- Scripts -->
     <script>
@@ -91,8 +93,11 @@
     </div>
 
     <!-- Scripts -->
-    @yield('inline-script')
+    @yield('pre-inline-script')
+
     {{-- <script src="https://cdn.polyfill.io/v2/polyfill.js"></script> --}}
     <script src="/js/app.js"></script>
+
+    @yield('inline-script')
 </body>
 </html>

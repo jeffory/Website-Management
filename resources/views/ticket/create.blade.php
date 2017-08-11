@@ -18,7 +18,7 @@
         <p class="control">
             <textarea class="textarea{{ $errors->has('message') ? ' is-danger' : '' }}" name="message" type="text" placeholder="Message" required></textarea>
 
-            <message-attachments upload-to="{{ route('tickets.file_upload') }}"></message-attachments>
+            <message-attachments upload-to="{{ route('tickets.file_upload') }}" ref="attachments"></message-attachments>
 
             @if ($errors->has('message'))
                 <span class="help is-danger">{{ $errors->first('message') }}</span>

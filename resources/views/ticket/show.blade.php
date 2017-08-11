@@ -111,7 +111,7 @@
 </div>
 @endsection
 
-@section('inline-script')
+@section('pre-inline-script')
 <script>
     var ticket = {!! json_encode($ticket) !!};
 </script>

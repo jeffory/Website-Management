@@ -86,6 +86,7 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
 
+    'current_password'     => 'The current password entered is incorrect, please try again.',
     'recaptcha'            => 'Please check the Recaptcha field.',
 
 

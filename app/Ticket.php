@@ -27,7 +27,7 @@ class Ticket extends Model
      */
     public function save(array $options = [])
     {
-        // The message part is stored seperately from the ticket.
+        // The message part is stored separately from the ticket.
         if (isset($this->message)) {
             $ticket_message = $this->message;
             unset($this->message);

@@ -62,7 +62,7 @@
 </div>
 @endsection
 
-@section('inline-script')
+@section('pre-inline-script')
 <script>
     var tickets = {}
     tickets.columns = [

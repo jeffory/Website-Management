@@ -36,7 +36,7 @@
 </div>
 @endsection
 
-@section('inline-script')
+@section('pre-inline-script')
 <script>
     var accounts = {};
     // [['Email address', 'email'], ['Disk usage', 'humandiskused'], ['Disk limit', 'humandiskquota']]

@@ -28,16 +28,40 @@
         </div>
     </section>
 
-    <div id="app">
+    <div id="app" class="main-container container">
         @yield('content')
-        </div>
     </div>
 
+    <footer class="container">
+        <ul>
+            <li>
+                <a href="{{ route('home') }}">Client area</a>
+            </li>
+
+            <li>
+                <a href="/contact-us">Contact us</a>
+            </li>
+
+            <li>
+                <a href="/terms">Terms and Conditions</a>
+            </li>
+
+            <li>
+                <a href="/aup">Acceptable Use Policy</a>
+            </li>
+        </ul>
+    </footer>
+
     <!-- Scripts -->
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script>
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); ?>
+
+        function submitMessageForm(token) {
+            document.getElementById('contact-form').submit();
+        }
     </script>
     @yield('inline-script')
     <script src="/js/app.js"></script>

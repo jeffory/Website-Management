@@ -25,9 +25,7 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
         }
 
-        Validator::extend('current_password', function ($attribute, $value, $parameters, $validator) {
-            return Hash::check($value, current($parameters));
-        }, 'Password is incorrect, please try again.');
+        Validator::extend('current_password', 'App\Rules\CheckPassword@passes');
         Validator::extend('recaptcha', 'App\Rules\VerifyRecaptcha@passes');
     }
 

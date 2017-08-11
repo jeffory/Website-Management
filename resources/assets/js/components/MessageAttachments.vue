@@ -21,7 +21,9 @@
                 <ul class="file-list" v-else>
                     <li class="file-list-item tag is-medium" v-for="file in attachedFiles">
                         <progress :value="file.percentage" max="100" class="progress"
-                            v-bind:class="{'is-primary': file.percentage < 100, 'is-success':  file.percentage == 100, 'is-danger': file.hasError}">
+                            v-bind:class="{'is-primary': file.percentage < 100,
+                                           'is-success':  file.percentage == 100,
+                                           'is-danger': file.hasError}">
                         </progress>
 
                         <span>{{ file.name }}</span>

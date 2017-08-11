@@ -29,7 +29,3 @@
         }
     }
 </script>
-
-<style>
-    
-</style>

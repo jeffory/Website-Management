@@ -46,19 +46,30 @@
                 </div>
             </a>
         </div>
-        @endif
 
+        @if($user->hasServerAccess())
+            <div class="column icon-box">
+                <a href="{{ route('server.index') }}">
+                    <div>
+                        <i class="icon fa fa-server is-big"></i>
+                        <h3>Website management</h3>
+                    </div>
+                </a>
+            </div>
+        @endif
+    </div>
+
+    <div class="columns" style="margin-top: 1em">
         @if($user->isAdmin())
-        <div class="column icon-box">
-            <a href="{{ route('admin.index') }}">
-                <div>
-                    <i class="icon fa fa-bolt is-big"></i>
-                    <h3>Admin</h3>
-                </div>
-            </a>
-        </div>
+            <div class="column icon-box">
+                <a href="{{ route('admin.index') }}">
+                    <div>
+                        <i class="icon fa fa-bolt is-big"></i>
+                        <h3>Admin</h3>
+                    </div>
+                </a>
+            </div>
         @endif
-
     </div>
 </div>
 @endsection

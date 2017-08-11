@@ -13,7 +13,7 @@
 </div>
 @endsection
 
-@section('inline-script')
+@section('pre-inline-script')
 <script>
     var accounts = {};
     accounts.columns = [
