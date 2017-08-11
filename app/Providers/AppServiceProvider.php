@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('current_password', function ($attribute, $value, $parameters, $validator) {
             return Hash::check($value, current($parameters));
         }, 'Password is incorrect, please try again.');
+        Validator::extend('recaptcha', 'App\Rules\VerifyRecaptcha@passes');
     }
 
     /**

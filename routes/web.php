@@ -94,4 +94,6 @@ Route::group(['prefix' => 'client-area/admin/'], function () {
          ->name('admin.user_destroy');
 });
 
-Route::get('/{page?}', 'PagesController@serve');
+
+Route::post('/contact-us', 'PagesController@sendMessage')->name('contact_us');
+Route::get('/{page?}', 'PagesController@serve')->name('page');
