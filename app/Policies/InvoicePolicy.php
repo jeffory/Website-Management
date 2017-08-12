@@ -36,7 +36,6 @@ class InvoicePolicy
         if ($invoice->view_key === request()->get('view_key')) {
             return true;
         }
-//        return $server->hasAuthorisedUser($user);
     }
 
     /**
