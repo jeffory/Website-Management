@@ -15,6 +15,9 @@
     <!-- Styles -->
     <link href="{{ url('/css/app.css') }}" rel="stylesheet" type="text/css">
 
+    @if (Route::currentRouteName() == 'invoice.generate_pdf')
+    <link href="{{ url('/css/invoice-pdf-fixes.css') }}" rel="stylesheet" type="text/css">
+    @endif
 
     <!-- Scripts -->
     <script>

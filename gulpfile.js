@@ -15,5 +15,7 @@ require('laravel-elixir-vue-2');
 
 elixir((mix) => {
     mix.sass('app.scss')
+       .sass('invoice-pdf-fixes.scss')
        .webpack('app.js');
+
 });

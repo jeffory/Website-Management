@@ -37,12 +37,12 @@
             </a>
         </div>
 
-        @if($user->hasServerAccess())
+
         <div class="column icon-box">
-            <a href="{{ route('server.index') }}">
+            <a href="{{ route('invoice.index') }}">
                 <div>
-                    <i class="icon fa fa-server is-big"></i>
-                    <h3>Website management</h3>
+                    <i class="icon fa fa-file-text-o is-big"></i>
+                    <h3>Invoices</h3>
                 </div>
             </a>
         </div>

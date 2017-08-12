@@ -94,6 +94,25 @@ Route::group(['prefix' => 'client-area/admin/'], function () {
          ->name('admin.user_destroy');
 });
 
+Route::group(['prefix' => 'client-area/invoice'], function () {
+    Route::get('/', 'InvoiceController@index')
+        ->name('invoice.index');
+
+    Route::post('/', 'InvoiceController@store')
+        ->name('invoice.store');
+
+    Route::get('/create', 'InvoiceController@create')
+        ->name('invoice.create');
+
+    Route::get('/{invoice}', 'InvoiceController@show')
+        ->name('invoice.show');
+
+    Route::get('/{invoice}/pdf', 'InvoiceController@generatePDF')
+        ->name('invoice.generate_pdf');
+
+    Route::post('/{invoice}/payment', 'InvoicePaymentController@store')
+        ->name('invoice.payment_store');
+});
 
 Route::post('/contact-us', 'PagesController@sendMessage')->name('contact_us');
 Route::get('/{page?}', 'PagesController@serve')->name('page');

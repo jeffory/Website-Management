@@ -2,8 +2,7 @@
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,500);
 @import url(https://fonts.googleapis.com/css?family=Archivo+Black);
-@import url(https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css);
-
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
 
 // Variables
 @import "variables";
@@ -14,6 +13,8 @@ $primary: desaturate(#5831cc, 20%);
 @import "node_modules/bulma/bulma.sass";
 @import "front-page.scss";
 
+@import "node_modules/pikaday/css/pikaday";
+
 *,
 body,
 *:after {
@@ -21,7 +22,16 @@ body,
 }
 
 [v-cloak] {
-    display:none;
+    display: none;
+}
+
+.is-title,
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5 {
+    font-family: 'Montserrat', sans-serif;
 }
 
 h1,
@@ -45,6 +55,10 @@ h2, .title.is-2 {
 h3 {
     font-size: $size-3 * .75;
     margin-bottom: .3em;
+}
+
+.is-bold {
+    font-weight: bold;
 }
 
 .is-label {
@@ -144,7 +158,6 @@ body {
 
 h2 {
     font-size: 2em;
-    // margin-bottom: .7em;
 
     .fa {
         font-size: 2.5em;
@@ -156,6 +169,14 @@ p {
     margin-bottom: 1em;
 }
 
+.level-align-top {
+    align-self: flex-start;
+}
+
+.level-align-bottom {
+    align-self: flex-end;
+}
+
 .panel h2,
 .panel h3,
 .panel table {
@@ -165,6 +186,14 @@ p {
 .main-container {
     background-color: $panel-default-main-content;
     padding: 1em 2em;
+
+    section {
+        padding: 3em 0;
+    }
+
+    section:not(:last-child) {
+        border-bottom: 1px solid #ddd;
+    }
 }
 
 .small-container {
@@ -220,6 +249,16 @@ p {
     font-size: 2.5em;
     height: 40px;
     width: 40px;
+}
+
+.icon.is-extra-large {
+    display: inline-block;
+    font-size: 60px;
+    height: 5.5rem;
+    line-height: 5.5rem;
+    text-align: center;
+    vertical-align: top;
+    width: 5.5rem;
 }
 
 .icon-box {
@@ -448,6 +487,149 @@ form.had-error-submit .status-error {
     }
 }
 
+.highlight {
+    background-color: $grey-lighter;
+    padding: 1em 2em;
+}
+
+.grecaptcha-badge {
+    z-index: 1;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 3rem 4.75rem;
+
+    ul {
+        list-style: none;
+        padding-left: 1em;
+    }
+
+    li {
+        display: inline-block;
+        padding: 0 1.5em;
+
+        &:first-child {
+            padding-left: 0;
+        }
+
+        &:not(:last-child) {
+            border-right: 1px solid darken(#fff, 20%);
+        }
+
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+
+    a {
+        color: darken($white, 10%);
+
+        &:hover {
+            color: $primary;
+        }
+    }
+}
+
+.invoice-items {
+    $border-color: $primary;
+
+    //font-size: 1.1em;
+    margin-bottom: 2em;
+
+    td,
+    th {
+        padding: 1em 1.6em;
+    }
+
+    .numeric {
+        font-weight: bold;
+        white-space: nowrap;
+
+        &:not(.has-text-left):not(.has-text-right) {
+            text-align: center;
+        }
+    }
+
+    tr:not(.totals-row) {
+        border-bottom: 2px solid #fff;
+    }
+
+    thead {
+        tr {
+            background-color: $primary;
+        }
+
+        th {
+            color: #fff;
+
+            &:not(.has-text-left):not(.has-text-right) {
+                text-align: center;
+            }
+        }
+    }
+
+    tbody tr:not(.totals-row) {
+        &:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        &:nth-child(even) {
+            background-color: lighten(#eee, 4%);
+        }
+    }
+
+    tr.totals-row {
+        &:first-child {
+            border-top: 6px double $primary;
+        }
+
+        &:not(:last-child) {
+            border-bottom: 2px solid $border-color;
+        }
+
+        .invoice-note {
+            font-size: .95em;
+            //vertical-align: bottom;
+        }
+
+        td:not(.invoice-note) {
+            font-weight: bold;
+        }
+    }
+
+    tr.balance-row {
+        background-color: lighten($primary, 45%);
+        border-bottom: none;
+        color: $primary;
+        font-size: 1.1em;
+        font-weight: bold;
+
+        td.currency {
+            padding-right: 1.3em;
+        }
+    }
+}
+
+.invoice-number {
+    color: #9BA2AB;
+    margin-top: .25em;
+    padding: .7em 1em;
+}
+
+.invoice-details {
+    min-width: 200px;
+}
+
+.invoice-items-enter-active, .invoice-items-leave-active {
+    transition: all 1s;
+}
+
+.invoice-items-enter, .invoice-items-leave-to {
+    opacity: 0;
+    transform: translateX(-50px);
+}
 
 // ====== Mobile ======
 
@@ -500,7 +682,7 @@ form.had-error-submit .status-error {
     
     .main-container {
         background-color: $panel-default-main-content;
-        padding: 2em 4em 4em;
+        padding: 3em 4em 6em;
 
         // Stop titles pushing options button off screen.
         .level-left {
@@ -520,5 +702,12 @@ form.had-error-submit .status-error {
         &:not(:last-child) {
             margin-right: 1.5em;
         }
+    }
+}
+
+@media print {
+    nav .nav-left > a,
+    nav .nav-right {
+        display: none;
     }
 }

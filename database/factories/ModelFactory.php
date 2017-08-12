@@ -63,3 +63,43 @@ $factory->define(App\TicketFile::class, function (Faker\Generator $faker) {
         'token' => str_random(40)
     ];
 });
+
+$factory->define(App\Invoice::class, function (Faker\Generator $faker) {
+    static $client_id;
+
+    return [
+        'client_id' => $client_id ?: $client_id = factory(App\InvoiceClient::class)->create()->id,
+        'date_issued' => \Carbon\Carbon::now()->format('d/m/Y'),
+        'note' => $faker->sentence(),
+        'days_until_due' => 30,
+        'old_invoice' => false,
+    ];
+});
+
+$factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
+    static $invoice_id;
+
+    $quantity = $faker->numberBetween(1, 10);
+    $cost = $faker->randomFloat(2, 1, 30);
+
+    return [
+        'invoice_id' => $invoice_id ?: $invoice_id = factory(App\Invoice::class)->create()->id,
+        'description' => $faker->sentence(),
+        'quantity' => $quantity,
+        'cost' => $cost
+    ];
+});
+
+$factory->define(App\InvoiceClient::class, function (Faker\Generator $faker) {
+    static $user;
+
+    return [
+        'user_id' => $user ?: $user = factory(App\User::class)->create()->id,
+        'name' => $faker->company,
+        'address' => $faker->streetAddress,
+        'city' => $faker->city,
+        'state' => $faker->state,
+        'country' => $faker->country,
+        'postcode' => $faker->postcode,
+    ];
+});

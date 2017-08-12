@@ -5,10 +5,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap')
+require('./bootstrap');
 
 import VueTimeago from 'vue-timeago'
 import VeeValidate, { Validator } from 'vee-validate'
+
+window.Pikaday = require('pikaday');
 
 // var Turbolinks = require("turbolinks")
 // Turbolinks.start()
@@ -28,14 +30,14 @@ Vue.use(VueTimeago, {
             ['%s year ago', '%s years ago'],
         ],
     },
-})
+});
 
-Vue.use(VeeValidate)
+Vue.use(VeeValidate);
 
 Validator.extend('cpanel_verify', {
     getMessage: field => `Password is not complex enough.`,
     validate: value => {
-        const url = '/client-area/management/email/geckode.com.au/password-check'
+        const url = '/client-area/management/email/geckode.com.au/password-check';
 
         if (value === '') {
             return false
@@ -43,8 +45,8 @@ Validator.extend('cpanel_verify', {
 
         return window.axios.post(url, { password: value })
             .then(response => {
-                let password_strength = parseInt(response.data.strength)
-                window.app.password_strength = parseInt(response.data.strength)
+                let password_strength = parseInt(response.data.strength);
+                window.app.password_strength = parseInt(response.data.strength);
 
                 return Promise.resolve({
                     valid: password_strength >= 50
@@ -53,33 +55,34 @@ Validator.extend('cpanel_verify', {
                 return Promise.reject()
             })
     }
-})
+});
 
-window.axios = require('axios')
+window.axios = require('axios');
 
-require('./directives/inline-submit.js')
+require('./directives/inline-submit.js');
 
-Vue.component('dropdown-menu', require('./components/DropdownMenu.vue'))
-Vue.component('ticket-details', require('./components/TicketDetails.vue'))
-Vue.component('message-attachments', require('./components/MessageAttachments.vue'))
-Vue.component('tab', require('./components/Tab.vue'))
-Vue.component('tabs', require('./components/Tabs.vue'))
-Vue.component('data-table', require('./components/DataTable.vue'))
-Vue.component('modal', require('./components/Modal.vue'))
-Vue.component('flash-message', require('./components/FlashMessage.vue'))
+Vue.component('dropdown-menu', require('./components/DropdownMenu.vue'));
+Vue.component('ticket-details', require('./components/TicketDetails.vue'));
+Vue.component('message-attachments', require('./components/MessageAttachments.vue'));
+Vue.component('tab', require('./components/Tab.vue'));
+Vue.component('tabs', require('./components/Tabs.vue'));
+Vue.component('data-table', require('./components/DataTable.vue'));
+Vue.component('modal', require('./components/Modal.vue'));
+Vue.component('flash-message', require('./components/FlashMessage.vue'));
+Vue.component('invoice', require('./components/Invoice.vue'));
 
 
 window.onload = function() {
-    let notifications = document.getElementsByClassName("notification")
+    let notifications = document.getElementsByClassName("notification");
 
-    for (var i = 0; i < notifications.length; i++) {
-        let notification = notifications[i]
-        let timeout = notification.getAttribute('data-timeout')
+    for (let i = 0; i < notifications.length; i++) {
+        let notification = notifications[i];
+        let timeout = notification.getAttribute('data-timeout');
 
-        notification.classList.add('is-active')
+        notification.classList.add('is-active');
 
         if (timeout !== null) {
-            timeout = parseInt(timeout)
+            timeout = parseInt(timeout);
 
             setTimeout(() => {
                 notification.classList.remove('is-active')
@@ -90,14 +93,14 @@ window.onload = function() {
             event.target.parentNode.classList.remove('is-active')
         }
     }
-}
+};
 
 // For "page-wide" events and data, ie. Modals
 window.eventbus = new Vue({
     data: {
         modal: {}
     }
-})
+});
 
 window.app = new Vue({
     data: {
@@ -106,8 +109,7 @@ window.app = new Vue({
         eventbus: window.eventbus,
         ticket: null,
         tickets: null,
-
-        // TODO: Suss out why these are global...
+        table_data: null,
         password_strength: 0,
 
         table_query: '',
@@ -133,17 +135,21 @@ window.app = new Vue({
             this.accounts = window.accounts
         }
 
+        if (window.table_data !== undefined) {
+            this.table_data = window.table_data
+        }
+
         this.eventbus.$on('delete-ticket', function (data) {
             window.eventbus.$emit('show-modal', {id: 'delete-ticket-modal', ticket: data.id})
-        })
+        });
 
         this.eventbus.$on('delete-email', function (data) {
             window.eventbus.$emit('show-modal', {id: 'delete-email-modal', email: data.email})
-        })
+        });
 
         this.eventbus.$on('email-options', function (data) {
             window.eventbus.$emit('show-modal', {id: 'email-options-modal', email: data.email})
-        })
+        });
 
         this.eventbus.$on('delete-user', function (data) {
             window.eventbus.$emit('show-modal', {
@@ -159,11 +165,11 @@ window.app = new Vue({
     },
     methods: {
         loopUntilLoaded(timeout_limit = 30, timeout_count = 0) {
-            this.loaded = this.isFullyLoaded()
+            this.loaded = this.isFullyLoaded();
             if (!this.loaded && timeout_count < timeout_limit) {
                 setTimeout(() => {
                     this.loopUntilLoaded(timeout_limit, timeout_count)
-                }, 250)
+                }, 250);
 
                 timeout_count++
             } else {
@@ -173,8 +179,8 @@ window.app = new Vue({
 
         isFullyLoaded() {
             // Synchronous loop - could be replaced with a promise
-            for (var i = this.$children.length - 1; i >= 0; i--) {
-                let component = this.$children[i]
+            for (let i = this.$children.length - 1; i >= 0; i--) {
+                let component = this.$children[i];
 
                 if ('loaded' in component.$data && !component.$data.loaded) {
                     return false
@@ -192,41 +198,42 @@ window.app = new Vue({
             // Allows a scope to be specified on the rule with a "scope.name" rule.
 
             this.$validator._findFieldInDOM = function _findFieldInDOM (query) {
-                let fieldBreakdown
+                let fieldBreakdown, fieldName, scope, field;
+
                 // A dot indicates a scope, unless escaped with a backslash
                 if (fieldBreakdown = query.match(/^([^\.\\]+)\.(.*)$/)) {
-                    var scope = fieldBreakdown[1]
-                    var fieldName = fieldBreakdown[2]
+                    scope = fieldBreakdown[1]
+                    fieldName = fieldBreakdown[2]
                 } else {
-                    var scope = '__global__'
-                    var fieldName = query
+                    scope = '__global__'
+                    fieldName = query
                 }
 
                 // Unescape any dots
-                fieldName = fieldName.replace("\\.", ".")
+                fieldName = fieldName.replace("\\.", ".");
 
-                if (scope == '__global__') {
-                    var field = document.querySelector("input[name='" + fieldName + "']")
+                if (scope === '__global__') {
+                    field = document.querySelector("input[name='" + fieldName + "']")
                 } else {
-                    var field = document.querySelector("[data-vv-scope='" +  scope + "'] input[name='" + fieldName + "']")
+                    field = document.querySelector("[data-vv-scope='" +  scope + "'] input[name='" + fieldName + "']");
 
                     if (!field) {
                         // Scope may be set on an input directly
-                        var field = document.querySelector("input[name='" + fieldName + "'][data-vv-scope='" +  scope + "']")
+                        field = document.querySelector("input[name='" + fieldName + "'][data-vv-scope='" +  scope + "']");
                     }
                 }
 
                 return field
-            }
+            };
 
-            this.$validator.remove('confirmed')
+            this.$validator.remove('confirmed');
             this.$validator.extend('confirmed', {
                 getMessage(field) {
                     return "The " + field + " confirmation does not match."
                 },
                 validate(value, [confirmedField], validatingField) {
                     // Validator instance was monkey patched, need to use that instance
-                    var field = confirmedField
+                    let field = confirmedField
                             ? window.app.$validator._findFieldInDOM(confirmedField)
                             : window.app.$validator._findFieldInDOM(validatingField + '_confirmation')
 
@@ -240,12 +247,13 @@ window.app = new Vue({
             Object.keys(this.$validator.$scopes).forEach((scope) => {
                 Object.keys(this.$validator.$scopes[scope]).forEach((field) => {
                     Object.keys(this.$validator.$scopes[scope][field].validations).forEach((validationRule) =>{
-                        if (validationRule == 'confirmed') {
+                        if (validationRule === 'confirmed') {
+                            let relatedField;
 
                             if (this.$validator.$scopes[scope][field].validations[validationRule]) {
-                                var relatedField = this.$validator._findFieldInDOM(this.$validator.$scopes[scope][field].validations[validationRule][0])
+                                relatedField = this.$validator._findFieldInDOM(this.$validator.$scopes[scope][field].validations[validationRule][0])
                             } else {
-                                var relatedField = _findFieldInDOM(scope + '.' + field + '_confirmed')
+                                relatedField = _findFieldInDOM(scope + '.' + field + '_confirmed')
                             }
 
                             relatedField.addEventListener("input", () => {
