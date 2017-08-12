@@ -60,8 +60,7 @@ class TicketPage extends BasePage
             $browser->type('@input.file', $file);
         }
 
-        // TODO: Actually wait for uploads to finish, not just a generic wait.
-        sleep(1);
+        $browser->waitUntil('app.$refs["attachments"].uploadsInProgress == 0');
         $browser->press('@input.submit');
 
         $browser->assertSee($title)

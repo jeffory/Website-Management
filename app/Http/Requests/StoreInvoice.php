@@ -27,10 +27,10 @@ class StoreInvoice extends FormRequest
      */
     public function authorize()
     {
-        return Auth::user()->is_admin;
+        return Auth::user()->isAdmin();
     }
 
-    /**
+   /**
      * Get the validation rules that apply to the request.
      *
      * @return array

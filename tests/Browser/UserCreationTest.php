@@ -2,16 +2,13 @@
 
 namespace Tests\Browser;
 
-use Tests\DuskTestCase;
+use App\User;
 use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-
-use Tests\Browser\Pages\Registration;
+use Tests\Browser\Pages\AccountVerification;
 use Tests\Browser\Pages\Login;
 use Tests\Browser\Pages\Logout;
-use Tests\Browser\Pages\AccountVerification;
-
-use App\User;
+use Tests\Browser\Pages\Registration;
+use Tests\DuskTestCase;
 
 class UserCreationTest extends DuskTestCase
 {
@@ -27,11 +24,11 @@ class UserCreationTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $password) {
             $browser->visit(new Registration)
-                    ->registration($user->name, $user->email, $password);
+                ->registration($user->name, $user->email, $password);
         });
 
         $user = User::where('email', '=', $user->email)
-                    ->firstOrFail();
+            ->firstOrFail();
 
         $user->forceDelete();
     }
@@ -52,14 +49,14 @@ class UserCreationTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit(new AccountVerification)
-                    ->verifyByUser($user);
+                ->visit(new AccountVerification)
+                ->verifyByUser($user);
 
             $browser->visit(new Logout);
         });
 
         $user = $user->fresh();
-        $this->assertTrue((bool) $user->is_verified);
+        $this->assertTrue((bool)$user->is_verified);
         $user->forceDelete();
     }
 
@@ -78,7 +75,7 @@ class UserCreationTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $password) {
             $browser->visit(new Login)
-                    ->login($user->email, $password);
+                ->login($user->email, $password);
         });
 
         $user->forceDelete();
