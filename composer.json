@@ -40,7 +40,7 @@
         "psr-4": {
             "Tests\\": "tests/"
         },
-        "files": ["tests/utilities/functions.php"]
+        "files": ["tests/Utilities/functions.php"]
     },
     "scripts": {
         "post-root-package-install": [
