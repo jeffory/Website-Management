@@ -145,7 +145,7 @@
         @can('update', $invoice)
         <hr>
 
-        <div>
+        <div class="is-hidden-print">
             <h3>Enter a payment</h3>
             
             <form action="{{ route('invoice.payment_store', ['invoice' => $invoice->id]) }}" method="post" style="max-width: 500px">

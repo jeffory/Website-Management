@@ -48,4 +48,8 @@ tr.balance-row {
   border-top: 2px solid #654ab3;
 }
 
+.is-hidden-print {
+  display: none;
+}
+
 /*# sourceMappingURL=invoice-pdf-fixes.css.map */
