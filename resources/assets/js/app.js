@@ -12,9 +12,6 @@ import VeeValidate, { Validator } from 'vee-validate'
 
 window.Pikaday = require('pikaday');
 
-// var Turbolinks = require("turbolinks")
-// Turbolinks.start()
-
 Vue.use(VueTimeago, {
     name: 'timeago', // component name, `timeago` by default
     locale: 'en-US',

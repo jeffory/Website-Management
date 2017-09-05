@@ -183,12 +183,7 @@
         */
       row_click (row) {
         if (this.row_has_link(row)) {
-
-          if (typeof(Turbolinks) !== 'undefined') {
-            Turbolinks.visit(row['_link'], {action: 'advance'})
-          } else {
             document.location.href = row['_link']
-          }
         }
       },
       /**

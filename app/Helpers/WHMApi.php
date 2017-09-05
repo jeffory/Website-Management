@@ -28,12 +28,12 @@ class WHMApi
 
     /**
      * GuzzleHTTP client.
-     * @var |GuzzleHttp|Client
+     * @var GuzzleHttp|Client
      */
     public $client;
 
     /**
-     * Last encounted error.
+     * Last encountered error.
      * @var Array
      */
     public $last_error;
