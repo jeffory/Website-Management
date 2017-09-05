@@ -6,6 +6,5 @@
 Homestead.json
 Homestead.yaml
 .env
-yarn.lock
-composer.lock
+.env.*.local
 .DS_Store
