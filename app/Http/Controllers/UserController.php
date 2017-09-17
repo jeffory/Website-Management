@@ -23,9 +23,8 @@ class UserController extends Controller
     /**
      * Display a form for changing current user details.
      *
-            'user' => $user
-                * @return \Illuminate\View\View
-        */
+     * @return \Illuminate\View\View
+     */
     public function edit()
     {
         $user = Auth::user();

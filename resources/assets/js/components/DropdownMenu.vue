@@ -43,7 +43,7 @@
 </script>
 
 <style>
-    aside.menu {
+    .dropdown-menu aside.menu {
         background-color: #fff;
         border: 1px solid #dbdbdb;
         position: absolute;
@@ -52,7 +52,7 @@
         z-index: 9010;
     }
 
-    .menu-list a {
+    .dropdown-menu .menu-list a {
         padding: 1em 2.5em;
     }
 </style>

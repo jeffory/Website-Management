@@ -11,6 +11,12 @@
 |
 */
 
+// Define custom parameter binding
+Route::bind('remoteserver', function ($value) {
+    return App\RemoteServer::where('domain', $value)->firstOrFail();
+});
+
+
 Auth::routes();
 
 Route::get('/home', function () {
@@ -47,9 +53,7 @@ Route::group(['prefix' => 'client-area/management'], function () {
         ->name('server.cpanel_redirect');
 });
 
-Route::bind('remoteserver', function ($value) {
-    return App\RemoteServer::where('domain', $value)->firstOrFail();
-});
+
 
 Route::group(['prefix' => 'client-area/management/email/{remoteserver}'], function () {
     Route::get('/', 'ServerEmailController@index')
@@ -94,25 +98,15 @@ Route::group(['prefix' => 'client-area/admin/'], function () {
          ->name('admin.user_destroy');
 });
 
-Route::group(['prefix' => 'client-area/invoice'], function () {
-    Route::get('/', 'InvoiceController@index')
-        ->name('invoice.index');
+Route::resource('client-area/invoice', 'InvoiceController');
 
-    Route::post('/', 'InvoiceController@store')
-        ->name('invoice.store');
+Route::get('client-area/invoice/{invoice}/pdf', 'InvoiceController@generatePDF')
+    ->name('invoice.generate_pdf');
 
-    Route::get('/create', 'InvoiceController@create')
-        ->name('invoice.create');
+Route::post('client-area/invoice/{invoice}/payment', 'InvoicePaymentController@store')
+    ->name('invoice.payment_store');
 
-    Route::get('/{invoice}', 'InvoiceController@show')
-        ->name('invoice.show');
-
-    Route::get('/{invoice}/pdf', 'InvoiceController@generatePDF')
-        ->name('invoice.generate_pdf');
-
-    Route::post('/{invoice}/payment', 'InvoicePaymentController@store')
-        ->name('invoice.payment_store');
-});
+Route::resource('client-area/clients', 'InvoiceClientController');
 
 Route::post('/contact-us', 'PagesController@sendMessage')->name('contact_us');
 Route::get('/{page?}', 'PagesController@serve')->name('page');

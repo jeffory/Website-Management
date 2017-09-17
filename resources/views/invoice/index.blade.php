@@ -6,13 +6,15 @@
 
         <div class="level">
             <div class="level-left is-centered-mobile">
-                <a class="button is-primary" href="{{ route('invoice.create') }}">
-                    <span class="icon is-small">
-                        <i class="fa fa-plus"></i>
-                    </span>
+                <div class="level-item">
+                    <a class="button is-primary" href="{{ route('invoice.create') }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-plus"></i>
+                        </span>
 
-                    <span>New invoice</span>
-                </a>
+                        <span>New invoice</span>
+                    </a>
+                </div>
             </div>
 
             <div class="level-right">

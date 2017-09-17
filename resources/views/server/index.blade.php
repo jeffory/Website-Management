@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container main-container">
-    <h2 class="title is-2">Website management</h2>
+    <h2 class="title is-1 is-bold">Website management</h2>
 
     <div class="level">
         <div class="level-left">

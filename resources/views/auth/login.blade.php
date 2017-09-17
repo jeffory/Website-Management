@@ -1,8 +1,8 @@
-@extends('layouts.client-area')
+@extends('layouts.minimal-dialog')
 
 @section('content')
 
-<div class="container small-container">
+<div class="small-container">
     <h2><i class="fa fa-lock"></i><br>Login</h2>
 
     <form role="form" method="POST" action="{{ route('login') }}">
@@ -50,5 +50,7 @@
             </a>
         </p>
     </form>
+
+    <a href="/">&larr; Back to home page</a>
 </div>
 @endsection

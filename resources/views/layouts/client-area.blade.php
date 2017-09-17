@@ -23,75 +23,33 @@
     <script>
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
+            'pusherKey' => env('PUSHER_KEY')
         ]); ?>
     </script>
 </head>
-<body class="has-top-navbar">
+<body>
     <div id="app">
         {{ $flash->displayBulma() }}
 
-        <nav class="nav container">
-            <div class="nav-left">
-                <h1 style="font-size: 1.7em; padding: .25em .5em; margin-right: .5em; font-weight: 500">
-                    <a href="/">
-                        <span style="color: #fff">GEC</span><span style="color: #4EE559">KODE</span>
-                    </a>
-                </h1>
+        <div style="display: flex; margin: 0 auto; max-width: 1300px; box-shadow: 0 0 5px rgba(0,0,0,0.4);">
 
-                <a class="nav-item nav-brand" href="{{ route('home') }}">
-                    Client Area
-                </a>
-            </div>
-            
-            <!-- Desktop menu -->
-            <div class="nav-right nav-menu">
-                @if (Auth::guest())
-                    <a class="nav-item" href="{{ route('login') }}">Login</a>
-                    <a class="nav-item" href="{{ route('register') }}">Register</a>
-                @else
-                <a class="nav-item" href="{{ route('server.index') }}">My Servers</a>
-                <a class="nav-item" href="{{ route('tickets.index') }}">My tickets</a>
-                
-                <a class="nav-item" href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();">
-                    Logout
-                </a>
+            <div class="sidebar is-desktop">
+                <div class="has-text-centered">
+                    <img src="/images/geckode-logo-small-white.png" style="width: 100px;" class="logo">
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                </form>
-                @endif
+                    <h1 class="title is-2">
+                        GEC<span class="alt-color">KODE</span>
+                    </h1>
+                </div>
+
+                @include('layouts.nav-desktop')
             </div>
 
-            <!-- Mobile menu -->
-            <div class="nav-toggle">
-                <dropdown-menu>
-                    <template slot="button" class="nav-toggle is-dark">
-                        <span class="icon">
-                            <i class="fa fa-bars"></i>
-                        </span>
-                    </template>
+            @include('layouts.nav-small')
 
-                    <template slot="menu">
-                        <ul class="menu-list" style="background-color: #242424">
-                            <li>
-                                <a href="{{ route('tickets.index') }}">My tickets</a>
-                            </li>
-                            <li>
-                                <a class="nav-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </template>
-                </dropdown-menu>
+            <div style="background-color: #fff; flex: 1;">
+                 @yield('content')
             </div>
-        </nav>
-
-        @yield('content')
         </div>
     </div>
 

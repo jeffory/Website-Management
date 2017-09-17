@@ -129,7 +129,7 @@
                                         {{ Carbon\Carbon::parse($payment->date_paid)->format('j/m/Y') }}
                                     </td>
                                     <td>
-                                        {{ $payment->amount_paid }}
+                                        {{ '$'. $payment->amount_paid }}
                                     </td>
                                     <td>
                                         {{ $payment->note }}
