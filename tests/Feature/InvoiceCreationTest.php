@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Invoice;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
+use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class InvoiceCreationTest extends TestCase
@@ -12,7 +13,7 @@ class InvoiceCreationTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function guests_may_not_create_invoices()
+    function guests_may_not_create_invoices()
     {
         $this->withExceptionHandling()
             ->get('/client-area/invoice/create')
@@ -23,7 +24,7 @@ class InvoiceCreationTest extends TestCase
     }
 
     /** @test */
-    public function normal_users_may_not_create_invoices()
+    function normal_users_may_not_create_invoices()
     {
         $this->signIn()
             ->withExceptionHandling()
@@ -35,60 +36,87 @@ class InvoiceCreationTest extends TestCase
     }
 
     /** @test */
-    public function admin_users_can_create_invoices()
+    function admin_users_can_create_invoices()
     {
         $user = create('App\User', ['is_admin' => true]);
 
         $this->signIn($user)
-            ->withExceptionHandling()
             ->get('/client-area/invoice/create')
             ->assertSuccessful();
 
-        $invoice = make('App\Invoice')->toArray();
+        $invoice = $this->get_fake_invoice_with_items();
 
-        // For the form request the fields need to be arrays even if single valued.
-        $item = array_map(function($key) {
-                return Array($key);
-            }, make('App\InvoiceItem')->toArray());
+        $this->post(route('invoice.store'), $invoice->toArray());
 
-        $this->withExceptionHandling()
-            ->post('/client-area/invoice', array_merge($invoice, $item))
-            ->assertSessionHas('flash.level', 'success');
+        $this->assertTrue(Invoice::where([
+            'client_id' => $invoice['client_id'],
+            'note' => $invoice['note']
+        ])->exists());
     }
 
     /** @test */
-    public function check_new_invoice_has_details()
+    function check_new_invoice_has_necessary_details()
     {
         $user = create('App\User', [
             'is_verified' => true,
             'is_admin' => true
         ]);
 
-        // For the form request the fields need to be arrays even if single valued.
-        $item = array_map(function($key) {
-            return Array($key);
-        }, make('App\InvoiceItem')->toArray());
-
-        $invoice = array_merge(make('App\Invoice')->toArray(), $item);
-
-        $expectedTotal = 0.00;
-
-        for ($i = 0; $i < count($invoice['quantity']); $i++) {
-            $expectedTotal = $expectedTotal + floatval($invoice['quantity'][$i]) * floatval($invoice['cost'][$i]);
-        }
-
-        $expectedTotal = round($expectedTotal, 2);
+        $invoice = $this->get_fake_invoice_with_items(3);
+        $expected_total = $this->get_expected_total($invoice);
 
         $this->signIn($user)
             ->withExceptionHandling()
-            ->post('/client-area/invoice', $invoice)
+            ->post('/client-area/invoice', $invoice->toArray())
             ->assertSessionHas('flash.level', 'success');
 
-        $invoice = Invoice::latest()
-            ->first()
-            ->load('items');
+        $this->assertDatabaseHas('invoice_items', [
+            'description' => $invoice->description[0],
+            'quantity' => $invoice->quantity[0],
+            'cost' => $invoice->cost[0],
+        ]);
 
-        $this->assertCount(1, $invoice->fresh()->items);
-        $this->assertEquals($expectedTotal, $invoice->fresh()->calculateTotal());
+        $this->assertDatabaseHas('invoices', [
+            'client_id' => $invoice->client_id,
+            'days_until_due' => $invoice->days_until_due,
+            'note' => $invoice->note,
+            'total' => $expected_total,
+            'owing' => $expected_total
+        ]);
+
+        $invoice = Invoice::first();
+        $this->assertNotNull($invoice->fresh()->view_key);
     }
+
+    /** Helper function */
+    public function get_fake_invoice_with_items($itemCount = 1)
+    {
+        $invoice = make('App\Invoice');
+
+        $invoice->description = [];
+        $invoice->quantity = [];
+        $invoice->cost = [];
+
+        make('App\InvoiceItem', [], $itemCount)->each(function ($newItem) use (&$invoice) {
+            // The magic methods on the model mess with array_push
+            $invoice->description = array_merge($invoice->description, [$newItem->description]);
+            $invoice->quantity = array_merge($invoice->quantity, [$newItem->quantity]);
+            $invoice->cost = array_merge($invoice->cost, [$newItem->cost]);
+        });
+
+        return $invoice;
+    }
+
+    /** Helper function */
+    public function get_expected_total($invoice)
+    {
+        $expected_total = 0.00;
+
+        for ($i = 0; $i < count($invoice->cost); $i++) {
+            $expected_total += $invoice->cost[$i] * $invoice->quantity[$i];
+        }
+
+        return $expected_total;
+    }
+
 }

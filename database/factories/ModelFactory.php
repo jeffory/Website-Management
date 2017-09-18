@@ -72,7 +72,6 @@ $factory->define(App\Invoice::class, function (Faker\Generator $faker) {
         'date_issued' => \Carbon\Carbon::now()->format('d/m/Y'),
         'note' => $faker->sentence(),
         'days_until_due' => 30,
-        'old_invoice' => false,
     ];
 });
 
@@ -80,10 +79,9 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
     static $invoice_id;
 
     $quantity = $faker->numberBetween(1, 10);
-    $cost = $faker->randomFloat(2, 1, 30);
+    $cost = $faker->randomFloat(2, 1, 50);
 
     return [
-        'invoice_id' => $invoice_id ?: $invoice_id = factory(App\Invoice::class)->create()->id,
         'description' => $faker->sentence(),
         'quantity' => $quantity,
         'cost' => $cost
