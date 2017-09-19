@@ -52,5 +52,16 @@ class InvoiceTest extends TestCase
         $this->assertEquals($invoice->fresh()->balanceDue(), $expected_total - $payment_1->amount_paid);
     }
 
+    /** @test */
+    function it_deletes_associated_items_and_payments_on_deletion()
+    {
+        $invoice = create('App\Invoice');
+        $item = create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
+        $payment = create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
 
+        $invoice->delete();
+
+        $this->assertNotTrue($item->exists());
+        $this->assertNotTrue($payment->exists());
+    }
 }

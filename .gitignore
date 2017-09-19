@@ -9,3 +9,4 @@ Homestead.yaml
 .env.*.local
 .DS_Store
 .wakatime-project
+tests/Report/
