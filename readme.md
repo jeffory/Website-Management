@@ -1,10 +1,22 @@
 # Website Management
 
-**Note: This is not recommended for production use just yet, still removing some business details as hard-coded strings.**
+**Note: This is not recommended for production use just yet, still removing some business
+details as hard-coded strings.**
 
-This application is a website built with Laravel, Vue.js and the Bulma CSS framework. It is designed to be a simple website with a portal to allow clients to create new emails, change passwords, and check their disk usage.
+This web application is designed to be a simple portal to allow clients to create support
+tickets, create new emails for their web hosting, change email passwords, and check their
+disk usage.
 
-There is also simple invoicing functionality built-in which will become optional and removable in the future.
+It is built with Laravel, Vue.js and the Bulma CSS framework.
+
+There is also simple invoicing functionality built-in which will become optional and possibly
+removable in the future.
+
+## Screenshots
+
+![](http://keithmcgahey.com/images/geckode/geckode-01.jpg)
+
+![](http://keithmcgahey.com/images/geckode/geckode-03.jpg)
 
 ## TODO
 
