@@ -181,7 +181,9 @@ class InvoiceController extends Controller
     {
         $this->authorize('delete', $invoice);
 
-        $invoice->softDelete();
+        $invoice->delete();
+    }
+
     public function hasValidToken(Invoice $invoice)
     {
         if ($invoice->view_key == null) {
