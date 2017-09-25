@@ -6,7 +6,7 @@
 @include('partials/modal/password-options-modal')
 
 <div class="container main-container">
-    <h2 class="title is-2">Email accounts for: {{ $domain }}</h2>
+    <h2 class="title is-1 is-bold">Email accounts for: {{ $domain }}</h2>
     
     <div class="level">
         <div class="level-left is-centered-mobile">

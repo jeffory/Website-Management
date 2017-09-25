@@ -17,17 +17,64 @@
                     </template>
 
                     <template slot="menu">
-                        <ul class="menu-list" style="background-color: #242424">
-                            <li>
-                                <a href="{{ route('tickets.index') }}">My tickets</a>
-                            </li>
-                            <li>
-                                <a class="nav-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                            </li>
+                        <ul class="menu-list" style="background-color: #242424; min-width: 230px">
+                            @if (auth()->check())
+                                <li>
+                                    <a href="{{ route('home') }}">
+                                        Dashboard
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('user.edit') }}">
+                                        User details
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('tickets.index') }}">
+                                        Support tickets
+                                    </a>
+                                </li>
+
+                                @can('view', \App\RemoteServer::class)
+                                    <li>
+                                        <a href="{{ route('server.index') }}">
+                                                Server management
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('index', \App\Invoice::class)
+                                    <a href="{{ route('invoice.index') }}">
+                                        Billing
+                                    </a>
+                                @endcan
+
+                                @if (auth()->user()->isAdmin())
+                                    <li>
+                                        <a href="{{ route('clients.index') }}" class="{{ route_match('clients.*') ? 'is-active' : null }}">
+                                            Billing clients
+                                        </a>
+                                    </li>
+                                @endif
+
+                                <li class="separator" style="margin: 0 auto;"></li>
+
+                                <li>
+                                    <a class="nav-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{ route('login') }}">
+                                        Login
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </template>
                 </dropdown-menu>

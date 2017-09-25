@@ -31,11 +31,11 @@
     <div id="app">
         {{ $flash->displayBulma() }}
 
-        <div style="display: flex; margin: 0 auto; max-width: 1300px; box-shadow: 0 0 5px rgba(0,0,0,0.4);">
+        <div class="page-container">
 
-            <div class="sidebar is-desktop">
+            <div class="nav-sidebar is-desktop is-hidden-print">
                 <div class="has-text-centered">
-                    <img src="/images/geckode-logo-small-white.png" style="width: 100px;" class="logo">
+                    <img src="/images/geckode-logo-small-white.png" style="max-width: 100px;" class="logo">
 
                     <h1 class="title is-2">
                         GEC<span class="alt-color">KODE</span>
@@ -47,9 +47,9 @@
 
             @include('layouts.nav-small')
 
-            <div style="background-color: #fff; flex: 1;">
+            <section class="page-content">
                  @yield('content')
-            </div>
+            </section>
         </div>
     </div>
 
