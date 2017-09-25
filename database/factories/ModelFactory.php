@@ -88,6 +88,16 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\InvoicePayment::class, function (Faker\Generator $faker) {
+    static $user;
+
+    return [
+        'date_paid' => $faker->date,
+        'amount_paid' => $faker->randomFloat(2, 1, 50),
+        'note' => $faker->sentence()
+    ];
+});
+
 $factory->define(App\InvoiceClient::class, function (Faker\Generator $faker) {
     static $user;
 

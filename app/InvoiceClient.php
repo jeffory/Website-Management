@@ -13,6 +13,11 @@ class InvoiceClient extends Model
      */
     public function invoices()
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Invoice::class, 'client_id');
+    }
+
+    public function invoice_count()
+    {
+        return $this->invoices->count();
     }
 }
