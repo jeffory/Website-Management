@@ -14,13 +14,11 @@ class InvoiceItem extends Model
         parent::boot();
 
         static::created(function ($item) {
-            $item->invoice->total = $item->invoice->calculateTotal();
-            $item->invoice->save();
+            $item->invoice->fresh()->refreshTotal();
         });
 
         static::deleted(function ($item) {
-            $item->invoice->total = $item->invoice->calculateTotal();
-            $item->invoice->save();
+            $item->invoice->fresh()->refreshTotal();
         });
     }
 

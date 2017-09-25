@@ -63,7 +63,7 @@ class GroupInputData
     public function truncateEmptyGroups($group_key, $zero_is_empty = true)
     {
         foreach ($this->request->get($group_key) as $index => $group) {
-            $empty = 0;
+            $empty_count = 0;
 
             foreach ($group as $value) {
                 if ($zero_is_empty) {
@@ -73,11 +73,12 @@ class GroupInputData
                 $value = trim($value);
 
                 if (empty($value)) {
-                    $empty++;
+                    $empty_count++;
                 }
             }
 
-            if ($empty === 3) {
+            // If the line is blank
+            if ($empty_count === count($group)) {
                 $data = $this->request->get($group_key);
                 unset($data[$index]);
                 $this->request->set($group_key, $data);

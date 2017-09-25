@@ -38,7 +38,7 @@ class StoreInvoice extends FormRequest
     public function rules()
     {
         return [
-            'date_issued' => 'required|date',
+            'date_issued' => 'required|date_format:d/m/Y',
             'client_id' => 'required|integer|exists:invoice_clients,id',
             'description' => 'required|array',
             'quantity' => 'required|array',

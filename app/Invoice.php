@@ -13,11 +13,37 @@ class Invoice extends Model
     {
         parent::boot();
 
-        static::deleted(function ($invoice) {
+        static::creating(function ($invoice) {
+            $invoice->view_key = str_random(20);
+        });
+
+        static::deleting(function ($invoice) {
             $invoice->items->each->delete();
             $invoice->payments->each->delete();
         });
     }
+
+    /**
+     * Ensure a carbon date instance is always returned.
+     * NOTE: This gets run quite late when the model is converted to an array.
+     *
+     * @param $date
+     *
+     * @return \Carbon\Carbon
+     */
+    public function getDateIssuedAttribute($date)
+    {
+        if (preg_match('/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/', $date)) {
+            return \App\Helpers\CarbonExtended::createFromFormat('d/m/Y', $date);
+        }
+
+        if (preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $date)) {
+            return \App\Helpers\CarbonExtended::parse($date);
+        }
+
+        return $date;
+    }
+
 
     /**
      * Invoice items for the current invoice.
@@ -65,7 +91,13 @@ class Invoice extends Model
         $invoice_item->invoice_id = $this->id;
         $invoice_item->save();
 
+        $this->refreshTotal();
+    }
+
+    public function refreshTotal()
+    {
         $this->total = $this->calculateTotal();
+        $this->owing = $this->calculateTotal() - $this->paymentTotal();
         $this->save();
     }
 

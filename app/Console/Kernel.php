@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\UpdateServerDetails::class
+        Commands\RefreshServerDetails::class,
+        Commands\InvoiceRecalculateTotals::class
     ];
 
     /**
@@ -24,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('webservers:update')
+        $schedule->command('remoteservers:update')
                  ->daily();
     }
 

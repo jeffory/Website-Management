@@ -7,7 +7,7 @@
                 <div class="level-left level-align-top">
                     <div>
                         <h2 class="title is-1 is-marginless is-bold">Invoice</h2>
-                        <span>{{ Carbon\Carbon::parse($invoice->date_issued)->format('j F Y') }}</span>
+                        <span>{{ $invoice->date_issued->format('j F Y') }}</span>
                     </div>
                 </div>
 

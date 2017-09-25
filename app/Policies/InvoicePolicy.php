@@ -31,9 +31,9 @@ class InvoicePolicy
      * @param  Invoice $invoice
      * @return mixed
      */
-    public function view(Invoice $invoice)
+    public function view(User $user, Invoice $invoice)
     {
-        if ($invoice->view_key === request()->get('view_key')) {
+        if ($invoice->client->user_id === $user->id) {
             return true;
         }
     }
@@ -46,7 +46,9 @@ class InvoicePolicy
      */
     public function index(User $user)
     {
-        return $user->isAdmin();
+        if (\App\InvoiceClient::whereUserId($user->id)->exists()) {
+            return true;
+        }
     }
 
     /**

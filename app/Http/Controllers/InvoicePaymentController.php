@@ -20,13 +20,13 @@ class InvoicePaymentController extends Controller
         $this->authorize('update', Invoice::class);
 
         $this->validate($request, [
-            'date_paid' => 'required|date',
-            'amount_paid' => 'required'
+            'date_paid' => 'required|date_format:d/m/Y',
+            'amount_paid' => 'required|numeric'
         ]);
 
         InvoicePayment::create([
             'invoice_id' => $invoice_id,
-            'date_paid' => Carbon::parse($request->date_paid),
+            'date_paid' => Carbon::createFromFormat('d/m/Y', $request->date_paid),
             'amount_paid' => $request->amount_paid,
             'note' => $request->note
         ]);

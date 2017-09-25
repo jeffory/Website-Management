@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands;
 
+use App\InvoicePayment;
 use Illuminate\Console\Command;
-use App\RemoteServer;
 
-class UpdateServerDetails extends Command
+class InvoiceRecalculateTotals extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'remoteservers:update';
+    protected $signature = 'invoice:fix';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Query web hosts for new details.';
+    protected $description = 'Fix the invoice totals for payments and generate missing viewing tokens.';
 
     /**
      * Create a new command instance.
@@ -38,6 +38,13 @@ class UpdateServerDetails extends Command
      */
     public function handle()
     {
-        RemoteServer::updateServerList();
+        foreach (\App\Invoice::all() as $invoice) {
+            $invoice->total = $invoice->refreshTotal();
+
+            if ($invoice->view_key === null) {
+                $invoice->view_key = str_random(32);
+                $invoice->save();
+            }
+        }
     }
 }

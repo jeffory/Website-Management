@@ -6,6 +6,7 @@ use App\Helpers\CarbonExtended;
 use App\Http\Requests\StoreInvoice;
 use App\Invoice;
 use App\InvoiceClient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\View;
@@ -18,7 +19,7 @@ class InvoiceController extends Controller
      */
     function __construct()
     {
-        $this->middleware('auth')->except(['show']);
+        $this->middleware('auth')->except(['show', 'generatePDF']);
     }
 
     /**
@@ -41,7 +42,7 @@ class InvoiceController extends Controller
             $invoice['total'] = '$ '. $invoice['total'];
             $invoice['owing'] = '$ '. $invoice['owing'];
 
-            $invoice['date_issued'] = CarbonExtended::parse($invoice['date_issued'])->dateDiffForHumans();
+            $invoice['date_issued'] = (string)$invoice['date_issued']->dateDiffForHumans();
 
             $invoice['client_name'] = $invoice['client']['name'];
             $invoice['_link'] = route('invoice.show', $invoice->id);
@@ -74,22 +75,22 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoice $request)
     {
-        $invoice = new Invoice;
+        $this->authorize('create', Invoice::class);
 
+        $invoice = new Invoice;
         $invoice->client_id = $request->client_id;
-        $invoice->date_issued = CarbonExtended::now();
+        $invoice->date_issued = Carbon::createFromFormat('d/m/Y', $request->date_issued);
         $invoice->days_until_due = 30;
         $invoice->note = $request->note;
         $invoice->save();
 
         foreach ($request->items as $item) {
-            $invoice->addItem($item['description'], $item['quantity'], $item['cost']);
+            $invoice->fresh()->addItem($item['description'], $item['quantity'], $item['cost']);
         }
-
 
         Flash::set('Invoice created', 'success');
 
-        return redirect()->route('invoice.show', ['invoice' => $invoice->id]);
+        return redirect()->route('invoice.show', $invoice);
     }
 
     /**
@@ -100,7 +101,9 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        if (! $this->hasValidToken($invoice)) {
+            $this->authorize('view', $invoice);
+        }
 
         $invoice->load('client', 'items');
 
@@ -115,7 +118,9 @@ class InvoiceController extends Controller
      */
     public function generatePDF(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        if (! $this->hasValidToken($invoice)) {
+            $this->authorize('view', $invoice);
+        }
 
         \Debugbar::disable();
 
@@ -177,5 +182,12 @@ class InvoiceController extends Controller
         $this->authorize('delete', $invoice);
 
         $invoice->softDelete();
+    public function hasValidToken(Invoice $invoice)
+    {
+        if ($invoice->view_key == null) {
+            return false;
+        }
+
+        return $invoice->view_key === request()->get('view_key');
     }
 }
