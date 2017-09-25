@@ -36,6 +36,19 @@ class InvoiceCreationTest extends TestCase
     }
 
     /** @test */
+    function normal_users_can_view_an_invoice_with_a_token()
+    {
+        $invoice = create('App\Invoice');
+        create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
+        create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
+
+        $this->get(route('invoice.generate_pdf', [
+            'invoice_id' => $invoice->id,
+            'view_key' => $invoice->view_key
+        ]));
+    }
+
+    /** @test */
     function admin_users_can_create_invoices()
     {
         $user = create('App\User', ['is_admin' => true]);
@@ -86,6 +99,37 @@ class InvoiceCreationTest extends TestCase
 
         $invoice = Invoice::first();
         $this->assertNotNull($invoice->fresh()->view_key);
+    }
+
+    /** @test */
+    function blank_lines_are_trimmed_from_invoices()
+    {
+        $invoice = $this->get_fake_invoice_with_items(3)->toArray();
+
+        $invoice['description'][] = '';
+        $invoice['description'][] = '';
+        $invoice['quantity'][] = '';
+        $invoice['cost'][] = '';
+        $invoice['cost'][] = '';
+        $invoice['cost'][] = '';
+
+        $this->signIn(create('App\User', ['is_admin' => true]))
+            ->post('/client-area/invoice', $invoice)
+            ->assertSessionHas('flash.level', 'success');
+
+        $invoice = Invoice::first();
+        $this->assertEquals(3, $invoice->items->count());
+    }
+
+    /** @test */
+    function ensure_invoice_pdf_is_generated_without_errors()
+    {
+        $invoice = create('App\Invoice');
+        $item = create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
+        $payment = create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
+
+        $this->signIn(create('App\User'));
+        $this->get(route('invoice.generate_pdf', ['invoice_id' => $invoice->id, 'view_key' => $invoice->view_key]));
     }
 
     /** Helper function */
