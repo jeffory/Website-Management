@@ -1,18 +1,18 @@
 language: php
 
-services:
-  - redis-server
-
 php:
   - 7.1
 
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 before_script:
+  - mv .travis.env .env
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer install --no-interaction
-  - mv .travis.env .env
   - php artisan key:generate
-  - php artisan migrate
+  - php artisan migrate --no-interaction -vvv
 
 script:
   - vendor/bin/phpunit
