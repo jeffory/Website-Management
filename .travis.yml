@@ -1,0 +1,18 @@
+language: php
+
+services:
+  - redis-server
+
+php:
+  - 7.0
+
+before_script:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - composer install --no-interaction
+  - mv .travis.env .env
+  - php artisan key:generate
+  - php artisan migrate
+
+script:
+  - vendor/bin/phpunit
