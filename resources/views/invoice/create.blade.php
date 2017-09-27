@@ -73,7 +73,7 @@
         for (var i = 0; i < dateFields.length; i++) {
             new window.Pikaday({
                 field: dateFields[i],
-                format: 'D/MM/YYYY'
+                format: 'DD/MM/YYYY'
             });
         }
     </script>

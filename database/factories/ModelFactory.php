@@ -69,7 +69,7 @@ $factory->define(App\Invoice::class, function (Faker\Generator $faker) {
 
     return [
         'client_id' => $client_id ?: $client_id = factory(App\InvoiceClient::class)->create()->id,
-        'date_issued' => \Carbon\Carbon::now()->format('d/m/Y'),
+        'date_issued' => $faker->date('d/m/Y'),
         'note' => $faker->sentence(),
         'days_until_due' => 30,
     ];

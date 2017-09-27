@@ -52,7 +52,7 @@
             @endcan
 
             <li>
-                <a href="{{ route('invoice.index') }}" class="{{ route_match('invoice.*') && !route_match('*.create') ? 'is-active' : null }}">
+                <a href="{{ route('invoice.index') }}" class="{{ route_regex_match('#invoice.(index|show|generate_pdf)#') ? 'is-active' : null }}">
                     <span class="icon">
                         <i class="fa fa-file-text"></i>
                     </span>
@@ -62,7 +62,7 @@
                     </span>
                 </a>
 
-                @if (route_match('invoice.*') && auth()->user()->can('create', \App\Invoice::class))
+                @if (route_regex_match('#(invoice.*|payment.index)#') && auth()->user()->can('create', \App\Invoice::class))
                     <ul>
                         <li>
                             <a href="{{ route('invoice.create') }}" class="{{ route_match('invoice.create') ? 'is-active' : null }}">
@@ -71,6 +71,16 @@
                                 </span>
 
                                 <span>Create invoice</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('payment.index') }}" class="{{ route_match('payment.index') ? 'is-active' : null }}">
+                                <span class="icon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+
+                                <span>Invoice payments</span>
                             </a>
                         </li>
                     </ul>

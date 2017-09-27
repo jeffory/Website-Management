@@ -11,19 +11,10 @@ class InvoicePaymentsTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function check_payments_update_invoice_total()
+    public function normal_users_cannot_add_payments()
     {
-        $user = create('App\User', [
-            'is_verified' => true,
-            'is_admin' => true
-        ]);
-
-        $items = [];
-
-        $invoice = create('App\Invoice');
-        $item = create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
-
-        $this->assertEquals($item->total(), $invoice->fresh()->total);
-
+        $this->signIn()
+            ->post(route('invoice.payment_store', 1), [])
+            ->assertStatus(403);
     }
 }

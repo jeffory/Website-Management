@@ -103,6 +103,9 @@ Route::resource('client-area/invoice', 'InvoiceController');
 Route::get('client-area/invoice/{invoice}/pdf', 'InvoiceController@generatePDF')
     ->name('invoice.generate_pdf');
 
+Route::get('client-area/invoice_payments', 'InvoicePaymentController@index')
+    ->name('payment.index');
+
 Route::post('client-area/invoice/{invoice}/payment', 'InvoicePaymentController@store')
     ->name('invoice.payment_store');
 

@@ -10,6 +10,22 @@ use Illuminate\Http\Request;
 class InvoicePaymentController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $this->authorize('update', Invoice::class);
+
+        $payments = InvoicePayment::latest()
+                        ->with('invoice', 'invoice.client')
+                        ->paginate(20);
+
+        return response()->view('invoice_payments.index', compact('payments'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
