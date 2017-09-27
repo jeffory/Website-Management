@@ -42,10 +42,11 @@ class InvoiceCreationTest extends TestCase
         create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
         create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
 
-        $this->get(route('invoice.generate_pdf', [
+        $this->get(route('invoice.show', [
             'invoice_id' => $invoice->id,
             'view_key' => $invoice->view_key
-        ]));
+        ]))
+        ->assertStatus(200);
     }
 
     /** @test */
@@ -53,13 +54,16 @@ class InvoiceCreationTest extends TestCase
     {
         $user = create('App\User', ['is_admin' => true]);
 
+        $this->withExceptionHandling();
+
         $this->signIn($user)
             ->get('/client-area/invoice/create')
             ->assertSuccessful();
 
         $invoice = $this->get_fake_invoice_with_items();
 
-        $this->post(route('invoice.store'), $invoice->toArray());
+        $response = $this->post(route('invoice.store'), $invoice->toArray());
+        $response->assertSessionMissing('errors');
 
         $this->assertTrue(Invoice::where([
             'client_id' => $invoice['client_id'],
@@ -106,6 +110,7 @@ class InvoiceCreationTest extends TestCase
     {
         $invoice = $this->get_fake_invoice_with_items(3)->toArray();
 
+        // Add 3 extra blank lines
         $invoice['description'][] = '';
         $invoice['description'][] = '';
         $invoice['quantity'][] = '';
@@ -125,8 +130,8 @@ class InvoiceCreationTest extends TestCase
     function ensure_invoice_pdf_is_generated_without_errors()
     {
         $invoice = create('App\Invoice');
-        $item = create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
-        $payment = create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
+        create('App\InvoiceItem', ['invoice_id' => $invoice->id]);
+        create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
 
         $this->signIn(create('App\User'));
         $this->get(route('invoice.generate_pdf', ['invoice_id' => $invoice->id, 'view_key' => $invoice->view_key]));
@@ -142,7 +147,7 @@ class InvoiceCreationTest extends TestCase
         $invoice->cost = [];
 
         make('App\InvoiceItem', [], $itemCount)->each(function ($newItem) use (&$invoice) {
-            // The magic methods on the model mess with array_push
+            // The magic methods on the model prevent the use of array_push
             $invoice->description = array_merge($invoice->description, [$newItem->description]);
             $invoice->quantity = array_merge($invoice->quantity, [$newItem->quantity]);
             $invoice->cost = array_merge($invoice->cost, [$newItem->cost]);

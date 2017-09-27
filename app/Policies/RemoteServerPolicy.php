@@ -54,17 +54,6 @@ class RemoteServerPolicy
     }
 
     /**
-     * Determine whether the user can create servers.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function create(User $user, RemoteServer $server)
-    {
-        return $server->hasAuthorisedUser($user);
-    }
-
-    /**
      * Determine whether the user can update the server.
      *
      * @param  \App\User  $user

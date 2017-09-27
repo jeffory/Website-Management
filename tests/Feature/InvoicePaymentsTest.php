@@ -14,6 +14,7 @@ class InvoicePaymentsTest extends TestCase
     public function normal_users_cannot_add_payments()
     {
         $this->signIn()
+            ->withExceptionHandling()
             ->post(route('invoice.payment_store', 1), [])
             ->assertStatus(403);
     }

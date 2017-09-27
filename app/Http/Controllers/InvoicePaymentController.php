@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class InvoicePaymentController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +21,7 @@ class InvoicePaymentController extends Controller
      */
     public function index()
     {
-        $this->authorize('update', Invoice::class);
+        $this->authorize('create', Invoice::class);
 
         $payments = InvoicePayment::latest()
                         ->with('invoice', 'invoice.client')
@@ -33,7 +38,7 @@ class InvoicePaymentController extends Controller
      */
     public function store($invoice_id, Request $request)
     {
-        $this->authorize('update', Invoice::class);
+        $this->authorize('create', Invoice::class);
 
         $this->validate($request, [
             'date_paid' => 'required|date_format:d/m/Y',

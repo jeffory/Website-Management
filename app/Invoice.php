@@ -2,10 +2,14 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Invoice extends Model
 {
+    protected $dates = ['created_at', 'updated_at', 'date_issued'];
+
     /**
      * Bind into Eloquent methods.
      */
@@ -24,26 +28,34 @@ class Invoice extends Model
     }
 
     /**
-     * Ensure a carbon date instance is always returned.
-     * NOTE: This gets run quite late when the model is converted to an array.
+     * Allow setting of date with dd/mm/yyyy strings.
      *
-     * @param $date
+     * @param $value
      *
-     * @return \Carbon\Carbon
+     * @return void
      */
-    public function getDateIssuedAttribute($date)
+    public function setDateIssuedAttribute($value)
     {
-        if (preg_match('/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/', $date)) {
-            return \App\Helpers\CarbonExtended::createFromFormat('d/m/Y', $date);
+        if (is_string($value) && preg_match('/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/', $value)) {
+            $this->attributes['date_issued'] = Carbon::createFromFormat('d/m/Y', $value);
+            return;
         }
 
-        if (preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $date)) {
-            return \App\Helpers\CarbonExtended::parse($date);
-        }
-
-        return $date;
+        $this->attributes['date_issued'] = Carbon::parse($value);
     }
 
+    /**
+     * Format the date strings correctly.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $invoice = parent::toArray();
+        $invoice['date_issued'] = $this->date_issued->format('d/m/Y');
+
+        return $invoice;
+    }
 
     /**
      * Invoice items for the current invoice.
