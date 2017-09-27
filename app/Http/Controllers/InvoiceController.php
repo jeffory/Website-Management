@@ -9,6 +9,7 @@ use App\InvoiceClient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\View;
 use App\Facades\Flash;
 
@@ -41,8 +42,6 @@ class InvoiceController extends Controller
         $invoices->map(function($invoice) {
             $invoice['total'] = '$ '. $invoice['total'];
             $invoice['owing'] = '$ '. $invoice['owing'];
-
-            $invoice['date_issued'] = (string)$invoice['date_issued']->dateDiffForHumans();
 
             $invoice['client_name'] = $invoice['client']['name'];
             $invoice['_link'] = route('invoice.show', $invoice->id);
@@ -118,26 +117,28 @@ class InvoiceController extends Controller
      */
     public function generatePDF(Invoice $invoice)
     {
+        \Debugbar::disable();
+
         if (! $this->hasValidToken($invoice)) {
             $this->authorize('view', $invoice);
         }
 
-        \Debugbar::disable();
+        $pdf_options = new Options();
+        $pdf_options->set('enable_html5_parser', true);
+        $pdf_options->set('isRemoteEnabled', true);
 
-        $invoice->load('client', 'items');
-
-        $pdf = new Dompdf();
-        $view = View::make('invoice.show', ['invoice' => $invoice, 'pdf_mode' => true]);
+        $pdf = new Dompdf($pdf_options);
+        $view = View::make('invoice.show', [
+            'invoice' => $invoice->load('client', 'items'),
+            'pdf_mode' => true
+        ]);
 
         $pdf->loadHtml($view->render());
         $pdf->setPaper('A4');
-        $pdf->isRemoteEnabled = true;
-        $pdf->isHtml5ParserEnabled = true;
         $pdf->setHttpContext(stream_context_create([
             'ssl' => [
                 'verify_peer' => FALSE,
-                'verify_peer_name' => FALSE,
-                'allow_self_signed'=> TRUE
+                'verify_peer_name' => FALSE
             ]
         ]));
 
