@@ -30,6 +30,12 @@
                 mobile_caption: true
             },
             {
+                caption: 'Amount',
+                classes: 'is-inline-block-mobile',
+                key: 'amount_paid',
+                mobile_caption: true
+            },
+            {
                 caption: 'Note',
                 classes: 'is-inline-block-mobile',
                 key: 'note',
