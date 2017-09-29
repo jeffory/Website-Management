@@ -134,7 +134,10 @@ class InvoiceCreationTest extends TestCase
         create('App\InvoicePayment', ['invoice_id' => $invoice->id]);
 
         $this->signIn(create('App\User'));
-        $this->get(route('invoice.generate_pdf', ['invoice_id' => $invoice->id, 'view_key' => $invoice->view_key]));
+        $this->get(route('invoice.generate_pdf', [
+            'invoice_id' => $invoice->id,
+            'view_key' => $invoice->view_key
+        ]))->assertStatus(200);
     }
 
     /** Helper function */
