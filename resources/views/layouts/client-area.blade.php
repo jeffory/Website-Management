@@ -1,4 +1,4 @@
- @inject('flash', '\App\Helpers\FlashMessage')
+@inject('flash', '\App\Helpers\FlashMessage')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,7 @@
     <!-- Styles -->
     <link href="{{ url('/css/app.css') }}" rel="stylesheet" type="text/css">
 
-    @if (Route::currentRouteName() == 'invoice.generate_pdf')
+    @if ($pdf_mode)
     <link href="{{ url('/css/invoice-pdf-fixes.css') }}" rel="stylesheet" type="text/css">
     @endif
 

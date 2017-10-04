@@ -104,6 +104,7 @@ $factory->define(App\InvoiceClient::class, function (Faker\Generator $faker) {
     return [
         'user_id' => $user ?: $user = factory(App\User::class)->create()->id,
         'name' => $faker->company,
+        'email' => $faker->email,
         'address' => $faker->streetAddress,
         'city' => $faker->city,
         'state' => $faker->state,

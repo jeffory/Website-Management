@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Invoice;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-
-use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class InvoiceCreationTest extends TestCase
@@ -170,5 +168,4 @@ class InvoiceCreationTest extends TestCase
 
         return $expected_total;
     }
-
 }

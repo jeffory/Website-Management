@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\CarbonExtended;
+use App\Facades\Flash;
+use App\Helpers\PDFView;
 use App\Http\Requests\StoreInvoice;
 use App\Invoice;
 use App\InvoiceClient;
+use App\Mail\SendInvoiceEmail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Illuminate\Support\Facades\View;
-use App\Facades\Flash;
+use Illuminate\Support\Facades\Mail;
 
 class InvoiceController extends Controller
 {
@@ -33,15 +32,15 @@ class InvoiceController extends Controller
         $this->authorize('index', Invoice::class);
 
         $invoices = Invoice::with(['client' => function ($query) {
-                $query->select('id', 'name');
-            }])
+            $query->select('id', 'name');
+        }])
             ->with('payments')
             ->orderBy('id', 'desc')
             ->paginate(15);
 
-        $invoices->map(function($invoice) {
-            $invoice['total'] = '$ '. $invoice['total'];
-            $invoice['owing'] = '$ '. $invoice['owing'];
+        $invoices->map(function ($invoice) {
+            $invoice['total'] = '$ ' . $invoice['total'];
+            $invoice['owing'] = '$ ' . $invoice['owing'];
 
             $invoice['client_name'] = $invoice['client']['name'];
             $invoice['_link'] = route('invoice.show', $invoice->id);
@@ -69,7 +68,7 @@ class InvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreInvoice $request)
@@ -100,7 +99,7 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        if (! $this->hasValidToken($invoice)) {
+        if (!$this->hasValidToken($invoice)) {
             $this->authorize('view', $invoice);
         }
 
@@ -117,42 +116,42 @@ class InvoiceController extends Controller
      */
     public function generatePDF(Invoice $invoice)
     {
-        \Debugbar::disable();
-
-        if (! $this->hasValidToken($invoice)) {
+        if (!$this->hasValidToken($invoice)) {
             $this->authorize('view', $invoice);
         }
 
-        $pdf_options = new Options();
-        $pdf_options->set('enable_html5_parser', true);
-        $pdf_options->set('isRemoteEnabled', true);
-
-        $pdf = new Dompdf($pdf_options);
-        $view = View::make('invoice.show', [
-            'invoice' => $invoice->load('client', 'items'),
-            'pdf_mode' => true
+        return PDFView::output('invoice.show', [
+            'invoice' => $invoice->load('client', 'items')
         ]);
+    }
 
-        $pdf->loadHtml($view->render());
-        $pdf->setPaper('A4');
-        $pdf->setHttpContext(stream_context_create([
-            'ssl' => [
-                'verify_peer' => FALSE,
-                'verify_peer_name' => FALSE
-            ]
-        ]));
+    /**
+     * Send the invoice to the client.
+     *
+     * @param Invoice $invoice
+     */
+    public function send(Invoice $invoice)
+    {
+        if (!$this->hasValidToken($invoice)) {
+            $this->authorize('view', $invoice);
+        }
 
-        $pdf->render();
+        if (! $invoice->client->email) {
+            Flash::set("No contact email available for client: '{$invoice->client->name}'.", 'error');
+            return redirect()->route('invoice.show', $invoice);
+        }
 
-        return response($pdf->output())->withHeaders([
-            'Content-Type' => 'application/pdf'
-        ]);
+        Mail::to($invoice->client->email)
+            ->queue(new SendInvoiceEmail($invoice));
+
+        Flash::set("Invoice has been mailed to {$invoice->client->email}", 'success');
+        return redirect()->route('invoice.show', $invoice);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -163,8 +162,8 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
