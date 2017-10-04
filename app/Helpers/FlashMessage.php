@@ -12,23 +12,13 @@ class FlashMessage
     protected $request;
 
     /**
-     * Initialise the class.
-     *
-     * @return void
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
      * Check if there is a message.
      *
      * @return boolean
      */
     public function has()
     {
-        return $this->request->session()->has('flash.message');
+        return session()->has('flash.message');
     }
 
     /**
@@ -40,8 +30,8 @@ class FlashMessage
     {
         if ($this->has()) {
             return [
-                'message' => $this->request->session()->get('flash.message'),
-                'level' => $this->request->session()->get('flash.level')
+                'message' => session('flash.message'),
+                'level' => session('flash.level')
             ];
         } else {
             return false;
@@ -55,8 +45,8 @@ class FlashMessage
      */
     public function set($message, $level = 'info')
     {
-        $this->request->session()->flash('flash.message', $message);
-        $this->request->session()->flash('flash.level', $level);
+        session()->flash('flash.message', $message);
+        session()->flash('flash.level', $level);
     }
 
     /**
