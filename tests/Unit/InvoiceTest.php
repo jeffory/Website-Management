@@ -2,9 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Invoice;
-use App\InvoiceItem;
-
 use App\InvoicePayment;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -63,5 +60,15 @@ class InvoiceTest extends TestCase
 
         $this->assertNotTrue($item->exists());
         $this->assertNotTrue($payment->exists());
+    }
+
+    /** @test */
+    function it_can_use_a_ddmmyyyy_date()
+    {
+        $test_date = Carbon::create();
+
+        $invoice = create('App\Invoice', ['date_issued' => $test_date->format('d/m/Y')]);
+
+        $this->assertTrue($invoice->fresh()->date_issued->eq($test_date));
     }
 }
