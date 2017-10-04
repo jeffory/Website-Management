@@ -2,17 +2,22 @@ language: php
 
 php:
   - 7.1
+  - 7.0
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 
 before_script:
   - mv .travis.env .env
-  - phpenv config-rm xdebug.ini
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
   - php artisan migrate --no-interaction -vvv
+  - mkdir -p build/logs
 
 script:
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit -d memory_limit=1024M --coverage-clover build/logs/clover.xml
+
+after_success:
+  - export CI_BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"; export CI_PULL_REQUEST="$TRAVIS_PULL_REQUEST"; export CI_BRANCH="$TRAVIS_BRANCH"
+  - travis_retry php vendor/bin/coveralls -v

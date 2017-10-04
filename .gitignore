@@ -10,3 +10,5 @@ Homestead.yaml
 .DS_Store
 .wakatime-project
 tests/Report/
+
+build/

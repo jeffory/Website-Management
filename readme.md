@@ -1,6 +1,7 @@
 # Website Management
 
 [![Build Status](https://travis-ci.org/jeffory/Website-Management.svg?branch=master)](https://travis-ci.org/jeffory/Website-Management)
+[![Coverage Status](https://coveralls.io/repos/github/jeffory/Website-Management/badge.svg?branch=master)](https://coveralls.io/github/jeffory/Website-Management?branch=master)
 
 **Note: This is not recommended for production use just yet, still removing some business
 details as hard-coded strings.**
