@@ -63,7 +63,7 @@ class InvoiceTest extends TestCase
     }
 
     /** @test */
-    function it_can_use_a_ddmmyyyy_date()
+    function it_can_use_a_dmy_date()
     {
         $test_date = Carbon::create()->format('d/m/Y');
 

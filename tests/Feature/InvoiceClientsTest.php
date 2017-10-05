@@ -30,7 +30,7 @@ class InvoiceClientsTest extends TestCase
     }
 
     /** @test */
-    public function can_create_new_invoice_clients()
+    public function admins_can_create_new_invoice_clients()
     {
         $this->signIn(create('App\User', ['is_admin' => true]));
 
