@@ -30,6 +30,34 @@ class TicketTest extends TestCase
         $this->assertEquals('Hello world', $ticket->fresh()->messages[0]->message);
     }
 
+    /** @test */
+    function a_ticket_message_can_change_ticket_status()
+    {
+        $ticket = create('App\Ticket');
+        $ticket->addMessage('test', 2);
 
+        $this->assertEquals(2, $ticket->fresh()->status);
+    }
 
+    /** @test */
+    function ensure_staff_and_admin_listed_to_be_notified_when_a_new_ticket_is_made()
+    {
+        create('App\User', ['is_staff' => true]);
+        $ticket = create('App\Ticket');
+
+        $this->assertCount(1, $ticket->fresh()->usersToNotify());
+
+        create('App\User', ['is_admin' => true]);
+        $this->assertCount(2, $ticket->fresh()->usersToNotify());
+    }
+
+    /** @test */
+    function test_ticket_statuses()
+    {
+        $ticket = create('App\Ticket')->fresh();
+
+        $this->assertTrue($ticket->isOpen());
+        $ticket->close();
+        $this->assertTrue($ticket->isClosed());
+    }
 }

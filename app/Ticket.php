@@ -52,7 +52,9 @@ class Ticket extends Model
         $ticket_message->message = $message;
 
         if ($status_change) {
-            $ticket_message->status_change = settype($status_change, 'integer');
+            $ticket_message->status_change = (int)$status_change;
+            $this->status = (int)$status_change;
+            $this->save();
         }
 
         $ticket_message->user_id = $this->user_id;
@@ -100,6 +102,20 @@ class Ticket extends Model
     public function ownedBy(User $user)
     {
         return (int) $this->user_id === (int) $user->id;
+    }
+
+
+    /**
+     * Close the ticket.
+     *
+     * @return $this
+     */
+    public function close()
+    {
+        $this->status = 1;
+        $this->save();
+
+        return $this;
     }
 
     /**
