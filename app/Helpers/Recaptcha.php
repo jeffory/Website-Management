@@ -13,6 +13,11 @@ trait Recaptcha
 
     public $error;
 
+    /**
+     * @param $token
+     *
+     * @return bool
+     */
     static private function verifyToken($token)
     {
         $response = (new \GuzzleHttp\Client())->post(
@@ -38,6 +43,7 @@ trait Recaptcha
     /**
      * @param Request $request
      * @param $token
+     *
      * @return bool
      */
     static public function verify($token = '')
