@@ -15,7 +15,7 @@
     <!-- Styles -->
     <link href="{{ url('/css/app.css') }}" rel="stylesheet" type="text/css">
 
-    @if ($pdf_mode)
+    @if (isset($pdf_mode) && $pdf_mode)
     <link href="{{ url('/css/invoice-pdf-fixes.css') }}" rel="stylesheet" type="text/css">
     @endif
 
