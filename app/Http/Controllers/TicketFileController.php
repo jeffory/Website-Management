@@ -55,27 +55,29 @@ class TicketFileController extends Controller
     {
         $file = $this->processFileUpload($request, "upload_file");
 
-        // If the file hasn't finished uploading yet - this fuction will be called again.
+        // If the file hasn't finished uploading yet - this function will be called again.
         if (! $file->isFinished()) {
             return;
         }
 
-        $directory = 'public/uploads/'. date('Y-m-j'). '/'. str_random(8);
+        $directory = 'uploads/'. date('Y-m-d'). '/'. str_random(8);
         
         while (Storage::exists($directory)) {
-            $directory = 'public/uploads/'. date('Y-m-j'). '/'. str_random(8);
+            $directory = 'uploads/'. date('Y-m-d'). '/'. str_random(8);
         }
 
-        $filename = $file->getClientOriginalName();
-        $filepath = $file->storeAs($directory, $filename);
+        Storage::makeDirectory($directory, 'public');
 
-        Storage::setVisibility($filepath, 'public');
+        $filename = $file->getClientOriginalName();
+        $filepath = $file->storeAs($directory, $filename, 'public');
+
+        Storage::disk('public')->setVisibility($filepath, 'public');
 
         $TicketFile = new TicketFile();
         $TicketFile->name = $filename;
         $TicketFile->path = $filepath;
-        $TicketFile->url = Storage::url($filepath);
-        $TicketFile->file_size = Storage::size($filepath);
+        $TicketFile->url = Storage::disk('public')->url($filepath);
+        $TicketFile->file_size = Storage::disk('public')->size($filepath);
 
         $TicketFile->user_id = Auth::user()->id;
         $TicketFile->token = str_random(60);

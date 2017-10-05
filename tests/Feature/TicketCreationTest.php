@@ -44,13 +44,13 @@ class TicketCreationTest extends TestCase
     {
         $this->signIn();
 
-        Storage::fake('attachments');
+        Storage::fake('public');
 
         $response = $this->json('POST', route('tickets.file_upload'), [
             'upload_file' => UploadedFile::fake()->image('image.png', 600, 600)
         ])->json();
 
-        $this->assertFileExists($response['path']);
+        Storage::disk('public')->assertExists($response['path']);
     }
 
     /** @test */
