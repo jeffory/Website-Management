@@ -28,7 +28,7 @@ class Ticket extends Model
     public function save(array $options = [])
     {
         // The message part is stored separately from the ticket.
-        if (isset($this->message)) {
+        if (array_key_exists('message', $this->attributes)) {
             $ticket_message = $this->message;
             unset($this->message);
         }
@@ -36,7 +36,7 @@ class Ticket extends Model
         parent::save($options);
 
         // Add message after the save so there's a ticket id.
-        if (isset($ticket_message)) {
+        if (isset($ticket_message) && $ticket_message !== null && $ticket_message !== "") {
             $this->addMessage($ticket_message);
         }
     }

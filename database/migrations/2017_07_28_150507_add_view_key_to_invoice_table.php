@@ -14,7 +14,7 @@ class AddViewKeyToInvoiceTable extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->string('view_key', 20)
+            $table->string('view_key', 32)
                 ->after('owing')
                 ->nullable();
         });
