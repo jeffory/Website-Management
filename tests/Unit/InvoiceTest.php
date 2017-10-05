@@ -65,10 +65,10 @@ class InvoiceTest extends TestCase
     /** @test */
     function it_can_use_a_ddmmyyyy_date()
     {
-        $test_date = Carbon::create();
+        $test_date = Carbon::create()->format('d/m/Y');
 
-        $invoice = create('App\Invoice', ['date_issued' => $test_date->format('d/m/Y')]);
+        $invoice = create('App\Invoice', ['date_issued' => $test_date]);
 
-        $this->assertTrue($invoice->fresh()->date_issued->eq($test_date));
+        $this->assertEquals($test_date, $invoice->fresh()->date_issued->format('d/m/Y'));
     }
 }
