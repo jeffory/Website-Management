@@ -53,8 +53,6 @@ Route::group(['prefix' => 'client-area/management'], function () {
         ->name('server.cpanel_redirect');
 });
 
-
-
 Route::group(['prefix' => 'client-area/management/email/{remoteserver}'], function () {
     Route::get('/', 'ServerEmailController@index')
          ->name('server_email.index');

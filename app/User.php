@@ -17,6 +17,22 @@ class User extends Authenticatable
 
     protected $cascadeDeletes = ['tickets'];
 
+    protected $casts = [
+        'is_verified' => 'boolean'
+    ];
+
+    /**
+     * Bind into Eloquent methods.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            $user->verification_token = str_random(40);
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
