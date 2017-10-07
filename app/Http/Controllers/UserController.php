@@ -81,7 +81,7 @@ class UserController extends Controller
      * @param string $token
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function verifyUserByToken($token)
+    public function verifyUserByToken($token = '')
     {
         if ($token == '') {
             return redirect('/');

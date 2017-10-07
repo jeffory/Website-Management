@@ -76,7 +76,7 @@ Route::group(['prefix' => 'client-area/management/email/{remoteserver}'], functi
 Route::get('/user/resend-verification', 'UserController@sendVerificationEmail')
     ->name('user.sendVerification');
 
-Route::get('/user/verify/{token}', 'UserController@verifyUserByToken')
+Route::get('/user/verify/{token?}', 'UserController@verifyUserByToken')
     ->name('user.verify');
 
 Route::get('/user/edit', 'UserController@edit')
