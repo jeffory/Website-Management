@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use App\Ticket;
-use App\TicketMessage;
-use App\TicketFile;
-use Auth;
 use App\Events\TicketCreated;
 use App\Facades\Flash;
+use App\Ticket;
+use App\TicketFile;
+use Auth;
+use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
@@ -35,7 +31,7 @@ class TicketController extends Controller
         $this->authorize('index', Ticket::class);
 
         $user = Auth::user();
-        
+
         $sort_status = $request->input('status', 0);
 
         // Other than an asterisk, we only want to allow integers
@@ -46,7 +42,7 @@ class TicketController extends Controller
         }
 
         $tickets = $user->myTickets($sort_status)
-                        ->paginate(15);
+            ->paginate(15);
 
         foreach ($tickets as &$ticket) {
             $ticket['user_name'] = $ticket['user']['name'];
@@ -77,7 +73,7 @@ class TicketController extends Controller
         }]);
 
         if ($request->wantsJson()) {
-            return [ 'ticket' => $ticket ];
+            return ['ticket' => $ticket];
         }
 
         foreach ($ticket->messages as &$message) {
@@ -105,7 +101,7 @@ class TicketController extends Controller
     /**
      * Store a new ticket.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\App\Ticket
      */
     public function store(Request $request)
     {
@@ -131,11 +127,11 @@ class TicketController extends Controller
 
         event(new TicketCreated($ticket));
 
-        if (! $request->wantsJson()) {
-            return redirect()->route('tickets.show', ['id' => $ticket->id]);
-        } else {
-            return compact($ticket);
+        if ($request->wantsJson()) {
+            return $ticket->fresh()->load('files', 'messages');
         }
+
+        return redirect()->route('tickets.show', ['id' => $ticket->id]);
     }
 
     /**
@@ -154,7 +150,7 @@ class TicketController extends Controller
         if ($request->has('status')) {
             $ticket->status = $request->input('status');
             $ticket->save();
-            
+
             return redirect()->route('tickets.show', $ticket->id);
         }
 
@@ -171,12 +167,12 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket, Request $request)
     {
         $this->authorize('delete', $ticket);
-        
+
         if ($ticket->delete()) {
             Flash::set('Ticket deleted', 'success');
         }
 
-        if (! $request->wantsJson()) {
+        if (!$request->wantsJson()) {
             return redirect()->route('tickets.index');
         }
     }

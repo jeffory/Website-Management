@@ -3,11 +3,8 @@
 namespace tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UserProfileTest extends TestCase
@@ -27,7 +24,7 @@ class UserProfileTest extends TestCase
     }
 
     /** @test */
-    function users_can_access_profile_edit_page()
+    function a_user_can_access_their_profile_edit_page()
     {
         $this->withExceptionHandling()
             ->signIn()

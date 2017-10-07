@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Ticket;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -57,12 +58,17 @@ class TicketCreationTest extends TestCase
     function a_ticket_can_be_created_with_an_attachment()
     {
         $this->signIn();
-        $ticket = make('App\Ticket')->toArray();
+        $ticket = make('App\Ticket');
 
-        $this->post(route('tickets.file_upload'), [
+        $file_token = $this->json('post', route('tickets.file_upload'), [
             'upload_file' => UploadedFile::fake()->image('image.png', 600, 600)
-        ]);
+        ])->json()['token'];
 
-        $this->post(route('tickets.store'), $ticket);
+        $ticket->ticket_file = [$file_token];
+
+        $response = $this->json('post', route('tickets.store'), $ticket->toArray())->json();
+        $ticket = Ticket::whereId($response['id'])->first();
+
+        $this->assertCount(1, $ticket->files);
     }
 }

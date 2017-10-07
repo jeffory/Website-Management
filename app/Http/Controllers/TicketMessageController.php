@@ -27,7 +27,6 @@ class TicketMessageController extends Controller
      */
     public function store(Ticket $ticket, Request $request)
     {
-        // TODO: Check user has permission to ticket thread.
         $this->authorize('update', $ticket);
 
         $ticketMessage = new TicketMessage();
@@ -44,13 +43,15 @@ class TicketMessageController extends Controller
         $ticketMessage->message = $request->input('message');
         $ticketMessage->save();
 
-        foreach ($request->input('ticket_files') as $index => $file) {
-            $TicketFile = TicketFile::where('token', $file['token'])->first();
+        if ($request->has('ticket_files')) {
+            foreach ($request->input('ticket_files') as $index => $file) {
+                $TicketFile = TicketFile::where('token', $file['token'])->first();
 
-            $TicketFile->ticket_id = $ticket->id;
-            $TicketFile->ticket_message_id = $ticketMessage->id;
+                $TicketFile->ticket_id = $ticket->id;
+                $TicketFile->ticket_message_id = $ticketMessage->id;
 
-            $TicketFile->save();
+                $TicketFile->save();
+            }
         }
 
         // Set the Ticket updated_at time to now.
@@ -89,6 +90,8 @@ class TicketMessageController extends Controller
      */
     public function destroy(Ticket $ticket, TicketMessage $ticketmessage, Request $request)
     {
+        $this->authorize('update', $ticket);
+
         broadcast(new \App\Events\TicketDeleteMessage($ticketmessage))->toOthers();
         $ticketmessage->delete();
 
