@@ -50,31 +50,37 @@ class WHMApi
      */
     public $transaction_history = [];
 
-    /**
-     * Initialise the class.
-     * @var string
-     */
     public function __construct()
     {
         $this->host = env('CPANEL_HOST');
         $this->username = env('CPANEL_USERNAME');
-        $access_hash = env('CPANEL_PASSWORD');
+    }
+    
+    protected function getHandlerStack()
+    {
+        $stack = HandlerStack::create();
 
-        $this->stack = HandlerStack::create();
-        $this->stack->push(
+        $stack->push(
             Middleware::history($this->transaction_history)
         );
+
+        return $stack;
+    }
+
+    protected function initClient()
+    {
+        $access_hash = env('CPANEL_PASSWORD');
 
         $this->client = new Client([
             'allow_redirects' => true,
             'base_uri'        => "https://{$this->host}/json-api/",
-            'handler'         => $this->stack,
+            'handler'         => $this->getHandlerStack(),
             'headers'         => ["Accept" => "application/json",
-                                  "Authorization" => "WHM {$this->username}:{$access_hash}"],
+                "Authorization" => "WHM {$this->username}:{$access_hash}"],
             'timeout'         => 10,
             'verify'          => true,
             'query'           => ['cpanel_jsonapi_user' => $this->username,
-                                  'cpanel_jsonapi_apiversion' => 3]
+                'cpanel_jsonapi_apiversion' => 3]
         ]);
     }
 
@@ -92,6 +98,7 @@ class WHMApi
             'listaccts',
             [ 'api.version' => 1 ]
         );
+
 
         if (!$accounts) {
             return false;
@@ -112,6 +119,8 @@ class WHMApi
     public function call($method, $data = [], $action = 'GET')
     {
         $action = strtoupper($action);
+
+        $this->initClient();
 
         try {
             $response = $this->client->request($action, $method, [
