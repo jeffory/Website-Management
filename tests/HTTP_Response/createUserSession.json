@@ -1,0 +1,16 @@
+{
+  "data": {
+    "service": "cpaneld",
+    "session": "john:OHpnOsYAYuhgSK1Wt:create_user_session,bMtfGGrm3qwEq4riFfrRQghmsUrt4fRa",
+    "cp_security_token": "/cpsess0015991774",
+    "expires": 1507634408,
+    "url": "https://example.com:2083/cpsess0015991774/login/?locale=en&session=john%OHpnOsYAYuhgSK1Wt%3acreate_user_session%bMtfGGrm3qwEq4riFfrRQghmsUrt4fRa",
+    "locale": "en"
+  },
+  "metadata": {
+    "reason": "Created session",
+    "command": "create_user_session",
+    "version": 1,
+    "result": 1
+  }
+}

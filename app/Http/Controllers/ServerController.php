@@ -63,6 +63,11 @@ class ServerController extends Controller
         }
 
         if (isset($cpanel_session) && isset($cpanel_session->url)) {
+
+            if (request()->expectsJson()) {
+                return ['cpanel_url' => $cpanel_session->url];
+            }
+
             return redirect($cpanel_session->url);
         }
     }
