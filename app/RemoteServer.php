@@ -49,7 +49,7 @@ class RemoteServer extends Model
 
         $whitelisted_servers = preg_split(
             '@(?:\s*,\s*|^\s*|\s*$)@',
-            env('REMOTESERVER_WHITELIST', []),
+            config('cpanel.server_whitelist'),
             null,
             PREG_SPLIT_NO_EMPTY
         );

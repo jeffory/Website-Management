@@ -62,8 +62,8 @@ class WHMApi
      */
     public function __construct()
     {
-        $this->host = env('CPANEL_HOST');
-        $this->username = env('CPANEL_USERNAME');
+        $this->host = config('cpanel.host');
+        $this->username = config('cpanel.username');
     }
 
     /**
@@ -87,7 +87,7 @@ class WHMApi
      */
     protected function initClient()
     {
-        $access_hash = env('CPANEL_PASSWORD');
+        $access_hash = config('cpanel.password');
 
         $this->client = new Client([
             'allow_redirects' => true,
