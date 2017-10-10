@@ -26,3 +26,18 @@ function make($class, $attributes = [], $times = null)
 {
     return factory($class, $times)->make($attributes);
 }
+
+/**
+ * Read in a fake HTTP response file.
+ *
+ * @param $name
+ *
+ * @return string
+ */
+function fake_http_response($name)
+{
+    $responses_directory = base_path('tests/HTTP_Response');
+
+    return file_get_contents($responses_directory. DIRECTORY_SEPARATOR. "{$name}.json");
+
+}

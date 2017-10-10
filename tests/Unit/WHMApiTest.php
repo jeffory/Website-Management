@@ -19,7 +19,7 @@ class WHMApiTest extends TestCase
     /** @test */
     public function it_does_escape_query_data()
     {
-        WHMApi::addFakeResponse(200, [], $this->response_file('emailList'));
+        WHMApi::addFakeResponse(200, [], fake_http_response('emailList'));
 
         WHMApi::emailList('user&cpanel_jsonapi_user=baduser', 'good.com&bad_action=bad.com');
 
@@ -32,7 +32,7 @@ class WHMApiTest extends TestCase
     /** @test */
     public function it_can_retrieve_server_accounts()
     {
-        WHMApi::addFakeResponse(200, [], $this->response_file('accountList'));
+        WHMApi::addFakeResponse(200, [], fake_http_response('accountList'));
 
         $accounts = WHMApi::accountList();
         $uri = WHMApi::getQueryURL();
@@ -48,7 +48,7 @@ class WHMApiTest extends TestCase
     /** @test */
     public function it_can_retrieve_email_accounts()
     {
-        WHMApi::addFakeResponse(200, [], $this->response_file('emailList'));
+        WHMApi::addFakeResponse(200, [], fake_http_response('emailList'));
 
         $emails = WHMApi::emailList('user', 'example.com');
 
@@ -56,11 +56,5 @@ class WHMApiTest extends TestCase
         $this->assertEquals('john@example.com', $emails[0]->email);
         $this->assertEquals('bob@example.com', $emails[1]->email);
         $this->assertEquals('jane@example.com', $emails[2]->email);
-    }
-
-    // Helper function
-    public function response_file($name)
-    {
-        return file_get_contents("./tests/JSON_Responses/{$name}.json");
     }
 }
