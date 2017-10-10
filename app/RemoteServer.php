@@ -83,8 +83,8 @@ class RemoteServer extends Model
      */
     public function hasAuthorisedUser(User $user)
     {
-        foreach ($this->users as $current_user) {
-            if ($user->id === $current_user->id) {
+        foreach ($this->users()->get() as $attached_user) {
+            if ($user->id === $attached_user->id) {
                 return true;
             }
         }
