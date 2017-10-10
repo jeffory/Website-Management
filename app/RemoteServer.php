@@ -117,27 +117,6 @@ class RemoteServer extends Model
     }
 
     /**
-     * Searches the database for the user belonging to a domain.
-     *
-     * CPanel's API requires a matching domain and user to perform most commands.
-     *
-     * @param string $domain the domain to lookup
-     *
-     * @return string the username associated with the domain.
-     *                FALSE if domain is non-existent.
-     */
-    public static function getDomainUsername($domain)
-    {
-        $server = RemoteServer::where('domain', $domain)->first();
-
-        if ($server) {
-            return $server->username;
-        }
-
-        return false;
-    }
-
-    /**
      * Create an email account.
      *
      * @param string $username email username, ie. user
@@ -186,8 +165,6 @@ class RemoteServer extends Model
      */
     public function emailList()
     {
-//        $username = $this->getDomainUsername($this->domain);
-
         return [
             'domain' => $this->domain,
             'username' => $this->username,
@@ -214,6 +191,7 @@ class RemoteServer extends Model
      * Change an email accounts password.
      *
      * @param array
+     * @return array
      */
     public function emailChangePassword($email, $password)
     {

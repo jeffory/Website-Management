@@ -112,3 +112,18 @@ $factory->define(App\InvoiceClient::class, function (Faker\Generator $faker) {
         'postcode' => $faker->postcode,
     ];
 });
+
+$factory->define(App\RemoteServer::class, function (Faker\Generator $faker) {
+    static $active;
+
+    return [
+        'uid' => $faker->numberBetween(1, 1000),
+        'domain' => $faker->domainName,
+        'username' => $faker->userName,
+        'plan-name' => 'some_plan',
+        'max-emails' => $faker->numberBetween(1, 10),
+        'disk-used' => $faker->numberBetween(1, 1000),
+        'disk-limit' => 1000,
+        'active' => $active ?: $active = 1
+    ];
+});

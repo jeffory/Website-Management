@@ -37,7 +37,7 @@
                 </a>
             </li>
 
-            @can('view', \App\RemoteServer::class)
+            @can('index', \App\RemoteServer::class)
             <li>
                 <a href="{{ route('server.index') }}" class="{{ route_match('server.*') ? 'is-active' : null }}">
                     <span class="icon">
