@@ -3,10 +3,10 @@
 namespace App\Helpers;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Exception\ClientException;
-
+use GuzzleHttp\TransferStats;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -50,12 +50,27 @@ class WHMApi
      */
     public $transaction_history = [];
 
+
+    /**
+     * Stores the last url for testing/debugging.
+     * @var String
+     */
+    public $previous_url = '';
+
+    /**
+     * WHMApi constructor.
+     */
     public function __construct()
     {
         $this->host = env('CPANEL_HOST');
         $this->username = env('CPANEL_USERNAME');
     }
-    
+
+    /**
+     *
+     *
+     * @return HandlerStack
+     */
     protected function getHandlerStack()
     {
         $stack = HandlerStack::create();
@@ -67,20 +82,30 @@ class WHMApi
         return $stack;
     }
 
+    /**
+     * Initialise a Guzzle client.
+     */
     protected function initClient()
     {
         $access_hash = env('CPANEL_PASSWORD');
 
         $this->client = new Client([
             'allow_redirects' => true,
-            'base_uri'        => "https://{$this->host}/json-api/",
-            'handler'         => $this->getHandlerStack(),
-            'headers'         => ["Accept" => "application/json",
-                "Authorization" => "WHM {$this->username}:{$access_hash}"],
-            'timeout'         => 10,
-            'verify'          => true,
-            'query'           => ['cpanel_jsonapi_user' => $this->username,
-                'cpanel_jsonapi_apiversion' => 3]
+            'base_uri' => "https://{$this->host}/json-api/",
+            'handler' => $this->getHandlerStack(),
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => "WHM {$this->username}:{$access_hash}"
+            ],
+            'timeout' => 10,
+            'verify' => true,
+            'query' => [
+                'cpanel_jsonapi_user' => $this->username,
+                'cpanel_jsonapi_apiversion' => 3
+            ],
+            'on_stats' => function (TransferStats $stats) use (&$url) {
+                $this->previous_url = $stats->getEffectiveUri();
+            }
         ]);
     }
 
@@ -96,21 +121,19 @@ class WHMApi
     {
         $accounts = $this->call(
             'listaccts',
-            [ 'api.version' => 1 ]
+            ['api.version' => 1]
         );
 
 
         if (!$accounts) {
             return false;
         }
-        
+
         return $accounts->data->acct;
     }
 
     /**
      * Run a call on the server.
-     *
-     * TODO: Escape the data to prevent manipulation.
      *
      * @var string
      *
@@ -124,13 +147,13 @@ class WHMApi
 
         try {
             $response = $this->client->request($action, $method, [
-                    'query' => $data
-                ]);
+                'query' => $data
+            ]);
         } catch (ClientException $e) {
             if (isset($response) && $response->getStatusCode()) {
                 $this->last_error['http_code'] = $response->getStatusCode();
             }
-            
+
             $this->last_error['text'] = $e->getMessage();
             $this->last_error['method'] = $method;
             $this->last_error['method_data'] = $data;
@@ -178,10 +201,10 @@ class WHMApi
 
         return self::call(
             'cpanel',
-            [ 'cpanel_jsonapi_module' => $module,
-              'cpanel_jsonapi_func' => $function,
-              'cpanel_jsonapi_apiversion' => $api_version,
-              'cpanel_jsonapi_user' => $user,
+            ['cpanel_jsonapi_module' => $module,
+                'cpanel_jsonapi_func' => $function,
+                'cpanel_jsonapi_apiversion' => $api_version,
+                'cpanel_jsonapi_user' => $user,
             ] + $data
         );
     }
@@ -218,7 +241,7 @@ class WHMApi
         if (!$data) {
             return false;
         }
-        
+
         return intval($data->result->status) == 1;
     }
 
@@ -271,11 +294,11 @@ class WHMApi
         $email_accounts = self::emailList($cpanel_user, $domain);
 
         foreach ($email_accounts as $index => $email) {
-            if ($email->email == $username. '@'. $domain) {
+            if ($email->email == $username . '@' . $domain) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -305,7 +328,7 @@ class WHMApi
         if (!$accounts) {
             return false;
         }
-        
+
         return $accounts->result->data;
     }
 
@@ -442,6 +465,11 @@ class WHMApi
         }
     }
 
+    public function getQueryURL()
+    {
+        return $this->previous_url;
+    }
+
     /**
      * Debug function to echo last HTTP requests.
      */
@@ -449,7 +477,7 @@ class WHMApi
     {
         echo '<pre style="background-color:#fff; padding: 1em 2em;">';
         foreach ($this->transaction_history as $transaction) {
-            echo (string) $transaction['request']->getBody();
+            echo (string)$transaction['request']->getBody();
         }
         echo '</pre>';
     }

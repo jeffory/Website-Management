@@ -1,0 +1,69 @@
+{
+  "module": "Email",
+  "func": "list_pops_with_disk",
+  "result": {
+    "errors": null,
+    "status": 1,
+    "metadata": {
+      "transformed": 1
+    },
+    "messages": null,
+    "data": [
+      {
+        "diskusedpercent": 0,
+        "mtime": 1506988196,
+        "email": "john@example.com",
+        "diskused": "1.35",
+        "humandiskquota": "2 GB",
+        "_diskused": "1414720",
+        "_diskquota": "2147483648",
+        "suspended_login": 0,
+        "domain": "example.com",
+        "humandiskused": "1.35 MB",
+        "diskusedpercent20": 0,
+        "suspended_incoming": 0,
+        "diskquota": "2048.00",
+        "txtdiskquota": "2048.00",
+        "user": "john",
+        "login": "john@example.com"
+      },
+      {
+        "diskusedpercent20": 0,
+        "suspended_incoming": 0,
+        "diskquota": "2048.00",
+        "user": "bob",
+        "txtdiskquota": "2048.00",
+        "login": "bob@example.com",
+        "mtime": 1507587661,
+        "diskusedpercent": 5,
+        "email": "bob@example.com",
+        "diskused": "106.50",
+        "humandiskquota": "2 GB",
+        "_diskquota": "2147483648",
+        "_diskused": "111674454",
+        "domain": "example.com",
+        "suspended_login": 0,
+        "humandiskused": "106.5 MB"
+      },
+      {
+        "diskusedpercent20": 0,
+        "suspended_incoming": 0,
+        "diskquota": "2048.00",
+        "user": "jane",
+        "txtdiskquota": "2048.00",
+        "login": "jane@example.com",
+        "mtime": 1507593777,
+        "diskusedpercent": 0,
+        "email": "jane@example.com",
+        "humandiskquota": "2 GB",
+        "diskused": "12.93",
+        "_diskquota": "2147483648",
+        "_diskused": "13562407",
+        "domain": "example.com",
+        "suspended_login": 0,
+        "humandiskused": "12.93 MB"
+      }
+    ]
+  },
+  "apiversion": 3
+}
