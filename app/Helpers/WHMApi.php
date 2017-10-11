@@ -58,15 +58,6 @@ class WHMApi
     public $previous_url = '';
 
     /**
-     * WHMApi constructor.
-     */
-    public function __construct()
-    {
-        $this->host = config('cpanel.host');
-        $this->username = config('cpanel.username');
-    }
-
-    /**
      *
      *
      * @return HandlerStack
@@ -87,6 +78,8 @@ class WHMApi
      */
     protected function initClient()
     {
+        $this->host = config('cpanel.host');
+        $this->username = config('cpanel.username');
         $access_hash = config('cpanel.password');
 
         $this->client = new Client([

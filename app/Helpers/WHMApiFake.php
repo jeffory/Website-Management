@@ -11,16 +11,25 @@ class WHMAPiFake extends WHMApi
 {
     private $mock_responses = [];
 
+    /**
+     * WHMAPiFake constructor.
+     */
     public function __construct()
     {
-        $this->host = 'https://fake.com/json-api/';
-        $this->username = 'test';
+        config(['cpanel.host' => 'https://fake.com/json-api/']);
+        config(['cpanel.username' => 'test']);
     }
 
+    /**
+     * Initialise any mock responses and add the history middleware to the Guzzle stack.
+     *
+     * @return \GuzzleHttp\HandlerStack
+     */
     protected function getHandlerStack()
     {
         if (count($this->mock_responses) > 0) {
-            $stack = MockHandler::createWithMiddleware($this->mock_responses);
+            // Retrieve and remove the first mock response
+            $stack = MockHandler::createWithMiddleware([array_shift($this->mock_responses)]);
         }
 
         $stack->push(
@@ -30,14 +39,36 @@ class WHMAPiFake extends WHMApi
         return $stack;
     }
 
+    /**
+     * Return a testable extended Uri object.
+     *
+     * @return UriTester
+     */
     public function getQueryURL()
     {
         return new UriTester($this->previous_url);
     }
 
+    /**
+     * Add a fake response for the next request to send back.
+     *
+     * @param int $status
+     * @param array $headers
+     * @param null $body
+     * @param string $version
+     * @param null $reason
+     */
     public function addFakeResponse($status = 200, array $headers = [], $body = null, $version = '1.1', $reason = null)
     {
         array_push($this->mock_responses, new \GuzzleHttp\Psr7\Response($status, $headers, $body, $version, $reason));
+    }
+
+    /**
+     * Clear any fake responses queued up.
+     */
+    public function clearFakeResponses()
+    {
+        $this->mock_responses = [];
     }
 }
 
