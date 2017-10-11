@@ -1,0 +1,15 @@
+{
+  "module": "Email",
+  "apiversion": 3,
+  "func": "delete_pop",
+  "result": {
+    "errors": null,
+    "messages": [
+      "Removed any entries belonging to “john@example.com” from the “example” Horde database.",
+      ""
+    ],
+    "metadata": {},
+    "status": 1,
+    "data": null
+  }
+}

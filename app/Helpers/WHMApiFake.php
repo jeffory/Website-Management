@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Assert as PHPUnit;
@@ -16,7 +17,8 @@ class WHMAPiFake extends WHMApi
      */
     public function __construct()
     {
-        config(['cpanel.host' => 'https://fake.com/json-api/']);
+        // Choose a host that doesn't go anywhere in case queries accidentally aren't faked.
+        config(['cpanel.host' => 'https://127.0.0.1/json-api/']);
         config(['cpanel.username' => 'test']);
     }
 
@@ -27,6 +29,8 @@ class WHMAPiFake extends WHMApi
      */
     protected function getHandlerStack()
     {
+        $stack = HandlerStack::create();
+
         if (count($this->mock_responses) > 0) {
             // Retrieve and remove the first mock response
             $stack = MockHandler::createWithMiddleware([array_shift($this->mock_responses)]);

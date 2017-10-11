@@ -54,6 +54,8 @@ class RemoteServer extends Model
             PREG_SPLIT_NO_EMPTY
         );
 
+        if (! $accounts) return false;
+
         foreach ($accounts as $index => $account) {
             if (!in_array($account->domain, $whitelisted_servers)) {
                 Log::info('updateServerList() - Not in whitelist: '. $account->domain);
@@ -165,12 +167,16 @@ class RemoteServer extends Model
      */
     public function emailList()
     {
+        $email_accounts = WHMApi::emailList($this->username, $this->domain);
+
+        if (!$email_accounts) {
+            return false;
+        }
+
         return [
             'domain' => $this->domain,
             'username' => $this->username,
-            'accounts' => WHMApi::emailList(
-                $this->username, $this->domain
-            )
+            'accounts' => $email_accounts
         ];
     }
 

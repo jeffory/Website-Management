@@ -1,0 +1,14 @@
+{
+  "func": "add_pop",
+  "result": {
+    "metadata": {},
+    "messages": null,
+    "status": 0,
+    "errors": [
+      "The email address “^^^^@example.com” is not a valid virtual username: (XID 7y6grv) The local part can only contain letters (a-z), numbers (0-9), periods, hyphens (-), and underscores (_)."
+    ],
+    "data": null
+  },
+  "module": "Email",
+  "apiversion": 3
+}

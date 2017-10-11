@@ -1,0 +1,9 @@
+{
+  "_comment": "This still results a 200 HTTP status code.",
+  "metadata": {
+    "version": 1,
+    "result": 0,
+    "reason": "You cannot create a session for the user “baduser” because they do not exist.",
+    "command": "create_user_session"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "apiversion": 3,
+  "func": "add_pop",
+  "result": {
+    "messages": [
+      ""
+    ],
+    "status": 1,
+    "metadata": {},
+    "data": "john+example.com.au",
+    "errors": null
+  },
+  "module": "Email"
+}
