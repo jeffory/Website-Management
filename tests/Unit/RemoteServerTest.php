@@ -157,7 +157,7 @@ class RemoteServerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_change_an_email_password()
+    public function it_can_change_an_email_account_password()
     {
         $server = RemoteServer::first();
 
@@ -170,5 +170,17 @@ class RemoteServerTest extends TestCase
         $response = $server->emailChangePassword('test@example.com', str_random());
 
         $this->assertFalse($response['status']);
+    }
+
+    /** @test */
+    public function it_cannot_change_email_account_password_outside_of_domain_scope()
+    {
+        $server = RemoteServer::first();
+
+        // This should throw a 400 error, that needs to be caught.
+        $this->withExceptionHandling()
+            ->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+
+        $server->emailChangePassword('john@bad_domain.com', str_random());
     }
 }
