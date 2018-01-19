@@ -189,7 +189,7 @@ class RemoteServer extends Model
     public function emailPasswordStrength($password)
     {
         return [
-            'strength' => WHMApi::emailPasswordStrength($password)
+            'strength' => WHMApi::emailPasswordStrength(env('CPANEL_USERNAME'), $password)
         ];
     }
 

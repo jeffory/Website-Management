@@ -34,7 +34,7 @@
 
                     <input name="password" class="input" type="password" v-validate="'required|cpanel_verify'"
                            data-vv-delay="500" :class="{ 'is-danger': errors.has('email_creation_form.password') }"
-                           v-model="email_creation_form.password">
+                           v-model="email_creation_form.password" id="new-email-password">
 
                     <span v-show="errors.has('email_creation_form.password')" class="help is-danger" v-cloak>
                         Score: @{{ password_strength }} / 50 -
@@ -48,7 +48,7 @@
                     <p class="control">
                         <input name="password_confirmation" type="password" class="input"
                                :class="{ 'is-danger': errors.has('email_creation_form.password_confirmation') }"
-                               v-validate="'confirmed:password'">
+                               v-validate="'confirmed:#new-email-password'">
 
                         <span v-show="errors.has('email_creation_form.password_confirmation')" class="help is-danger" v-cloak>
                             The password confirmation does not match the original password.

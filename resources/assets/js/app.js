@@ -157,7 +157,6 @@ window.app = new Vue({
         })
     },
     mounted() {
-        this.monkeyPatchConfirmedValidation()
         this.loopUntilLoaded()
     },
     methods: {
@@ -189,77 +188,6 @@ window.app = new Vue({
             }
 
             return true
-        },
-        monkeyPatchConfirmedValidation() {
-            // This is a monkey-patch for the confirmed rule in VeeValidate
-            // Allows a scope to be specified on the rule with a "scope.name" rule.
-
-            this.$validator._findFieldInDOM = function _findFieldInDOM (query) {
-                let fieldBreakdown, fieldName, scope, field;
-
-                // A dot indicates a scope, unless escaped with a backslash
-                if (fieldBreakdown = query.match(/^([^\.\\]+)\.(.*)$/)) {
-                    scope = fieldBreakdown[1]
-                    fieldName = fieldBreakdown[2]
-                } else {
-                    scope = '__global__'
-                    fieldName = query
-                }
-
-                // Unescape any dots
-                fieldName = fieldName.replace("\\.", ".");
-
-                if (scope === '__global__') {
-                    field = document.querySelector("input[name='" + fieldName + "']")
-                } else {
-                    field = document.querySelector("[data-vv-scope='" +  scope + "'] input[name='" + fieldName + "']");
-
-                    if (!field) {
-                        // Scope may be set on an input directly
-                        field = document.querySelector("input[name='" + fieldName + "'][data-vv-scope='" +  scope + "']");
-                    }
-                }
-
-                return field
-            };
-
-            this.$validator.remove('confirmed');
-            this.$validator.extend('confirmed', {
-                getMessage(field) {
-                    return "The " + field + " confirmation does not match."
-                },
-                validate(value, [confirmedField], validatingField) {
-                    // Validator instance was monkey patched, need to use that instance
-                    let field = confirmedField
-                            ? window.app.$validator._findFieldInDOM(confirmedField)
-                            : window.app.$validator._findFieldInDOM(validatingField + '_confirmation')
-
-                    return !! (field && String(value) === field.value)
-                }
-            })
-
-            // Setup any extra listeners
-            // eg. If there is a confirmed validation rule on a 'password_confirmed' field,
-            //     apply a input listener on 'password' field.
-            Object.keys(this.$validator.$scopes).forEach((scope) => {
-                Object.keys(this.$validator.$scopes[scope]).forEach((field) => {
-                    Object.keys(this.$validator.$scopes[scope][field].validations).forEach((validationRule) =>{
-                        if (validationRule === 'confirmed') {
-                            let relatedField;
-
-                            if (this.$validator.$scopes[scope][field].validations[validationRule]) {
-                                relatedField = this.$validator._findFieldInDOM(this.$validator.$scopes[scope][field].validations[validationRule][0])
-                            } else {
-                                relatedField = _findFieldInDOM(scope + '.' + field + '_confirmed')
-                            }
-
-                            relatedField.addEventListener("input", () => {
-                                this.$validator.validate(field, this.$validator.$scopes[scope][field]['el'].value, scope)
-                            })
-                        }
-                    })
-                })
-            })
         }
     }
 })
