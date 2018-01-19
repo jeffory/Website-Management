@@ -36,7 +36,7 @@
                                 <input name="password" class="input" type="password"
                                        v-validate="'required|cpanel_verify'" data-vv-delay="500"
                                        :class="{ 'is-danger': errors.has('password_change_form.password') }"
-                                       v-model="password_change_form.password">
+                                       v-model="password_change_form.password" id="password-change-password">
                 
                                 <span v-show="errors.has('password_change_form.password')" class="help is-danger" v-cloak>
                                     Score: @{{ password_strength }} / 50 -
@@ -50,7 +50,7 @@
                                 <p class="control">
                                     <input name="password_confirmation" type="password" class="input"
                                            :class="{ 'is-danger': errors.has('password_change_form.password_confirmation') }"
-                                           v-validate="'confirmed:password_change_form.password'">
+                                           v-validate="'confirmed:#password-change-password'">
                 
                                     <span v-show="errors.has('password_change_form.password_confirmation')"
                                           class="help is-danger" v-cloak>
