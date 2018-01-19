@@ -12,3 +12,4 @@ Homestead.yaml
 tests/Report/
 build/
 storage/framework/testing/
+.vscode/
