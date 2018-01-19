@@ -331,16 +331,17 @@ class WHMApi
      * CPanel v2 Function. Documentation:
      * https://documentation.cpanel.net/display/SDK/cPanel+API+2+Functions+-+PasswdStrength%3A%3Aget_password_strength
      *
+     * @param string username
      * @param string password to test strength on
      *
      * @return object|boolean JSON data or FALSE on request failure.
      */
-    public function emailPasswordStrength($password)
+    public function emailPasswordStrength($cpanel_user, $password)
     {
         $data = $this->cpanelCall(
             'PasswdStrength',
             'get_password_strength',
-            $this->username,
+            $cpanel_user,
             [
                 'password' => $password
             ]
@@ -458,20 +459,13 @@ class WHMApi
         }
     }
 
+    /**
+     * Get the last requested URI.
+     *
+     * @return String
+     */
     public function getQueryURL()
     {
         return $this->previous_url;
-    }
-
-    /**
-     * Debug function to echo last HTTP requests.
-     */
-    public function dumpRequests()
-    {
-        echo '<pre style="background-color:#fff; padding: 1em 2em;">';
-        foreach ($this->transaction_history as $transaction) {
-            echo (string)$transaction['request']->getBody();
-        }
-        echo '</pre>';
     }
 }
