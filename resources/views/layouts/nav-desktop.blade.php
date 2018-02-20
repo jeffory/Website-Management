@@ -39,7 +39,7 @@
 
             @can('index', \App\RemoteServer::class)
             <li>
-                <a href="{{ route('server.index') }}" class="{{ route_match('server.*') ? 'is-active' : null }}">
+                <a href="{{ route('server.index') }}" class="{{ route_regex_match('#^server(_email)?.*#') ? 'is-active' : null }}">
                     <span class="icon">
                         <i class="fa fa-server"></i>
                     </span>
@@ -53,7 +53,7 @@
 
             @can('index', \App\Invoice::class)
                 <li>
-                    <a href="{{ route('invoice.index') }}" class="{{ route_regex_match('#invoice.(index|show|generate_pdf)#') ? 'is-active' : null }}">
+                    <a href="{{ route('invoice.index') }}" class="{{ route_regex_match('#^invoice.(index|show|generate_pdf)#') ? 'is-active' : null }}">
                         <span class="icon">
                             <i class="fa fa-file-text"></i>
                         </span>
