@@ -43,10 +43,9 @@
     </article>
     @endif
 
-    @if ($tickets->count() == 0)
-        <p style="font-size: 13pt; padding: 1em 0; text-align: center">
-
-            @if ($ticket_status_sort === '0')
+    @if ($tickets->count() === 0)
+        <p class="has-text-centered" style="font-size: 13pt; padding: 1em 0;">
+            @if ($ticket_status_sort === 0)
                 No open support tickets found.<br>
             @else
                 No closed support tickets found.<br>
