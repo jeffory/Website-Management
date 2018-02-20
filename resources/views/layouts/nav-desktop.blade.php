@@ -51,41 +51,43 @@
             </li>
             @endcan
 
-            <li>
-                <a href="{{ route('invoice.index') }}" class="{{ route_regex_match('#invoice.(index|show|generate_pdf)#') ? 'is-active' : null }}">
-                    <span class="icon">
-                        <i class="fa fa-file-text"></i>
-                    </span>
+            @can('index', \App\Invoice::class)
+                <li>
+                    <a href="{{ route('invoice.index') }}" class="{{ route_regex_match('#invoice.(index|show|generate_pdf)#') ? 'is-active' : null }}">
+                        <span class="icon">
+                            <i class="fa fa-file-text"></i>
+                        </span>
 
-                    <span>
-                        Billing
-                    </span>
-                </a>
+                        <span>
+                            Billing
+                        </span>
+                    </a>
 
-                @if (route_regex_match('#(invoice.*|payment.index)#') && auth()->user()->can('create', \App\Invoice::class))
-                    <ul>
-                        <li>
-                            <a href="{{ route('invoice.create') }}" class="{{ route_match('invoice.create') ? 'is-active' : null }}">
-                                <span class="icon">
-                                    <i class="fa fa-plus"></i>
-                                </span>
+                    @if (route_regex_match('#(invoice.*|payment.index)#') && auth()->user()->can('create', \App\Invoice::class))
+                        <ul>
+                            <li>
+                                <a href="{{ route('invoice.create') }}" class="{{ route_match('invoice.create') ? 'is-active' : null }}">
+                                    <span class="icon">
+                                        <i class="fa fa-plus"></i>
+                                    </span>
 
-                                <span>Create invoice</span>
-                            </a>
-                        </li>
+                                    <span>Create invoice</span>
+                                </a>
+                            </li>
 
-                        <li>
-                            <a href="{{ route('payment.index') }}" class="{{ route_match('payment.index') ? 'is-active' : null }}">
-                                <span class="icon">
-                                    <i class="fa fa-money"></i>
-                                </span>
+                            <li>
+                                <a href="{{ route('payment.index') }}" class="{{ route_match('payment.index') ? 'is-active' : null }}">
+                                    <span class="icon">
+                                        <i class="fa fa-money"></i>
+                                    </span>
 
-                                <span>Invoice payments</span>
-                            </a>
-                        </li>
-                    </ul>
-                @endif
-            </li>
+                                    <span>Invoice payments</span>
+                                </a>
+                            </li>
+                        </ul>
+                    @endif
+                </li>
+            @endcan
 
             @if (auth()->user()->isAdmin())
                 <li class="separator"></li>
