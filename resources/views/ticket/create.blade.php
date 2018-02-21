@@ -16,7 +16,7 @@
         </p>
 
         <p class="control">
-            <textarea class="textarea{{ $errors->has('message') ? ' is-danger' : '' }}" name="message" type="text" placeholder="Message" required></textarea>
+            <textarea class="textarea{{ $errors->has('message') ? ' is-danger' : '' }}" name="message" type="text" placeholder="Message" style="min-height: 200px;" required></textarea>
 
             <message-attachments upload-to="{{ route('tickets.file_upload') }}" ref="attachments"></message-attachments>
 
