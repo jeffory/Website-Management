@@ -31,6 +31,6 @@ class UserPolicy
      */
     public function index(User $user)
     {
-        return ($user->isStaff() || $user->isAdmin());
+        return false;
     }
 }
