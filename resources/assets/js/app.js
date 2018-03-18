@@ -68,6 +68,7 @@ Vue.component('modal', require('./components/Modal.vue'));
 Vue.component('flash-message', require('./components/FlashMessage.vue'));
 Vue.component('invoice', require('./components/Invoice.vue'));
 
+Vue.component('ticket-user-select', require('./components/TicketUserSelect.vue'));
 
 window.onload = function() {
     let notifications = document.getElementsByClassName("notification");

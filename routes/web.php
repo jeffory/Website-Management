@@ -85,6 +85,10 @@ Route::get('/user/edit', 'UserController@edit')
 Route::post('/user/edit', 'UserController@update')
     ->name('user.update');
 
+Route::get('/client-area/users', 'UserController@index')
+    ->name('user.index');
+
+
 Route::group(['prefix' => 'client-area/admin/'], function () {
     Route::get('/', 'AdminController@index')
          ->name('admin.index');

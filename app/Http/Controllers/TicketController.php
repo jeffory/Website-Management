@@ -105,12 +105,18 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->has('user_id') && !empty($request->input('user_id'))) {
+            $this->authorize('createForUser', Ticket::class);
+            $user_id = $request->input('user_id');
+        }
+
         $this->authorize('create', Ticket::class);
 
         $ticket = new Ticket();
 
         $ticket->title = $request->input('title');
-        $ticket->user_id = Auth::user()->id;
+        $ticket->user_id = isset($user_id) ? $user_id : Auth::user()->id;
+
         $ticket->message = clean($request->input('message'));
         $ticket->save();
 

@@ -21,6 +21,29 @@ class UserController extends Controller
     }
 
     /**
+     * Get a list of current users
+     *
+     * @return User|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|\Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        $this->authorize('index', auth()->user());
+
+        $query = \App\User::select(['id', 'name']);
+
+        $search_query = $request->input('query');
+        $search_limit = $request->has('limit') ? intval($request->input('limit')) : 25;
+
+        if ($search_query) {
+            $query = $query->where('name', 'like', $search_query. '%');
+        }
+
+        return $query
+            ->take($search_limit)
+            ->get();
+    }
+
+    /**
      * Display a form for changing current user details.
      *
      * @return \Illuminate\View\View

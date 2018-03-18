@@ -59,6 +59,17 @@ class TicketPolicy
     }
 
     /**
+     * Determine whether the current user can create a ticket on behalf of another user.
+     *
+     * @param  \App\User  $user
+     * @return boolean
+     */
+    public function createForUser(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can update the ticket.
      *
      * @param  \App\User  $user

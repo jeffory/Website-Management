@@ -18,11 +18,19 @@
         <p class="control">
             <textarea class="textarea{{ $errors->has('message') ? ' is-danger' : '' }}" name="message" type="text" placeholder="Message" style="min-height: 200px;" required></textarea>
 
-            <message-attachments upload-to="{{ route('tickets.file_upload') }}" ref="attachments"></message-attachments>
-
             @if ($errors->has('message'))
                 <span class="help is-danger">{{ $errors->first('message') }}</span>
             @endif
+        </p>
+
+        @can ('createForUser', \App\Ticket::class)
+            <p class="control">
+                <ticket-user-select endpoint="/client-area/users"></ticket-user-select>
+            </p>
+        @endcan
+
+        <p class="control">
+            <message-attachments upload-to="{{ route('tickets.file_upload') }}" ref="attachments"></message-attachments>
         </p>
 
         <p class="control">
