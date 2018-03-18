@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <input type="hidden" name="user_id" v-if="active" :value="selectedUserID">
+        <input type="hidden" name="ticket_user_id" v-if="active" :value="selectedUserID">
     </div>
 </template>
 
@@ -50,7 +50,7 @@
 
         data() {
             return {
-                active: true,
+                active: false,
                 results: [],
                 query: '',
                 selectedUserID: null,
