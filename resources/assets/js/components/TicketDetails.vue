@@ -99,7 +99,7 @@
              * Delete a ticket.
              */
             storeMessage() {
-                // One at a time, prevent spamming and it should be unncessary.
+                // One at a time, prevent spamming and it should be unnecessary.
                 if ('uuid' in this.ticket_pending) {
                     return;
                 }
