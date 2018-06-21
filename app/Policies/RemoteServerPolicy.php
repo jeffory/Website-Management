@@ -53,6 +53,18 @@ class RemoteServerPolicy
         return $server->hasAuthorisedUser($user);
     }
 
+	/**
+	 * Determine whether the user can create emails on the server.
+	 *
+	 * @param  \App\User  $user
+	 * @param  \App\RemoteServer  $server
+	 * @return mixed
+	 */
+	public function create(User $user, RemoteServer $server)
+	{
+		return $server->hasAuthorisedUser($user);
+	}
+
     /**
      * Determine whether the user can update the server.
      *
@@ -84,7 +96,7 @@ class RemoteServerPolicy
      * @param  \App\RemoteServer  $server
      * @return mixed
      */
-    public function delete(User $user, RemoteServer $server)
+    public function destroy(User $user, RemoteServer $server)
     {
         return $server->hasAuthorisedUser($user);
     }

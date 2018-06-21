@@ -152,6 +152,8 @@ class ServerEmailController extends Controller
      */
     public function password_strength(Request $request, RemoteServer $remoteServer)
     {
+    	$remoteServer = auth()->user()->accessibleServers()->first();
+
         $this->authorize('update', $remoteServer);
 
         $this->validate($request, [
