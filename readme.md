@@ -1,3 +1,5 @@
+**NOTE: Deprecated project with out of date dependencies, do not use**
+
 # Website Management
 
 [![Build Status](https://travis-ci.org/jeffory/Website-Management.svg?branch=master)](https://travis-ci.org/jeffory/Website-Management)
